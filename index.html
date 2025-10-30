@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Inicio de sesión</title>
+  <link rel="stylesheet" href="inicio_regional.css">
+  <link rel="icon" href="lock-keyhole-55534E.png">
+</head>
+<body>
+  <div class="withe_square">
+  <main class="auth-wrap">
+    <section id="icono_1_container" class="auth-card">
+      <div class="card-top">
+        <img id="icono_1" src="icono_perfil.png" alt="Perfil">
+        <h1 class="card-title">Bienvenido</h1>
+        <p class="card-sub">Ingrese su usuario</p>
+      </div>
+      <div class="card-body">
+        <div class="input-group">
+          <input id="userInput" type="text" placeholder="Usuario" class="login_input" autocomplete="username">
+        </div>
+        <div class="input-group">
+          <input id="passInput" type="password" placeholder="Contraseña" class="login_input" autocomplete="current-password">
+          <button type="button"
+                  class="toggle-pass"
+                  aria-label="Mostrar u ocultar contraseña"
+                  aria-pressed="false"
+                  data-toggle="password"
+                  data-target="passInput">
+            <svg class="eye open" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+            </svg>
+            <svg class="eye closed" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 3l18 18-1.41 1.41-2.9-2.9A11.5 11.5 0 0 1 12 19c-5 0-9-5-9-7a12.4 12.4 0 0 1 4.69-5.59L1.59 4.41 3 3zm9 4a5 5 0 0 1 5 5c0 .64-.12 1.24-.34 1.8L8.2 5.34A4.97 4.97 0 0 1 12 7z"/>
+            </svg>
+          </button>
+        </div>
+        <button id="btnLogin" class="login_button">Acceso</button>
+        <button id="btnAdminOpen" class="admin_link" type="button">Ingresar al modo administración</button>
+      </div>
+    </section>
+  </main>
+  </div>
+  <div id="adminModal" class="modal">
+    <div class="modal_content">
+      <h3><b>Administración</b></h3>
+      <p class="modal_desc">Ingresa tus credenciales de administrador.</p>
+      <input id="adminUser" type="text" class="modal_input" placeholder="Usuario (admin)" autocomplete="username">
+      <div class="input-group">
+        <input id="adminPass" type="password" class="modal_input" placeholder="Contraseña" autocomplete="current-password">
+        <button type="button"
+                class="toggle-pass small"
+                aria-label="Mostrar u ocultar contraseña"
+                aria-pressed="false"
+                data-toggle="password"
+                data-target="adminPass">
+          <svg class="eye open" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+          </svg>
+          <svg class="eye closed" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 3l18 18-1.41 1.41-2.9-2.9A11.5 11.5 0 0 1 12 19c-5 0-9-5-9-7a12.4 12.4 0 0 1 4.69-5.59L1.59 4.41 3 3zm9 4a5 5 0 0 1 5 5c0 .64-.12 1.24-.34 1.8L8.2 5.34A4.97 4.97 0 0 1 12 7z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal_actions">
+        <button id="btnAdminCancel" class="btn_secondary" type="button">Cancelar</button>
+        <button id="btnAdminLogin" class="btn_primary" type="button">Acceder</button>
+      </div>
+      <p id="adminMsg" class="modal_msg"></p>
+    </div>
+  </div>
+  <script src="inicio_regional.js"></script>
+  <script src="header.js" defer></script>
+</body>
+</html>

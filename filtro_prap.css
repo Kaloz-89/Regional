@@ -1,0 +1,400 @@
+/* =========================================================
+   Filtro PRAP (PÚBLICO) — CSS individual
+   - Header/fondo iguales al resto
+   - Tabla estilo oscuro sin barras de scroll visibles
+   - Col 4 (Cantidad) y Col 8 (Ver) angostas
+   - Botón "Ver progreso" alineado a la izquierda
+   ========================================================= */
+
+/* -------- Tokens (oscuro) -------- */
+:root{
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --text: #eef2f6;
+  --text-dim: #cfd6de;
+
+  --bg-image: url("gpt7.jpg");
+  --overlay: linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.70));
+
+  --panel-1: rgba(28,28,28,.82);
+  --panel-2: rgba(18,18,18,.86);
+  --line: rgba(255,255,255,.12);
+
+  --hdr-bg: rgba(18,19,21,.82);
+  --hdr-bd: rgba(255,255,255,.08);
+  --hover-tint: rgba(255,255,255,.10);
+
+  --shadow-card: 0 10px 28px rgba(0,0,0,.25);
+  --shadow-pop: 0 16px 40px rgba(0,0,0,.40);
+
+  --table-head: #000;
+  --table-fg:   #fff;
+  --bd: #d0d0d0;
+  --zebra: #f7f7f7;
+
+  --radius: 12px;
+
+  /* Controles */
+  --ctrl-bg: #fff;
+  --ctrl-bd: #cfcfcf;
+  --ctrl-fg: #111;
+  --ctrl-focus: #bdbdbd;
+
+  /* Botones */
+  --btn-bg: #141414;
+  --btn-bg-hover: #1b1b1b;
+  --btn-fg: #fff;
+
+  --btn-sec-bg: #eaeaea;
+  --btn-sec-fg: #111;
+  --btn-sec-bd: #d6d6d6;
+  --btn-sec-hover: #f0f0f0;
+}
+
+/* -------- Base / Fondo -------- */
+*{ box-sizing: border-box; }
+html, body{ height:100%; }
+html{ overflow-x: hidden; } /* evita barras globales en zoom */
+body{
+  margin:0;
+  font-family:var(--ff);
+  color:var(--text);
+  background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
+}
+
+/* -------- Header (DEJADO IGUAL QUE ESTABA) -------- */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:14px 28px;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-bd);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.20);
+  position:relative; z-index:10;
+}
+.logo_direca img{ width:70px; display:block; }
+.logo img{ width: clamp(160px, 22vw, 300px); display:block; }
+
+nav{ flex:1 1 auto; display:flex; justify-content:center; }
+.nav-links{ display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0; }
+.nav-links a{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  font-weight:700; color:inherit; text-decoration:none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.nav-links a:hover{ background: var(--hover-tint); transform: translateY(-1px); }
+.boton_salida a{
+  background: rgba(255,255,255,.14);
+  border: 1px solid var(--hdr-bd);
+  border-radius: 10px; font-weight:800;
+}
+
+/* Dropdown del header */
+.nav-dropdown{ position:relative; }
+.nav-dropdown > .has-caret::after{ content:"▾"; margin-left:6px; font-size:12px; opacity:.85; }
+.dropdown-menu{
+  position:absolute; top: calc(100% + 10px); left:0; min-width:240px;
+  padding:8px; border-radius:12px; background: rgba(16,18,20,.96);
+  border:1px solid var(--line); box-shadow: var(--shadow-pop);
+  display:grid; gap:6px; opacity:0; pointer-events:none; transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease; z-index:60;
+}
+.nav-dropdown.open > .has-caret,
+.nav-dropdown.abierto > .has-caret{ background: var(--hover-tint); transform: translateY(-1px); }
+.nav-dropdown.open .dropdown-menu,
+.nav-dropdown.abierto .dropdown-menu{ opacity:1; pointer-events:auto; transform: translateY(0); }
+.dropdown-menu a{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border-radius:8px; color:#fff; font-weight:700;
+}
+.dropdown-menu a:hover{ background: rgba(255,255,255,.10); }
+
+/* -------- Lienzo -------- */
+.contenedor-principal{ padding: 18px 0 12px; }
+.fondo-blanco{
+  width: min(92vw, 1500px);
+  margin: 0 auto;
+  background: var(--panel-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+}
+.fondo-blanco h1{
+  margin: 6px 8px 14px;
+  font-size: clamp(18px, 2.1vw, 28px);
+  font-weight: 800;
+}
+
+/* -------- Tarjeta de filtros -------- */
+.filtro-card{
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.filtros-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 1.2fr auto;
+  gap: 12px;
+  align-items: end;
+}
+.campo label{
+  display:block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0 0 6px 2px;
+}
+
+/* Controles nativos */
+.campo select,
+.campo input[type="text"]{
+  width: 100%;
+  font-size: 14px;
+  color: var(--ctrl-fg);
+  background: var(--ctrl-bg);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  line-height: 1.2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.campo select:focus,
+.campo input[type="text"]:focus{
+  border-color: var(--ctrl-focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctrl-focus), transparent 75%);
+}
+
+/* Botones */
+.acciones{
+  display:flex; gap:10px; align-items:end; padding-bottom: 2px;
+}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  border-radius:10px; padding:10px 16px;
+  cursor:pointer; font-weight:800; text-decoration:none;
+  border:1px solid var(--btn-bg); background: var(--btn-bg); color: var(--btn-fg);
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  transition: transform .06s ease, filter .15s ease, background-color .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover{ background: var(--btn-bg-hover); }
+.btn.secundario{
+  background: var(--btn-sec-bg); color: var(--btn-sec-fg);
+  border-color: var(--btn-sec-bd);
+}
+.btn.secundario:hover{ background: var(--btn-sec-hover); }
+
+/* -------- Select personalizado (Dirección) -------- */
+.custom-select{ position: relative; display: grid; width: 100%; align-items: center; }
+.is-replaced{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.cs-trigger{
+  display:flex; align-items:center; justify-content:space-between;
+  width: 100%; min-height: 32px;
+  background: var(--ctrl-bg); color: var(--ctrl-fg);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px; padding: 10px 12px;
+  cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.cs-trigger:focus-visible{ outline: 2px solid var(--ctrl-focus); outline-offset: 2px; }
+.custom-select[aria-expanded="true"] .cs-trigger{
+  border-color: var(--ctrl-focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctrl-focus), transparent 75%);
+}
+.cs-caret{
+  display:inline-block; width: 0; height: 0; margin-left: 10px;
+  border-left:6px solid transparent; border-right:6px solid transparent; border-top:6px solid #666;
+  transition: transform .2s ease;
+}
+.custom-select[aria-expanded="true"] .cs-caret{ transform: rotate(180deg); }
+
+/* POP del select: ancho = ancho del control (no tapa el input de Responsable) */
+.cs-pop{
+  position:absolute; top: calc(100% + 6px); left:0;
+  min-width: 100%; max-width: 100%;
+  background: #111; border: 1px solid #222;
+  border-radius: 10px; box-shadow: var(--shadow-pop);
+  padding: 6px; display: none; z-index: 1000;
+  max-height: 60vh; overflow: auto;
+}
+.custom-select[aria-expanded="true"] .cs-pop{ display:block; }
+
+.cs-list{ list-style: none; margin:0; padding:0; }
+.cs-item{
+  padding: 8px 10px; color:#fff; border-radius: 8px;
+  outline: none; cursor: pointer;
+}
+.cs-item:hover, .cs-item:focus{ background: rgba(255,255,255,.10); }
+.cs-item[aria-selected="true"]{ background: rgba(255,255,255,.18); }
+
+/* -------- Tabla (ancho de la tarjeta, sin scrollbars visibles) -------- */
+.tabla-contenedor{
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 6px;
+  overflow-x: hidden;      /* sin barra horizontal */
+  overflow-y: auto;
+}
+.tabla-contenedor::-webkit-scrollbar{ display:none; } /* oculta barras si aparecen */
+.tabla-contenedor{ -ms-overflow-style:none; scrollbar-width:none; }
+
+table.tabla-poa{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff; color: #111;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  font-size: 12px; line-height: 1.25;
+}
+table.tabla-poa thead th{
+  background: var(--table-head); color: var(--table-fg);
+  border: 1px solid #2a2a2a; text-align: center;
+  padding: 8px 10px; font-weight: 800;
+}
+table.tabla-poa th, table.tabla-poa td{
+  border: 1px solid var(--bd); padding: 8px 10px;
+  background: #fff; color: #111; vertical-align: top;
+  word-wrap: break-word; overflow-wrap: anywhere;
+}
+table.tabla-poa tbody tr:nth-child(even){ background: var(--zebra); }
+
+/* --- #tablaFiltro columnas ---
+   1: Dirección | 2: Objetivo | 3: Indicador | 4: Cantidad (angosta)
+   5: Actividades | 6: Período | 7: Responsables | 8: Ver (angosta)
+*/
+#tablaFiltro thead th:nth-child(4),
+#tablaFiltro tbody td:nth-child(4){
+  width: 88px; max-width: 88px; min-width: 72px; white-space: nowrap;
+}
+#tablaFiltro thead th:nth-child(4){ text-align: center; }
+#tablaFiltro tbody td:nth-child(4){ text-align: right; }
+
+#tablaFiltro thead th:nth-child(8),
+#tablaFiltro tbody td:nth-child(8){
+  width: 84px; max-width: 92px; min-width: 72px;
+  text-align: center; white-space: nowrap;
+}
+
+/* Botón “Abrir” */
+.link-abrir{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 6px 10px; border-radius: 8px;
+  background: #151515; border: 1px solid #0f0f0f;
+  color:#fff; text-decoration:none; font-weight:800; font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  transition: background-color .2s ease, transform .06s ease, filter .15s ease;
+}
+.link-abrir:hover{ background:#1b1b1b; }
+.link-abrir:active{ transform: translateY(1px); }
+
+/* -------- “Ver progreso” alineado a la izquierda -------- */
+#btn_background{
+  width: 90vw; max-width: 1400px;      /* lo dejo como estaba */
+  margin: 14px auto 28px;
+  display: flex; justify-content: flex-start;
+}
+#btn_1{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 10px 14px; border-radius: 12px;
+  background: #0f0f0f; border: 1px solid #0a0a0a;
+  color: #fff; text-decoration: none; font-weight: 800;
+  box-shadow: 0 10px 20px rgba(0,0,0,.25);
+  transition: background-color .2s ease, transform .06s ease, filter .15s ease;
+}
+#btn_1:hover{ background:#171717; }
+#btn_1:active{ transform: translateY(1px); }
+
+/* -------- Responsive -------- */
+@media (max-width: 900px){
+  .filtros-grid{ grid-template-columns: 1fr; align-items: stretch; }
+  .acciones{ padding-top: 4px; }
+}
+
+/* =========================================================
+   Filtro PRAP — MÓVIL / TABLET PEQUEÑA (≤720px)
+   (sin barras de scroll; se ajusta con tipografía y anchos %)
+   ========================================================= */
+@media (max-width: 720px){
+
+  .fondo-blanco{
+    width: 90%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  .tabla-contenedor{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;                 /* no mostrar barra horizontal */
+  }
+
+  table.tabla-poa{
+    width: 100%;
+    font-size: 10px;                    /* más compacto */
+    line-height: 1.2;
+  }
+  table.tabla-poa th, table.tabla-poa td{ padding: 6px 6px; }
+
+  body {width: 150%;}
+
+  /* Reparto porcentual para 8 columnas (suma ~100%) */
+  #tablaFiltro thead th:nth-child(1),
+  #tablaFiltro tbody td:nth-child(1){ width: 13%; }   /* Dirección */
+  #tablaFiltro thead th:nth-child(2),
+  #tablaFiltro tbody td:nth-child(2){ width: 17%; }   /* Objetivo */
+  #tablaFiltro thead th:nth-child(3),
+  #tablaFiltro tbody td:nth-child(3){ width: 14%; }   /* Indicador */
+  #tablaFiltro thead th:nth-child(4),
+  #tablaFiltro tbody td:nth-child(4){ width: 8%; }    /* Cantidad (angosta) */
+  #tablaFiltro thead th:nth-child(5),
+  #tablaFiltro tbody td:nth-child(5){ width: 18%; }   /* Actividades */
+  #tablaFiltro thead th:nth-child(6),
+  #tablaFiltro tbody td:nth-child(6){ width: 12%; }   /* Período */
+  #tablaFiltro thead th:nth-child(7),
+  #tablaFiltro tbody td:nth-child(7){ width: 12%; }   /* Responsables */
+  #tablaFiltro thead th:nth-child(8),
+  #tablaFiltro tbody td:nth-child(8){ width: 6%; }    /* Ver (angosta) */
+
+  /* Encabezado compacto (sin sticky para evitar saltos en zoom) */
+  table.tabla-poa thead th{ font-size: 10px; position: static; }
+
+  /* Filtros en una sola columna y controles compactos */
+  .filtros-grid{ grid-template-columns: 1fr; gap: 10px; }
+  .campo select, .campo input[type="text"]{ font-size: 13px; padding: 9px 12px; }
+
+  /* POP del select: no se sale del contenedor */
+  .cs-pop{
+    left: 0; right: 0;
+    min-width: 100%; max-width: 100%;
+  }
+
+  /* Botón ancho alineado con el contenedor */
+  #btn_background{
+    width: calc(100vw - 24px);
+    max-width: none;
+    margin: 12px auto 24px;
+  }
+}
+
+/* =========================================================
+   Filtro PRAP — MÓVIL PEQUEÑO (≤520px)
+   ========================================================= */
+@media (max-width: 520px){
+  .fondo-blanco{ width: 90%; }
+  #btn_background{ width: calc(100vw - 16px); }
+
+  table.tabla-poa{ font-size: 9px; }
+  table.tabla-poa th, table.tabla-poa td{ padding: 5px 5px; }
+  body {width: 150%;}
+  .link-abrir {width:5% ;
+  font-size: 6px !important;
+  }
+}

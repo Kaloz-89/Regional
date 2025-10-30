@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PRAP — Administradores</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="tablas_app.css">
+  <link rel="stylesheet" href="tablas_app_light.css">
+  <link rel="icon" href="calendar.png" type="image/png">
+</head>
+<header>
+  <div class="logo_direca">
+    <img src="logo_direca.png" alt="DIRECA">
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li class="nav-volver">
+        <a href="pagina_principal_regional_administradores.html">Inicio</a>
+      </li>
+      <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+        <a href="#" class="has-caret">Datos de la Empresa</a>
+        <ul class="dropdown-menu" aria-label="submenu">
+          <li><a href="datos_administrativos.html">Datos Administrativos</a></li>
+          <li><a href="justificacion.html">Justificacion</a></li>
+          <li><a href="mvv.html">Ideas Rectoras</a></li>
+        </ul>
+      </li>
+      <li class="boton_salida">
+        <a href="index.html">Cerrar sesión</a>
+      </li>
+    </ul>
+  </nav>
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="MEP">
+  </div>
+</header>
+<body>
+  <section class="contenedor-principal">
+    <div class="fondo-blanco">
+      <h1 id="titulo_direccion" >Dirección — Administradores</h1>
+      <div class="tabla-contenedor">
+        <table class="tabla-poa" id="tablaPoa">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Áreas estratégicas del POA regional</th>
+              <th>Objetivos estratégicos</th>
+              <th>Meta</th>
+              <th>Indicador</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="botones-tabla">
+        <button id="agregarFila" class="btn btn-primary">Agregar fila</button>
+      </div>
+    </div>
+  </section>
+  <script src="direccion.js"></script>
+  <script src="header.js"></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

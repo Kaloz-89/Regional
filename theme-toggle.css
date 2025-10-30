@@ -1,0 +1,20 @@
+/* Botón del header para cambiar tema (sol/luna) */
+.theme-toggle{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:34px; height:34px; border-radius:8px;
+  border:1px solid var(--hdr-bd);
+  background: transparent;
+  color:#fff;
+  cursor:pointer;
+  transition: background-color .18s ease, transform .06s ease, filter .18s;
+  margin-left: 8px;
+}
+.theme-toggle:hover{ background: var(--hover-tint); transform: translateY(-1px); }
+.theme-toggle:active{ transform: translateY(0); }
+.theme-toggle:focus-visible{ outline: 2px solid #93c5fd; outline-offset: 2px; }
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon{ font-size:14px; line-height:1; }
+
+/* En modo claro, el header es claro: ajusta color del ícono */
+html[data-theme="light"] .theme-toggle{ color:#111; border-color: var(--hdr-bd); }

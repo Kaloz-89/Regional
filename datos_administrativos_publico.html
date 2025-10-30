@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Datos Administrativos</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="datos_administrativos.css">
+  <link rel="stylesheet" href="datos_administrativos_light.css">
+  <link rel="icon" href="badge-55534E.png" type="image/png">
+</head>
+<header>
+  <div class="logo_direca">
+    <img src="logo_direca.png" alt="DIRECA">
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li class="nav-volver">
+        <a href="pagina_principal_regional.html" class="js-nav-replace">Inicio</a>
+      </li>
+      <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+        <a href="#" class="has-caret">Datos de la Empresa</a>
+        <ul class="dropdown-menu" aria-label="submenu">
+          <li><a href="datos_administrativos_publico.html">Datos Administrativos</a></li>
+          <li><a href="justificacion_publico.html">Justificacion</a></li>
+          <li><a href="mvv_publico.html">Ideas Rectoras</a></li>
+        </ul>
+      </li>
+      <li class="boton_salida">
+        <a href="index.html" class="js-nav-replace">Cerrar sesión</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="logo">
+    <img src="logo_mep_sinfondo.png" alt="MEP">
+  </div>
+</header>
+<body class="admin-data-page">
+  <main class="sheet-wrap">
+    <div class="sheet">
+      <h1 class="sheet-title">DATOS ADMINISTRATIVOS DAP</h1>
+      <div class="table-scroll">
+        <table class="tabla-admin" id="tablaAdminPublic">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Nombre de asesoría o equipo</th>
+              <th>Nombre completo</th>
+              <th>Correo electrónico</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script src="datos_administrativos_publico.js"></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Secret</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="icon" href="conceal-ffffff.png" type="image/png">
+  <link rel="stylesheet" href="otra_cosa_poco_importante.css">
+</head>
+<body>
+  <div class="hud">
+    <div class="score">Score: <span id="score">0</span></div>
+    <div class="hiscore">Mejor: <span id="hiscore">0</span></div>
+  </div>
+  <canvas width="400" height="400" id="game" aria-label="Snake game"></canvas>
+<div class="secret-msg" id="secretMsg" role="status" aria-live="polite">
+  <strong>¡Felicidades!</strong> Has encontrado el secreto.<br>
+  Estuviste atento/a a los detalles… ahora <em>¡a jugar y a superar tu récord!</em> 
+</div>
+  <aside class="help" aria-hidden="false">
+    <h3>¿Cómo jugar?</h3>
+    <ul>
+      <li>Usa las flechas del teclado:</li>
+      <li class="keys">
+        <span class="k">←</span>
+        <span class="k">↑</span>
+        <span class="k">→</span>
+        <span class="k">↓</span>
+      </li>
+      <li>Come la fruta roja para sumar puntos.</li>
+      <li>No choques con paredes ni contigo mismo.</li>
+      <li>Tras perder: <strong>Espacio</strong> o <strong>Enter</strong> reinicia.</li>
+    </ul>
+  </aside>
+  <div class="overlay" id="overlay" aria-live="polite" aria-hidden="true">
+    <div class="box">
+      <h2>¡GAME OVER!</h2>
+      <p>Puntuación: <span id="finalScore">0</span></p>
+      <p>Mejor: <span id="finalHi">0</span></p>
+      <div class="hint">Pulsa <strong>Espacio</strong> o <strong>Enter</strong> para jugar de nuevo</div>
+    </div>
+  </div>
+  <script src="otra_cosa_poco_importante.js"></script>
+  <script src="header.js" defer></script>
+</body>
+</html>

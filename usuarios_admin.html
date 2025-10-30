@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Usuarios</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="datos_administrativos.css">
+  <link rel="stylesheet" href="datos_administrativos_light.css">
+  <link rel="icon" href="badge-55534E.png" type="image/png">
+</head>
+<header>
+    <div class="logo_direca">
+      <img src="logo_direca.png" alt="DIRECA">
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="datos_administrativos.html" id="btnBackDir">← </a></li>
+      </ul>
+    </nav>
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="mep">
+    </div>
+  </header>
+<body>
+  <main class="sheet-wrap">
+    <div class="sheet">
+      <h1 class="sheet-title">Usuarios Administradores</h1>
+      <div class="table-scroll">
+        <table class="tabla-usuarios" id="tablaUsuarios">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Contraseña</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="acciones-hoja">
+        <button id="btnAdd" class="btn-primary">Agregar fila</button>
+        <span id="msg" class="muted"></span>
+      </div>
+    </div>
+  </main>
+  <script src="usuarios_admin.js"></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>
