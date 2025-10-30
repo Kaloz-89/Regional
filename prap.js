@@ -53,7 +53,7 @@
   const tbody = table ? table.getElementsByTagName("tbody")[0] : null;
   if (!tbody) return;
   const btnAdd = document.getElementById("agregarFila");
-  const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(1, 10);
   function normalizeFila(f) {
     return {
       rid: f.rid || rid(),
