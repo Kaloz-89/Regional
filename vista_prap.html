@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PRAP</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="tablas_app.css">
+  <link rel="stylesheet" href="tablas_app_light.css">
+  <link rel="icon" href="calendar.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca">
+      <img src="logo_direca.png" alt="DIRECA">
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="vista_direccion.html" id="btnBackDir">← Dirección</a></li>
+      </ul>
+    </nav>
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="MEP">
+    </div>
+  </header>
+  <section class="contenedor-principal">
+    <div class="fondo-blanco">
+      <h1>PRAP</h1>
+      <div class="tabla-contenedor">
+        <table class="tabla-poa sin-acciones" id="tablaPrapView">
+          <thead>
+            <tr>
+              <th>Objetivo específico o del producto</th>
+              <th>Indicador</th>
+              <th>Cantidad</th>
+              <th>Actividades</th>
+              <th>Período</th>
+              <th>Responsables</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <script src="vista_prap.js"></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

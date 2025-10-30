@@ -1,0 +1,48 @@
+/* Contenedor en la barra */
+.nav-links .theme-switch { display:flex; align-items:center; }
+
+/* Switch */
+.switch{
+  --w: 76px;
+  --h: 36px;
+  --pad: 3px;
+
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  border-radius: calc(var(--h)/2);
+  padding: var(--pad);
+  cursor: pointer;
+
+  background: #e6e6e6;              /* track claro */
+  border: 1px solid rgba(0,0,0,.15);
+  transition: background-color .18s ease, border-color .18s ease;
+}
+html[data-theme="dark"] .switch{
+  background: #2f3237;              /* track oscuro */
+  border-color: #444;
+}
+
+/* Knob con icono */
+.switch .knob{
+  position: absolute;
+  top: var(--pad);
+  left: var(--pad);
+  width: calc(var(--h) - var(--pad)*2);
+  height: calc(var(--h) - var(--pad)*2);
+  border-radius: 50%;
+  background: #fff center / 60% no-repeat;  /* el icono lo pone JS como background-image */
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  transition: transform .22s ease;
+}
+
+/* Cuando está en modo claro, mueve el knob a la derecha */
+.switch.is-light .knob{
+  transform: translateX(calc(var(--w) - var(--h)));
+}
+
+/* Accesibilidad / foco */
+.switch:focus-visible{
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}

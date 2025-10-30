@@ -1,0 +1,279 @@
+/* ===========================
+   1) Fondo negro y centrado
+=========================== */
+html, body { height: 100%; }
+body{
+  margin: 0;
+  background: #000;                     /* negro sólido */
+  background-image: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel blanco grande (detrás) y centrado */
+.withe_square{
+  background: #4a4a4a44;
+  width: 40%;
+  height: 100%;
+  margin: auto;                         /* centra en el body */
+  display: flex;                        /* centra su contenido (la tarjeta) */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 46px 120px rgba(0,0,0,.55);
+}
+
+/* Wrapper por compatibilidad */
+.auth-wrap{
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===========================
+   2) Tarjeta de login
+=========================== */
+.auth-card,
+#icono_1_container{                     /* compat con tu ID anterior */
+  width: min(420px, 100%);
+  background: #ffffff;
+  color: #111;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 0;                     /* esquinas cuadradas */
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.55);
+  transform: none !important;
+  margin: 0 !important;
+}
+
+/* Fija centrado adicional por si el contenedor cambia */
+#icono_1_container{
+  margin: 0 auto !important;
+  align-self: center;
+}
+
+/* ===========================
+   3) Cabezal oscuro
+=========================== */
+.card-top{
+  background:
+    radial-gradient(120% 120% at 80% -10%, rgba(0, 0, 0, 0.303) 0%, transparent 60%),
+    radial-gradient(120% 120% at 30% 10%,  rgb(0, 0, 0) 0%, transparent 55%),
+    linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+  color: #fff;
+  text-align: center;
+  padding: 28px 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+#icono_1{
+  width: 84px; height: 84px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 12px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
+}
+
+.card-title{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #ffffff;
+}
+
+.card-sub{
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #ededed;
+  opacity: .9;
+}
+
+/* ===========================
+   4) Cuerpo + campos
+=========================== */
+.card-body{
+  background: #181818;
+  color: #111;
+  display: grid;
+  gap: 12px;
+  padding: 18px 20px 22px;
+}
+
+.input-group{ position: relative; }
+
+.login_input,
+.modal_input{
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  color: #111;
+  border: 1px solid #cfd3da;
+  border-radius: 0;                     /* cuadradas */
+  padding: 12px 14px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.login_input::placeholder,
+.modal_input::placeholder{ color: #8a8f99; }
+.login_input:focus,
+.modal_input:focus{
+  border-color: rgba(229,185,74,.35);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+/* Botón “ojo” (mostrar/ocultar) */
+.toggle-pass{
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 6px;
+  border-radius: 0;                     /* cuadrado */
+  cursor: pointer;
+  line-height: 0;
+  color: #6b7280;
+}
+.toggle-pass:hover{ background: rgba(0,0,0,.06); }
+.toggle-pass .eye{ width: 22px; height: 22px; fill: currentColor; display: none; }
+/* OCULTA: icono “cerrado” visible */
+.toggle-pass .eye.closed{ display: block; }
+/* VISIBLE: al presionar se muestra el “abierto” */
+.toggle-pass[aria-pressed="true"] .eye.closed{ display: none; }
+.toggle-pass[aria-pressed="true"] .eye.open{   display: block; }
+
+/* ===========================
+   5) Botones
+=========================== */
+.login_button{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 0;
+  border: 1px solid #000;
+  background: linear-gradient(180deg, #1a1a1a, #0f0f0f);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .08s, box-shadow .2s, background .2s;
+}
+.login_button:hover{
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  background: linear-gradient(180deg, #222, #131313);
+}
+.login_button:active{ transform: translateY(1px); }
+
+.admin_link{
+  justify-self: start;
+  margin-top: 6px;
+  padding: 9px 12px;
+  font-size: 12px;
+  line-height: 1;
+  background: #0b0b0b;
+  color: #e8e8e8;
+  border: 1px solid #202020;
+  border-radius: 8px;
+  border-style: dashed;
+  cursor: pointer;
+  transition: background-color .25s, color .25s, border-color .25s;
+}
+.admin_link:hover{
+  background: #191919;
+  color: #fff;
+  border-color: #414141;
+}
+
+/* ===========================
+   6) Modal (oscuro)
+=========================== */
+.modal{
+  position: fixed; inset: 0;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(0,0,0,.55);
+  z-index: 9999;
+}
+
+.modal_content{
+  width: min(560px, 92vw);
+  background: #0f0f0f !important;
+  color: #eee !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 0;
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+.modal_content h3{ margin: 0; font-size: 20px; }
+.modal_desc{ margin: 0; color: #bcbcbc; font-size: 14px; }
+
+.modal_actions{
+  display: flex;
+  gap: 10px !important;
+  justify-content: flex-end;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.modal_input{
+  background: #131313 !important;
+  color: #eee !important;
+  border: 1px solid #2a2a2a !important;
+}
+.modal_input::placeholder{ color:#9aa0a6 !important; }
+.modal_input:focus{
+  border-color:#444 !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.07) !important;
+}
+
+.btn_primary, .btn_secondary{
+  padding: 10px 14px;
+  border-radius: 0;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 15px;
+}
+.btn_primary{
+  background: linear-gradient(180deg,#1a1a1a,#0f0f0f) !important;
+  color:#fff !important;
+  border:1px solid #000 !important;
+}
+.btn_primary:hover{
+  background: linear-gradient(180deg,#222,#131313) !important;
+}
+.btn_secondary{
+  background:#2a2a2a !important;
+  color:#eee !important;
+  border:1px solid #3a3a3a !important;
+}
+.btn_secondary:hover{
+  background:#343434 !important;
+  border-color:#4a4a4a !important;
+}
+
+.modal_msg{
+  min-height: 18px;
+  font-size: 14px;
+  color: #ff8c8c;
+}
+
+/* Evitar scroll del fondo con modal abierto */
+body.modal-open{ overflow: hidden; }
+
+/* ===========================
+   7) Responsive
+=========================== */
+@media (max-width: 420px){
+  .auth-wrap{ padding: 14px; }
+  .login_button{ font-size: 15px; }
+  .withe_square{
+    width: calc(100vw - 40px);
+    height: calc(100vh - 40px);
+  }
+}

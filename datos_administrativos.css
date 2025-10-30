@@ -1,0 +1,524 @@
+/* =========================================================
+   DATOS ADMINISTRATIVOS — CSS COMPARTIDO (Admins + Público + Usuarios)
+   - Fondo/encabezado como la home.
+   - Tablas soportadas:
+     • Admin:   #tablaAdmin          (7 columnas)
+     • Público: #tablaAdminPublic    (4 columnas)
+     • Usuarios: #tablaUsuarios      (5 columnas)
+   ========================================================= */
+
+/* -------- Tokens (oscuro) -------- */
+:root{
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --text: #eef2f6;
+  --text-dim: #cfd6de;
+
+  --bg-image: url("gpt7.jpg");
+  --overlay: linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.70));
+
+  --panel-1: rgba(28,28,28,.82);
+  --line: rgba(255,255,255,.12);
+
+  --hdr-bg: rgba(18,19,21,.82);
+  --hdr-bd: rgba(255,255,255,.08);
+  --hover-tint: rgba(255,255,255,.10);
+
+  --shadow-card: 0 10px 28px rgba(0,0,0,.25);
+  --shadow-pop: 0 16px 40px rgba(0,0,0,.40);
+
+  --table-head: #000;   /* thead negro sólido */
+  --table-fg:   #fff;
+  --bd: #d0d0d0;        /* bordes */
+  --zebra: #f7f7f7;
+
+  --radius: 12px;
+}
+
+/* -------- Base / Fondo -------- */
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  font-family: var(--ff);
+  color: var(--text);
+  background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
+  display:grid; grid-template-rows:auto 1fr auto;
+}
+
+/* -------- Header (igual a la home) -------- */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:14px 28px;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-bd);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.20);
+  position:relative; z-index:10;
+}
+.logo_direca img{ width:70px; display:block; }
+.logo img{ width: clamp(160px, 22vw, 300px); display:block; }
+
+nav{ flex:1 1 auto; display:flex; justify-content:center; }
+.nav-links{ display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0; }
+.nav-links a{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  font-weight:700; color:inherit; text-decoration:none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.nav-links a:hover{ background: var(--hover-tint); transform: translateY(-1px); }
+.boton_salida a{
+  background: rgba(255,255,255,.14);
+  border: 1px solid var(--hdr-bd);
+  border-radius: 10px; font-weight:800;
+}
+
+/* Dropdown */
+.nav-dropdown{ position:relative; }
+.nav-dropdown > .has-caret::after{ content:"▾"; margin-left:6px; font-size:12px; opacity:.85; }
+.dropdown-menu{
+  position:absolute; top: calc(100% + 10px); left:0; min-width:240px;
+  padding:8px; border-radius:12px; background: rgba(16,18,20,.96);
+  border:1px solid var(--line); box-shadow: var(--shadow-pop);
+  display:grid; gap:6px; opacity:0; pointer-events:none; transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease; z-index:60;
+}
+.nav-dropdown.open > .has-caret{ background: var(--hover-tint); transform: translateY(-1px); }
+.nav-dropdown.open .dropdown-menu{ opacity:1; pointer-events:auto; transform: translateY(0); }
+.dropdown-menu a{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border-radius:8px; color:#fff; font-weight:700;
+}
+.dropdown-menu a:hover{ background: rgba(255,255,255,.10); }
+
+/* -------- Hoja / Lienzo -------- */
+.sheet-wrap{ display:flex; justify-content:center; padding: 18px 0 36px; }
+.sheet{
+  width: min(92vw, 1500px);
+  background: var(--panel-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+}
+.sheet-title{
+  margin: 6px 8px 14px;
+  font-size: clamp(18px, 2.1vw, 28px);
+  font-weight: 800;
+}
+
+/* -------- Contenedor de tabla (90% de la página) -------- */
+.table-scroll{
+  width: 90vw;                  /* ≈90% del ancho de la página */
+  max-width: 1400px;
+  margin: 0 auto 14px;
+  overflow: auto;
+}
+
+/* -------- Base de tablas compartida -------- */
+table.tabla-admin,
+#tablaAdmin,
+#tablaAdminPublic,
+#tablaUsuarios{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;          /* respeta anchos por columna */
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  font-size: 12px;              /* texto pequeño para ingresar bastante */
+  line-height: 1.25;
+}
+
+/* Encabezados centrados */
+table.tabla-admin thead th,
+#tablaAdmin thead th,
+#tablaAdminPublic thead th,
+#tablaUsuarios thead th{
+  background: var(--table-head);
+  color: var(--table-fg);
+  border: 1px solid #2a2a2a;
+  text-align: center;
+  padding: 8px 10px;
+  font-weight: 800;
+}
+
+/* Celdas generales */
+table.tabla-admin th, table.tabla-admin td,
+#tablaAdmin th, #tablaAdmin td,
+#tablaAdminPublic th, #tablaAdminPublic td,
+#tablaUsuarios th, #tablaUsuarios td{
+  border: 1px solid var(--bd);
+  padding: 8px 10px;
+  background: #fff;
+  color: #111;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Zebra */
+table.tabla-admin tbody tr:nth-child(even),
+#tablaAdmin tbody tr:nth-child(even),
+#tablaAdminPublic tbody tr:nth-child(even),
+#tablaUsuarios tbody tr:nth-child(even){
+  background: var(--zebra);
+}
+
+/* =========================================================
+   ANCHOS ESPECÍFICOS POR TABLA
+   ========================================================= */
+
+/* --- DATOS ADMIN (Admin) — 1=N°, 5=Usuario, 7=Acciones --- */
+#tablaAdmin thead th:nth-child(1),
+#tablaAdmin tbody td:nth-child(1){
+  width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
+}
+#tablaAdmin thead th:nth-child(5){           /* Usuario (mediana) */
+  width: 160px; max-width: 160px; text-align: center; white-space: nowrap;
+}
+#tablaAdmin tbody td:nth-child(5){
+  width: 160px; max-width: 160px; white-space: nowrap;
+  text-overflow: ellipsis; overflow: hidden;
+}
+#tablaAdmin thead th:nth-child(7),
+#tablaAdmin tbody td:nth-child(7){
+  width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
+}
+
+/* --- DATOS ADMIN (Público) — 1=N° pequeño --- */
+#tablaAdminPublic thead th:nth-child(1),
+#tablaAdminPublic tbody td:nth-child(1){
+  width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
+}
+
+/* --- USUARIOS ADMIN — 1=#, 3=Usuario (mediana), 5=Acciones --- */
+#tablaUsuarios thead th:nth-child(1),
+#tablaUsuarios tbody td:nth-child(1){
+  width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
+}
+#tablaUsuarios thead th:nth-child(3){
+  width: 160px; max-width: 160px; white-space: nowrap; text-align: center;
+}
+#tablaUsuarios tbody td:nth-child(3){
+  width: 160px; max-width: 160px; white-space: nowrap;
+  text-overflow: ellipsis; overflow: hidden;
+}
+#tablaUsuarios thead th:nth-child(5),
+#tablaUsuarios tbody td:nth-child(5){
+  width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
+}
+
+/* =========================================================
+   ENTRADA / EDICIÓN
+   ========================================================= */
+#tablaAdmin input[type="text"],
+#tablaAdmin input[type="email"],
+#tablaAdmin input[type="password"],
+#tablaAdmin textarea,
+#tablaUsuarios input[type="text"],
+#tablaUsuarios input[type="password"],
+#tablaUsuarios textarea{
+  width: 100%;
+  font-size: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+#tablaAdmin input:focus,
+#tablaAdmin textarea:focus,
+#tablaUsuarios input:focus,
+#tablaUsuarios textarea:focus{
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.18);
+}
+
+/* contenteditable (si se usa) */
+#tablaAdmin [contenteditable="true"]:focus,
+#tablaUsuarios [contenteditable="true"]:focus{
+  outline: 2px solid #0f0f0f;
+  background: #f5f7fb;
+}
+
+/* =========================================================
+   BOTONES / ACCIONES
+   ========================================================= */
+.acciones-hoja{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-top: 8px;
+}
+.btn-primary, .btn-secondary{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  border-radius:10px; padding:8px 12px;
+  cursor:pointer; font-weight:700; text-decoration:none;
+  border:1px solid #141414; background:#141414; color:#fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  transition: transform .06s ease, filter .15s ease, background-color .2s ease;
+}
+.btn-primary:hover, .btn-secondary:hover{ background:#1b1b1b; }
+
+/* Eliminar (gris oscuro, compacto) — Admin y Usuarios */
+#tablaAdmin .btn-trash,
+#tablaAdmin .eliminar-fila,
+#tablaAdmin td:last-child .btn,
+#tablaAdmin td:last-child button,
+#tablaUsuarios .btn-trash,
+#tablaUsuarios .eliminar-fila,
+#tablaUsuarios td:last-child .btn,
+#tablaUsuarios td:last-child button{
+  width: 32px; height: 32px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:#1a1a1a;
+  border:1px solid #0e0e0e;
+  color:#fff;
+  border-radius:8px; cursor:pointer;
+  transition: background-color .2s ease, transform .06s ease, filter .15s ease;
+}
+#tablaAdmin .btn-trash:hover,
+#tablaAdmin .eliminar-fila:hover,
+#tablaAdmin td:last-child .btn:hover,
+#tablaAdmin td:last-child button:hover,
+#tablaUsuarios .btn-trash:hover,
+#tablaUsuarios .eliminar-fila:hover,
+#tablaUsuarios td:last-child .btn:hover,
+#tablaUsuarios td:last-child button:hover{
+  background:#121212;
+}
+#tablaAdmin .btn-trash:active,
+#tablaAdmin .eliminar-fila:active,
+#tablaAdmin td:last-child .btn:active,
+#tablaAdmin td:last-child button:active,
+#tablaUsuarios .btn-trash:active,
+#tablaUsuarios .eliminar-fila:active,
+#tablaUsuarios td:last-child .btn:active,
+#tablaUsuarios td:last-child button:active{
+  transform: translateY(1px);
+}
+#tablaAdmin .btn-trash img,
+#tablaAdmin .eliminar-fila img,
+#tablaAdmin td:last-child .btn img,
+#tablaAdmin td:last-child button img,
+#tablaUsuarios .btn-trash img,
+#tablaUsuarios .eliminar-fila img,
+#tablaUsuarios td:last-child .btn img,
+#tablaUsuarios td:last-child button img{
+  width:18px; height:18px; object-fit:contain; filter: invert(1) brightness(1.05);
+}
+
+/* -------- Responsive -------- */
+@media (max-width: 900px){
+  #tablaAdmin thead th:nth-child(5),
+  #tablaAdmin tbody td:nth-child(5),
+  #tablaUsuarios thead th:nth-child(3),
+  #tablaUsuarios tbody td:nth-child(3){
+    width: 136px; max-width: 136px;
+  }
+}
+@media (max-width: 680px){
+  #tablaAdmin thead th:nth-child(1),
+  #tablaAdmin tbody td:nth-child(1),
+  #tablaAdmin thead th:nth-child(7),
+  #tablaAdmin tbody td:nth-child(7),
+  #tablaAdminPublic thead th:nth-child(1),
+  #tablaAdminPublic tbody td:nth-child(1),
+  #tablaUsuarios thead th:nth-child(1),
+  #tablaUsuarios tbody td:nth-child(1),
+  #tablaUsuarios thead th:nth-child(5),
+  #tablaUsuarios tbody td:nth-child(5){
+    width: 48px; max-width: 48px;
+  }
+}
+
+/* -------- Print -------- */
+@media print{
+  body{ background:#fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  header{ background:#fff !important; border:none !important; box-shadow:none !important; }
+  .sheet{ background:#fff; border:none; box-shadow:none; }
+  .table-scroll{ width: 100% !important; max-width:none !important; }
+  table.tabla-admin, #tablaAdmin, #tablaAdminPublic, #tablaUsuarios{ font-size: 11px; border-radius: 0; }
+  table.tabla-admin thead th, #tablaAdmin thead th, #tablaAdminPublic thead th, #tablaUsuarios thead th{
+    background:#000; color:#fff;
+  }
+  .acciones-hoja{ display:none !important; }
+}
+
+/* =========================================================
+   MÓVIL Y TABLET PEQUEÑA (≤720px)
+   — compactar y forzar scroll horizontal sin tocar escritorio
+   ========================================================= */
+@media (max-width: 720px){
+
+  /* El contenedor ocupa todo el ancho y permite deslizar lateral */
+  .table-scroll{
+    width: 100%;
+    max-width: none;
+    margin: 0 0 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Texto y geometría más compactos; ancho mínimo para scroll */
+  table.tabla-admin,
+  #tablaAdmin,
+  #tablaAdminPublic,
+  #tablaUsuarios{
+    font-size: 10px;   /* pequeño a propósito */
+    line-height: 1.2;
+    min-width: 640px;  /* base (se sobreescribe abajo por tabla y en ≤520px) */
+  }
+
+  /* Anchos mínimos por cantidad de columnas */
+  #tablaAdmin{        /* 7 columnas (admin) */
+    min-width: 820px;
+  }
+  #tablaUsuarios{     /* 5 columnas (usuarios) */
+    min-width: 720px;
+  }
+  #tablaAdminPublic{  /* 4 columnas (público) */
+    min-width: 580px;
+  }
+
+  /* Encabezados más pequeños y fijos al hacer scroll vertical */
+  table.tabla-admin thead th,
+  #tablaAdmin thead th,
+  #tablaAdminPublic thead th,
+  #tablaUsuarios thead th{
+    font-size: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  /* Celdas con menos padding para ganar espacio */
+  table.tabla-admin th, table.tabla-admin td,
+  #tablaAdmin th, #tablaAdmin td,
+  #tablaAdminPublic th, #tablaAdminPublic td,
+  #tablaUsuarios th, #tablaUsuarios td{
+    padding: 6px 6px;
+  }
+
+  /* Columnas “#” y “Acciones” aún más compactas */
+  #tablaAdmin thead th:nth-child(1),
+  #tablaAdmin tbody td:nth-child(1),
+  #tablaAdmin thead th:nth-child(7),
+  #tablaAdmin tbody td:nth-child(7),
+  #tablaAdminPublic thead th:nth-child(1),
+  #tablaAdminPublic tbody td:nth-child(1),
+  #tablaUsuarios thead th:nth-child(1),
+  #tablaUsuarios tbody td:nth-child(1),
+  #tablaUsuarios thead th:nth-child(5),
+  #tablaUsuarios tbody td:nth-child(5){
+    width: 40px; max-width: 40px; white-space: nowrap; text-align: center;
+  }
+
+  /* “Usuario” un poco más estrecha en este rango */
+  #tablaAdmin thead th:nth-child(5),
+  #tablaAdmin tbody td:nth-child(5),
+  #tablaUsuarios thead th:nth-child(3),
+  #tablaUsuarios tbody td:nth-child(3){
+    width: 128px; max-width: 128px;
+  }
+
+  /* Inputs/textarea más chicos dentro de tablas editables */
+  #tablaAdmin input[type="text"],
+  #tablaAdmin input[type="email"],
+  #tablaAdmin input[type="password"],
+  #tablaAdmin textarea,
+  #tablaUsuarios input[type="text"],
+  #tablaUsuarios input[type="password"],
+  #tablaUsuarios textarea{
+    font-size: 10px;
+    padding: 3px 5px;
+    border-radius: 6px;
+  }
+
+  /* Botón de eliminar compacto */
+  #tablaAdmin .btn-trash,
+  #tablaAdmin .eliminar-fila,
+  #tablaAdmin td:last-child .btn,
+  #tablaAdmin td:last-child button,
+  #tablaUsuarios .btn-trash,
+  #tablaUsuarios .eliminar-fila,
+  #tablaUsuarios td:last-child .btn,
+  #tablaUsuarios td:last-child button{
+    width: 26px; height: 26px; border-radius: 6px;
+  }
+  #tablaAdmin .btn-trash img,
+  #tablaAdmin .eliminar-fila img,
+  #tablaAdmin td:last-child .btn img,
+  #tablaAdmin td:last-child button img,
+  #tablaUsuarios .btn-trash img,
+  #tablaUsuarios .eliminar-fila img,
+  #tablaUsuarios td:last-child .btn img,
+  #tablaUsuarios td:last-child button img{
+    width: 14px; height: 14px;
+  }
+}
+
+/* =========================================================
+   MÓVIL PEQUEÑO (≤520px)
+   — mismas reglas pero con tablas MÁS ANCHAS para mejor lectura
+   ========================================================= */
+@media (max-width: 520px){
+
+  /* Aumenta el ancho base de todas las tablas en móvil pequeño */
+  table.tabla-admin,
+  #tablaAdmin,
+  #tablaAdminPublic,
+  #tablaUsuarios{
+    min-width: 720px;   /* antes 640px en ≤720px */
+  }
+
+  /* Específicos por tabla (más espacio total) */
+  #tablaAdmin{        /* 7 columnas (admin) */
+    min-width: 960px; /* antes 820px */
+  }
+  #tablaUsuarios{     /* 5 columnas (usuarios) */
+    min-width: 840px; /* antes 720px */
+  }
+  #tablaAdminPublic{  /* 4 columnas (público) */
+    min-width: 700px; /* antes 580px */
+  }
+
+  /* “Usuario” un poco más ancha en móvil pequeño */
+  #tablaAdmin thead th:nth-child(5),
+  #tablaAdmin tbody td:nth-child(5),
+  #tablaUsuarios thead th:nth-child(3),
+  #tablaUsuarios tbody td:nth-child(3){
+    width: 140px; max-width: 140px; /* antes 128px */
+  }
+}
+/* =========================================================
+   MÓVIL — hoja y tabla casi a ancho completo de la pantalla
+   (colocar al FINAL del CSS)
+   ========================================================= */
+@media (max-width: 920px){
+  /* Hoja más ancha (margen ~12px por lado) */
+  .sheet{
+    width: calc(140vw - 44px) !important;
+    max-width: none !important;
+    margin: 1px !important;
+  }
+
+  /* El contenedor de la tabla ocupa la hoja completa */
+  .table-scroll{
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    overflow-x: auto;                 /* mantiene scroll lateral si hace falta */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 720px){
+  /* En pantallas muy chicas, aún más al borde (margen ~8px por lado) */
+  .sheet{
+    width: calc(140vw - 44px) !important;
+  }
+}

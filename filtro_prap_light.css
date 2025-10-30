@@ -1,0 +1,419 @@
+/* =========================================================
+   Filtro PRAP (PÚBLICO) — MODO CLARO
+   Archivo: filtro_prap_light.css
+   Aplica solo cuando <html data-theme="light"> está activo.
+   ========================================================= */
+
+/* -------- Tokens (claro) -------- */
+html[data-theme="light"]{
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --text: #0f172a;
+  --text-dim: #334155;
+
+  --bg-image: url("fondo_dorado_withe.jpg");
+  --overlay:
+    radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+
+  --panel-1: rgba(255,255,255,.92);
+  --panel-2: rgba(255,255,255,.86);
+  --line: rgba(15,23,42,.10);
+
+  --hdr-bg: rgb(1, 0, 57);
+  --hdr-bd: rgba(2,6,23,.08);
+  --hover-tint: rgba(2,6,23,.06);
+
+  --shadow-card: 0 10px 28px rgba(0,0,0,.12);
+  --shadow-pop: 0 16px 40px rgba(0,0,0,.18);
+
+  --table-head: #eef2f6;     /* encabezado claro */
+  --table-fg:   #0f172a;
+  --bd: rgba(15,23,42,.12);
+  --zebra: #f7fafc;
+
+  --radius: 12px;
+
+  /* Controles */
+  --ctrl-bg: #ffffff;
+  --ctrl-bd: rgba(15,23,42,.18);
+  --ctrl-fg: #0f172a;
+  --ctrl-focus: #1e66f5;
+
+  /* Botones */
+  --btn-bg: #141414;
+  --btn-bg-hover: #1b1b1b;
+  --btn-fg: #ffffff;
+
+  --btn-sec-bg: #f3f4f6;
+  --btn-sec-fg: #0f172a;
+  --btn-sec-bd: #e5e7eb;
+  --btn-sec-hover: #f8fafc;
+
+  color-scheme: light;
+}
+
+/* -------- Base / Fondo -------- */
+html[data-theme="light"] *{ box-sizing: border-box; }
+html[data-theme="light"] html, 
+html[data-theme="light"] body{ height:100%; }
+html[data-theme="light"] body{
+  margin:0;
+  font-family:var(--ff);
+  color:var(--text);
+  background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
+}
+
+/* -------- Header (igual al resto, claro) -------- */
+html[data-theme="light"] header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:14px 28px;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-bd);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+  backdrop-filter: saturate(120%) blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  position:relative; z-index:10;
+}
+html[data-theme="light"] .logo_direca img{ width:70px; display:block; }
+html[data-theme="light"] .logo img{ width: clamp(160px, 22vw, 300px); display:block; }
+
+html[data-theme="light"] nav{ flex:1 1 auto; display:flex; justify-content:center; }
+html[data-theme="light"] .nav-links{ display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0; }
+html[data-theme="light"] .nav-links a{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  font-weight:700; color:inherit; text-decoration:none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+html[data-theme="light"] .nav-links a:hover{ background: var(--hover-tint); transform: translateY(-1px); }
+html[data-theme="light"] .boton_salida a{
+  background: rgba(2,6,23,.06);
+  border: 1px solid var(--hdr-bd);
+  border-radius: 10px; font-weight:800;
+}
+
+/* Dropdown del header */
+html[data-theme="light"] .nav-dropdown{ position:relative; }
+html[data-theme="light"] .nav-dropdown > .has-caret::after{ content:"▾"; margin-left:6px; font-size:12px; opacity:.85; }
+html[data-theme="light"] .dropdown-menu{
+  position:absolute; top: calc(100% + 10px); left:0; min-width:240px;
+  padding:8px; border-radius:12px; background:#fff;
+  border:1px solid var(--line); box-shadow: var(--shadow-pop);
+  display:grid; gap:6px; opacity:0; pointer-events:none; transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease; z-index:60; color: var(--text);
+}
+html[data-theme="light"] .nav-dropdown.open > .has-caret,
+html[data-theme="light"] .nav-dropdown.abierto > .has-caret{ background: var(--hover-tint); transform: translateY(-1px); }
+html[data-theme="light"] .nav-dropdown.open .dropdown-menu,
+html[data-theme="light"] .nav-dropdown.abierto .dropdown-menu{ opacity:1; pointer-events:auto; transform: translateY(0); }
+html[data-theme="light"] .dropdown-menu a{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border-radius:8px; color:inherit; font-weight:700;
+}
+html[data-theme="light"] .dropdown-menu a:hover{ background: rgba(2,6,23,.06); }
+
+/* -------- Lienzo -------- */
+html[data-theme="light"] .contenedor-principal{ padding: 18px 0 12px; }
+html[data-theme="light"] .fondo-blanco{
+  width: min(92vw, 1500px);
+  margin: 0 auto;
+  background: var(--panel-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+}
+html[data-theme="light"] .fondo-blanco h1{
+  margin: 6px 8px 14px;
+  font-size: clamp(18px, 2.1vw, 28px);
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* -------- Tarjeta de filtros -------- */
+html[data-theme="light"] .filtro-card{
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+html[data-theme="light"] .filtros-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 1.2fr auto;
+  gap: 12px;
+  align-items: end;
+}
+html[data-theme="light"] .campo label{
+  display:block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0 0 6px 2px;
+}
+
+/* Controles nativos */
+html[data-theme="light"] .campo select,
+html[data-theme="light"] .campo input[type="text"]{
+  width: 100%;
+  font-size: 14px;
+  color: var(--ctrl-fg);
+  background: var(--ctrl-bg);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  line-height: 1.2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+html[data-theme="light"] .campo select:focus,
+html[data-theme="light"] .campo input[type="text"]:focus{
+  border-color: var(--ctrl-focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctrl-focus) 30%, transparent);
+}
+
+/* Botones */
+html[data-theme="light"] .acciones{
+  display:flex; gap:10px; align-items:end; padding-bottom: 2px;
+}
+html[data-theme="light"] .btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  border-radius:10px; padding:10px 16px;
+  cursor:pointer; font-weight:800; text-decoration:none;
+  border:1px solid var(--btn-bg); background: var(--btn-bg); color: var(--btn-fg);
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  transition: transform .06s ease, filter .15s ease, background-color .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+html[data-theme="light"] .btn:hover{ background: var(--btn-bg-hover); }
+html[data-theme="light"] .btn.secundario{
+  background: var(--btn-sec-bg); color: var(--btn-sec-fg);
+  border-color: var(--btn-sec-bd);
+}
+html[data-theme="light"] .btn.secundario:hover{ background: var(--btn-sec-hover); }
+
+/* -------- Select personalizado (Dirección) -------- */
+html[data-theme="light"] .custom-select{ position: relative; display: grid; width: 100%; align-items: center; }
+html[data-theme="light"] .is-replaced{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+html[data-theme="light"] .cs-trigger{
+  display:flex; align-items:center; justify-content:space-between;
+  width: 100%; min-height: 32px;
+  background: var(--ctrl-bg); color: var(--ctrl-fg);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px; padding: 10px 12px;
+  cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+html[data-theme="light"] .cs-trigger:focus-visible{ outline: 2px solid var(--ctrl-focus); outline-offset: 2px; }
+html[data-theme="light"] .custom-select[aria-expanded="true"] .cs-trigger{
+  border-color: var(--ctrl-focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctrl-focus) 30%, transparent);
+}
+html[data-theme="light"] .cs-caret{
+  display:inline-block; width: 0; height: 0; margin-left: 10px;
+  border-left:6px solid transparent; border-right:6px solid transparent; border-top:6px solid #666;
+  transition: transform .2s ease;
+}
+html[data-theme="light"] .custom-select[aria-expanded="true"] .cs-caret{ transform: rotate(180deg); }
+
+/* POP del select (no tapa el input de Responsable) */
+html[data-theme="light"] .cs-pop{
+  position:absolute; top: calc(100% + 6px); left:0;
+  min-width: 100%; max-width: 100%;
+  background: #ffffff; border: 1px solid var(--line);
+  border-radius: 10px; box-shadow: var(--shadow-pop);
+  padding: 6px; display: none; z-index: 1000;
+  max-height: 60vh; overflow: auto; color: var(--text);
+}
+html[data-theme="light"] .custom-select[aria-expanded="true"] .cs-pop{ display:block; }
+
+html[data-theme="light"] .cs-list{ list-style: none; margin:0; padding:0; }
+html[data-theme="light"] .cs-item{
+  padding: 8px 10px; color:inherit; border-radius: 8px;
+  outline: none; cursor: pointer;
+}
+html[data-theme="light"] .cs-item:hover, 
+html[data-theme="light"] .cs-item:focus{ background: var(--hover-tint); }
+html[data-theme="light"] .cs-item[aria-selected="true"]{ background: color-mix(in oklab, #1e66f5 12%, white); }
+
+/* -------- Tabla (90% del ancho de página) -------- */
+html[data-theme="light"] .tabla-contenedor{
+  width: 90vw;
+  max-width: 1400px;
+  margin: 0 auto 6px;
+  overflow: auto;
+}
+html[data-theme="light"] table.tabla-poa{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff; color: #111;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.10);
+  font-size: 12px; line-height: 1.25;
+}
+html[data-theme="light"] table.tabla-poa thead th{
+  background: var(--table-head); color: var(--table-fg);
+  border: 1px solid var(--bd); text-align: center;
+  padding: 8px 10px; font-weight: 800;
+}
+html[data-theme="light"] table.tabla-poa th, 
+html[data-theme="light"] table.tabla-poa td{
+  border: 1px solid var(--bd); padding: 8px 10px;
+  background: #fff; color: #111; vertical-align: top;
+  word-wrap: break-word; overflow-wrap: anywhere;
+}
+html[data-theme="light"] table.tabla-poa tbody tr:nth-child(even){ background: var(--zebra); }
+
+/* --- #tablaFiltro columnas --- */
+html[data-theme="light"] #tablaFiltro thead th:nth-child(4),
+html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){
+  width: 88px; max-width: 88px; min-width: 72px; white-space: nowrap;
+}
+html[data-theme="light"] #tablaFiltro thead th:nth-child(4){ text-align: center; }
+html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){ text-align: right; }
+
+html[data-theme="light"] #tablaFiltro thead th:nth-child(8),
+html[data-theme="light"] #tablaFiltro tbody td:nth-child(8){
+  width: 84px; max-width: 92px; min-width: 72px;
+  text-align: center; white-space: nowrap;
+}
+
+/* Botón “Abrir” */
+html[data-theme="light"] .link-abrir{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 6px 10px; border-radius: 8px;
+  background-color: #0f172a ; border: 1px solid #0f0f0f;
+  color:#fff; text-decoration:none; font-weight:800; font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  transition: background-color .2s ease, transform .06s ease, filter .15s ease;
+}
+html[data-theme="light"] .link-abrir:hover{ background:#030040; }
+html[data-theme="light"] .link-abrir:active{ transform: translateY(1px); }
+
+/* -------- “Ver progreso” alineado a la izquierda -------- */
+html[data-theme="light"] #btn_background{
+  width: 90vw; max-width: 1400px;
+  margin: 14px auto 28px;
+  display: flex; justify-content: flex-start;
+}
+html[data-theme="light"] #btn_1{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 10px 14px; border-radius: 12px;
+  background: #0f172a; border: 1px solid #0a0a0a;
+  color: #fff; text-decoration: none; font-weight: 800;
+  box-shadow: 0 10px 20px rgba(0,0,0,.20);
+  transition: background-color .2s ease, transform .06s ease, filter .15s ease;
+}
+html[data-theme="light"] #btn_1:hover{ background:#000c38; }
+html[data-theme="light"] #btn_1:active{ transform: translateY(1px); }
+
+/* -------- Responsive -------- */
+@media (max-width: 900px){
+  html[data-theme="light"] .filtros-grid{ grid-template-columns: 1fr; align-items: stretch; }
+  html[data-theme="light"] .acciones{ padding-top: 4px; }
+}
+
+
+html[data-theme="light"] .nav-links {
+    color: #fff;
+}
+html[data-theme="light"] .fondo-blanco {
+    background-color: #ffffff88;
+}
+html[data-theme="light"] .btn {
+    background-color: #0f172a;
+}
+html[data-theme="light"] .btn:hover {
+    background-color: #0f172a;
+}
+html[data-theme="light"] .link-abrir {
+    background-color: #0f172a;
+}
+    
+html[data-theme="light"] .btn_background {
+    background-color: #0f172a;
+}
+
+/* =========================================================
+   Filtro PRAP — MODO CLARO — MÓVIL / TABLET PEQUEÑA (≤720px)
+   (sin barras de scroll; se ajusta con tipografía y anchos %)
+   ========================================================= */
+@media (max-width: 720px){
+
+  html[data-theme="light"] .fondo-blanco{
+    width: 90%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  html[data-theme="light"] .tabla-contenedor{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;                 /* no mostrar barra horizontal */
+  }
+  /* Ocultar scrollbars si el navegador las pinta igual */
+  html[data-theme="light"] .tabla-contenedor::-webkit-scrollbar{ display:none; }
+  html[data-theme="light"] .tabla-contenedor{ -ms-overflow-style:none; scrollbar-width:none; }
+
+  html[data-theme="light"] table.tabla-poa{
+    width: 100%;
+    font-size: 10px;                    /* más compacto */
+    line-height: 1.2;
+  }
+  html[data-theme="light"] table.tabla-poa th,
+  html[data-theme="light"] table.tabla-poa td{
+    padding: 6px 6px;
+  }
+
+  /* Igual que en oscuro: “zoom hacia atrás” controlado */
+  html[data-theme="light"] body{ width: 150%; }
+
+  /* Reparto porcentual para 8 columnas (suma ~100%) */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(1),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(1){ width: 13%; }  /* Dirección */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(2),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(2){ width: 17%; }  /* Objetivo */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(3),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(3){ width: 14%; }  /* Indicador */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(4),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){ width: 8%;  }  /* Cantidad (angosta) */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(5),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(5){ width: 18%; }  /* Actividades */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(6),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(6){ width: 12%; }  /* Período */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(7),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(7){ width: 12%; }  /* Responsables */
+  html[data-theme="light"] #tablaFiltro thead th:nth-child(8),
+  html[data-theme="light"] #tablaFiltro tbody td:nth-child(8){ width: 6%;  }  /* Ver (angosta) */
+
+  /* Encabezado compacto (sin sticky para evitar saltos en zoom) */
+  html[data-theme="light"] table.tabla-poa thead th{
+    font-size: 10px;
+    position: static;
+  }
+
+  /* Botón ancho alineado con el contenedor */
+  html[data-theme="light"] #btn_background{
+    width: calc(100vw - 24px);
+    max-width: none;
+    margin: 12px auto 24px;
+  }
+}
+
+/* =========================================================
+   Filtro PRAP — MODO CLARO — MÓVIL PEQUEÑO (≤520px)
+   ========================================================= */
+@media (max-width: 520px){
+  html[data-theme="light"] .fondo-blanco{ width: 90%; }
+  html[data-theme="light"] #btn_background{ width: calc(100vw - 16px); }
+
+  html[data-theme="light"] table.tabla-poa{ font-size: 9px; }
+  html[data-theme="light"] table.tabla-poa th,
+  html[data-theme="light"] table.tabla-poa td{ padding: 5px 5px; }
+
+  /* Igual que en oscuro */
+  html[data-theme="light"] body{ width: 150%; }
+}

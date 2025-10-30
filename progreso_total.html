@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Progreso Total PRAP</title>
+  <script src="theme-boot.js"></script>
+  <link rel="icon" href="chart-line.png" type="image/png">
+  <link rel="stylesheet" href="progreso_total.css">
+  <link rel="stylesheet" href="progreso_total_light.css">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="filtro_prap.html">← </a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+  <main class="page-wrap">
+    <section class="card">
+      <h2>PRAP</h2>
+      <p class="desc"></p>
+      <div class="table-wrap">
+        <table class="data" id="tablaTotal" aria-live="polite">
+          <thead>
+            <tr>
+              <th>Objetivo específico o del producto</th>
+              <th>Indicador</th>
+              <th class="num">Cantidad</th>
+              <th>Actividades</th>
+              <th>Período</th>
+              <th>Responsables</th>
+              <th class="num">I Periodo (abs)</th>
+              <th class="num">I Periodo (%)</th>
+              <th class="num">II Periodo (abs)</th>
+              <th class="num">II Periodo (%)</th>
+              <th class="num">Avance total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="11" class="placeholder">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <div class="table-toolbar nonprint">
+    <button id="btnPdf" class="btn-print" type="button" title="Imprimir o guardar como PDF">
+      <img class="printer-icon" src="print-ffffff.png" alt="">
+      Imprimir / PDF
+    </button>
+  </div>
+  <script src="progreso_total.js"></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

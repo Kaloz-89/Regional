@@ -1,0 +1,248 @@
+/* =========================================================
+   MODO CLARO — Home
+   Archivo: pagina_principal_regional_light.css
+   Aplica solo cuando <html data-theme="light"> está activo
+   ========================================================= */
+
+html[data-theme="light"]{
+  /* Tipografía / medidas */
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --r: 10px;
+  --shadow-card: 0 10px 28px rgba(0,0,0,.12);
+  --shadow-pop: 0 8px 20px rgba(0,0,0,.14);
+
+  /* Texto y estados */
+  --text: #0f172a;
+  --text-dim: #334155;
+  --muted: #64748b;
+
+  /* Marca / acentos */
+  --brand: #0036a2;
+  --brand-ink: #ffffff;
+  --brand-hover: #1557d6;
+  --focus-ring: 0 0 0 3px rgba(30,102,245,.25);
+
+  /* Fondo principal (mismo arte, overlay claro) */
+  --bg-image: url("fondo_dorado_withe.jpg");
+  --overlay:
+    radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+
+  /* Superficies / bordes */
+  --surface-1: rgba(255,255,255,.92);
+  --surface-2: rgba(255,255,255,.78);
+  --surface-3: rgba(255,255,255,.64);
+  --bd-weak: rgba(15,23,42,.06);
+  --bd-strong: rgba(15,23,42,.12);
+  --hover-tint: rgba(2,6,23,.06);
+
+  /* Header / barra superior */
+  --hdr-bg: rgb(1, 0, 57);
+  --hdr-bd: rgba(2,6,23,.08);
+  --hdr-blur: saturate(120%) blur(10px);
+
+  /* Tarjetas / mosaicos */
+  --tile-bg: #ffffff;
+  --tile-ink: #004cff;
+
+  /* Tablas */
+  --table-th-bg: #eef2f6;
+  --table-th-fg: #0f172a;
+  --table-border: rgba(15,23,42,.12);
+  --table-zebra: #f7fafc;
+
+  /* Estados */
+  --ok: #0d9488;   /* teal-600 */
+  --warn: #f59e0b; /* amber-500 */
+  --err: #e11d48;  /* rose-600 */
+
+  /* Inputs/scrollbars en claro */
+  color-scheme: light;
+}
+
+/* Fondo, tipografía base */
+html[data-theme="light"] body{
+  background:
+    var(--overlay),
+    var(--bg-image) center / cover no-repeat fixed;
+  color: var(--text);
+  font-family: var(--ff);
+}
+
+/* Header / topbar */
+html[data-theme="light"] .header,
+html[data-theme="light"] header,
+html[data-theme="light"] .topbar{
+  background: var(--hdr-bg);
+  backdrop-filter: var(--hdr-blur);
+  -webkit-backdrop-filter: var(--hdr-blur);
+  border-bottom: 1px solid var(--hdr-bd);
+}
+
+/* Tarjetas / paneles */
+html[data-theme="light"] .card,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .module,
+html[data-theme="light"] .widget{
+  background: var(--surface-1);
+  border: 1px solid var(--bd-weak);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-card);
+  color: var(--text);
+}
+html[data-theme="light"] .card--secondary,
+html[data-theme="light"] .panel--subtle{
+  background: var(--surface-2);
+}
+html[data-theme="light"] .tile,
+html[data-theme="light"] .pill{
+  background: var(--tile-bg);
+  color: var(--tile-ink);
+  border: 1px solid var(--bd-weak);
+}
+
+/* Botones / enlaces */
+html[data-theme="light"] a,
+html[data-theme="light"] .btn-link{ color: #ffffff; }
+html[data-theme="light"] a:hover,
+html[data-theme="light"] .btn-link:hover{ color: #ffffff; }
+
+html[data-theme="light"] .btn,
+html[data-theme="light"] button,
+html[data-theme="light"] [role="button"]{
+  border-radius: calc(var(--r) + 2px);
+  border: 1px solid var(--bd-weak);
+  background: #9d9d9d;
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+html[data-theme="light"] .yt-pill {
+  color: #ffffff;
+
+}
+html[data-theme="light"] .btn:hover{
+  background: #fff;
+  outline: var(--focus-ring);
+  outline-offset: 1px;
+}
+html[data-theme="light"] .btn--primary{
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: transparent;
+}
+html[data-theme="light"] .btn--primary:hover{ background: var(--brand-hover); }
+
+/* Tablas */
+html[data-theme="light"] table{
+  border-collapse: collapse;
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--table-border);
+}
+html[data-theme="light"] th{
+  background: var(--table-th-bg);
+  color: var(--table-th-fg);
+  text-align: left;
+  border-bottom: 1px solid var(--table-border);
+  padding: .75rem;
+}
+html[data-theme="light"] td{
+  border-top: 1px solid var(--table-border);
+  padding: .70rem;
+  color: var(--text);
+}
+html[data-theme="light"] tbody tr:nth-child(even){
+  background: var(--table-zebra);
+}
+html[data-theme="light"] tbody tr:hover{
+  background: color-mix(in oklab, var(--table-zebra) 65%, white);
+}
+
+/* Formularios */
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea{
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--bd-strong);
+  border-radius: calc(var(--r) + 2px);
+  padding: .6rem .7rem;
+}
+html[data-theme="light"] input:focus,
+html[data-theme="light"] select:focus,
+html[data-theme="light"] textarea:focus{
+  outline: var(--focus-ring);
+  border-color: var(--brand);
+}
+
+/* Chips / alertas */
+html[data-theme="light"] .badge,
+html[data-theme="light"] .chip{
+  background: var(--surface-3);
+  border: 1px solid var(--bd-weak);
+  color: var(--text-dim);
+}
+html[data-theme="light"] .alert--ok{
+  background: color-mix(in oklab, var(--ok) 12%, white);
+  border-color: color-mix(in oklab, var(--ok) 35%, white);
+}
+html[data-theme="light"] .alert--warn{
+  background: color-mix(in oklab, var(--warn) 14%, white);
+  border-color: color-mix(in oklab, var(--warn) 40%, white);
+}
+html[data-theme="light"] .alert--err{
+  background: color-mix(in oklab, var(--err) 12%, white);
+  border-color: color-mix(in oklab, var(--err) 38%, white);
+}
+
+/* Selección y focos */
+html[data-theme="light"] ::selection{
+  background: color-mix(in oklab, var(--brand) 22%, white);
+  color: #0b1220;
+}
+html[data-theme="light"] :focus-visible{
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Hovers neutrales */
+html[data-theme="light"] .list-item:hover,
+html[data-theme="light"] .card:hover,
+html[data-theme="light"] .panel:hover{
+  background: color-mix(in oklab, var(--surface-1) 85%, white);
+}
+
+/* Utilidades */
+html[data-theme="light"] .hr,
+html[data-theme="light"] hr{
+  border: 0;
+  border-top: 1px solid var(--bd-strong);
+  margin: 1rem 0;
+}
+html[data-theme="light"] .shadow,
+html[data-theme="light"] .elev-1{ box-shadow: var(--shadow-card); }
+html[data-theme="light"] .pop,
+html[data-theme="light"] .elev-2{ box-shadow: var(--shadow-pop); }
+html[data-theme="light"] .menu-button {
+  background-color: #6e6e6ea9;
+}
+html[data-theme="light"] .asesoria-slot {
+  color: #ffffff;
+}
+html[data-theme="light"] .dropdown-menu {
+  background-color: #0b1220ee;
+
+}
+html[data-theme="light"] .yt-pop {
+  background-color: #0b1220ee;
+
+}
+
+html[data-theme="light"] .info-box {
+  background-color: #575757;
+  aspect-ratio: 1 / 1.3;
+  padding: 0%;
+  margin: 0;
+  height: 600px;
+  color: #ffffff;
+}

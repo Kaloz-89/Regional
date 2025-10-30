@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Filtro de PRAP — Administradores</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="filtro_prap.css">
+  <link rel="stylesheet" href="filtro_prap_light.css">
+  <link rel="icon" href="calendar.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca">
+      <img src="logo_direca.png" alt="DIRECA">
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver">
+          <a href="pagina_principal_regional_administradores.html" class="js-nav-replace">Inicio</a>
+        </li>
+        <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+          <a href="#" class="has-caret">Datos de la Empresa</a>
+          <ul class="dropdown-menu" aria-label="submenu">
+            <li><a href="datos_administrativos.html">Datos Administrativos</a></li>
+            <li><a href="justificacion.html">Justificacion</a></li>
+            <li><a href="mvv.html">Ideas Rectoras</a></li>
+          </ul>
+        </li>
+        <li class="boton_salida">
+          <a href="index.html" class="js-nav-replace">Cerrar sesión</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="MEP">
+    </div>
+  </header>
+  <main class="contenedor-principal">
+    <div class="fondo-blanco">
+      <h1>Filtro de PRAP</h1>
+      <section class="filtro-card" role="region" aria-label="Filtros de búsqueda">
+        <div class="filtros-grid">
+          <div class="campo">
+            <label for="selDireccion">Dirección</label>
+            <select id="selDireccion" name="direccion">
+              <option value="">— Todas —</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="inpResp">Responsable</label>
+            <input id="inpResp" name="responsable" type="text" placeholder="Escribe un nombre o parte del nombre…">
+          </div>
+          <div class="acciones">
+            <button id="btnBuscar" class="btn" type="button">Buscar</button>
+            <button id="btnLimpiar" class="btn secundario" type="button">Limpiar</button>
+          </div>
+        </div>
+        <div class="resumen" aria-live="polite">
+          <span id="lblResumen">Mostrando 0 resultados</span>
+        </div>
+      </section>
+      <div class="tabla-contenedor">
+        <table class="tabla-poa" id="tablaFiltro">
+          <thead>
+            <tr>
+              <th>Dirección</th>
+              <th>Objetivo específico o del producto</th>
+              <th>Indicador</th>
+              <th>Cantidad</th>
+              <th>Actividades</th>
+              <th>Período</th>
+              <th>Responsables</th>
+              <th>Ver</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <div id="btn_background">
+    <a href="progreso_total_admin.html" id="btn_1">Ver progreso</a>
+  </div>
+  <script src="filtro_prap_admin.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

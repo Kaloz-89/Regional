@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dirección</title>
+  <script src="theme-boot.js"></script>
+  <link rel="icon" href="calendar.png" type="image/png">
+  <link rel="stylesheet" href="tablas_app.css">
+  <link rel="stylesheet" href="tablas_app_light.css">
+</head>
+<header>
+  <div class="logo_direca">
+    <img src="logo_direca.png" alt="DIRECA">
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li class="nav-volver">
+        <a href="pagina_principal_regional.html" class="js-nav-replace">Inicio</a>
+      </li>
+      <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+        <a href="#" class="has-caret">Datos de la Empresa</a>
+        <ul class="dropdown-menu" aria-label="submenu">
+          <li><a href="datos_administrativos_publico.html">Datos Administrativos</a></li>
+          <li><a href="justificacion_publico.html">Justificación</a></li>
+          <li><a href="mvv_publico.html">Ideas Rectoras</a></li>
+        </ul>
+      </li>
+      <li class="boton_salida">
+        <a href="index.html" class="js-nav-replace">Cerrar sesión</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="logo">
+    <img src="logo_mep_sinfondo.png" alt="MEP">
+  </div>
+</header>
+<body>
+  <section class="contenedor-principal">
+    <div class="fondo-blanco">
+      <h1 class="titulo-seccion">Dirección</h1>
+      <div class="tabla-contenedor">
+        <table class="tabla-poa" id="tablaPoaView">
+          <thead>
+            <tr>
+              <th class="col-num">N°</th>
+              <th>Áreas estratégicas del POA regional</th>
+              <th>Objetivos estratégicos</th>
+              <th class="col-num-sm">Meta</th>
+              <th>Indicador</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <script src="vista_direccion.js"></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>
