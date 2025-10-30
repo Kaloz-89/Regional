@@ -81,6 +81,15 @@ btnLogin?.addEventListener('click', async () => {
     btnLogin.textContent = 'Acceso';
   }
 });
+// Permitir iniciar sesión con Enter en los campos de usuario/contraseña
+[userInput, passInput].forEach(el => {
+  el?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); 
+      if (!btnLogin?.disabled) btnLogin?.click();
+    }
+  });
+});
 // ========= Modal admin =========
 const adminModal     = document.getElementById('adminModal');
 const btnAdminOpen   = document.getElementById('btnAdminOpen');
