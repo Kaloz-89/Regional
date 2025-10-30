@@ -15,6 +15,7 @@
     const isHtml = /\.html($|[?#])/i.test(url.pathname);
     return isSameOrigin && isHtml;
   }
+
   document.addEventListener('click', (ev) => {
     const a = ev.target.closest('a');
     if (!a) return;
@@ -23,13 +24,16 @@
     ev.preventDefault();
     location.replace(a.href);
   }, true);
+
   window.addEventListener('pageshow', function (e) {
     if (e.persisted) setTimeout(() => { history.back(); }, 0);
   });
 })();
+
 (function () {
   const YEAR_STORE_KEY = "app_year_v1";
   const NOW = new Date().getFullYear();
+
   function getActiveYear() {
     const p = new URLSearchParams(location.search);
     const fromUrl = parseInt(p.get("year") || "", 10);
@@ -38,8 +42,10 @@
     if (Number.isFinite(fromLs)) return fromLs;
     return NOW;
   }
+
   const YEAR = getActiveYear();
   const MAIN_PAGE = "direccion.html";
+
   const params = new URLSearchParams(location.search);
   const dirId = params.get("id");
   if (!dirId) {
@@ -48,12 +54,16 @@
     location.replace(backUrl);
     return;
   }
+
   const KEY = `${YEAR}_prap_${dirId}`;
+
   const table = document.getElementById("tablaPrap");
   const tbody = table ? table.getElementsByTagName("tbody")[0] : null;
   if (!tbody) return;
+
   const btnAdd = document.getElementById("agregarFila");
   const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(1, 10);
+
   function normalizeFila(f) {
     return {
       rid: f.rid || rid(),
@@ -65,6 +75,7 @@
       resp: f.resp ?? ""
     };
   }
+
   function leer() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -73,6 +84,7 @@
       return arr.map(normalizeFila);
     } catch { return []; }
   }
+
   function escribir(arr) {
     try {
       localStorage.setItem(KEY, JSON.stringify(arr.map(normalizeFila)));
@@ -80,11 +92,14 @@
       console.warn("No se pudo guardar PRAP:", e);
     }
   }
+
   function render() {
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
-    const filas = leer();
-    const filas2 = leer();
-    filas2.forEach((fila) => {
+
+    let filas = leer();                 // <- solo una lectura
+    if (!Array.isArray(filas)) filas = [];
+
+    filas.forEach((fila) => {
       const tr = tbody.insertRow();
       const campos = ["obj", "ind", "cant", "acts", "periodo", "resp"];
       campos.forEach((k, i) => {
@@ -94,6 +109,7 @@
         td.dataset.key = k;
         td.dataset.rid = fila.rid;
       });
+
       const tdAcc = tr.insertCell(6);
       const btn = document.createElement("button");
       btn.textContent = "🗑️";
@@ -107,12 +123,14 @@
       tdAcc.appendChild(btn);
     });
   }
+
   function agregarFila() {
     const arr = leer();
     arr.push(normalizeFila({}));
     escribir(arr);
     render();
   }
+
   let tSave;
   function guardarDesdeDOM() {
     clearTimeout(tSave);
@@ -138,11 +156,14 @@
       escribir(nuevo);
     }, 120);
   }
+
   if (btnAdd) btnAdd.addEventListener("click", agregarFila);
+
   tbody.addEventListener("input", (e) => {
     if (!e.target.closest('td[contenteditable="true"]')) return;
     guardarDesdeDOM();
   });
+
   tbody.addEventListener("click", (e) => {
     const btn = e.target.closest(".eliminar-fila");
     if (!btn) return;
@@ -151,9 +172,15 @@
     guardarDesdeDOM();
     render();
   });
+
   window.addEventListener("storage", (e) => {
     if (e.key === KEY) render();
   });
-  escribir(leer());
+
+  // --- Inicialización: sembrar exactamente 1 fila si no hay datos ---
+  const init = leer();
+  if (init.length === 0) {
+    escribir([ normalizeFila({}) ]);
+  }
   render();
 })();
