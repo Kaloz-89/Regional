@@ -83,7 +83,6 @@
   function render() {
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
     const filas = leer();
-    if (filas.length === 0) agregarFila(); // crea una inicial si está vacío
     const filas2 = leer();
     filas2.forEach((fila) => {
       const tr = tbody.insertRow();
