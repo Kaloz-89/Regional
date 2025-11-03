@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" data-page="marco_referencia">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogos — Marco de Referencia</title>
+
+  <!-- Tema temprano -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Globales -->
+  <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
+
+  <!-- Estilos de esta vista -->
+  <link rel="stylesheet" href="marco_referencia.css">         <!-- Oscuro -->
+  <link rel="stylesheet" href="marco_referencia_light.css">   <!-- Claro -->
+
+  <link rel="icon" href="book-closed-ffffff.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container" aria-label="Catálogos para desplegables">
+    <section class="page-head">
+      <h1 class="title">Catálogos — Marco de Referencia</h1>
+      <div class="actions">
+        <button id="btnCircuitos" class="btn">Circuitos</button>
+      </div>
+    </section>
+
+    <!-- Tabla principal -->
+    <div class="table-wrap" role="region" aria-label="Catálogos principales" tabindex="0">
+      <table class="tabla-catalogos">
+        <thead>
+          <tr>
+            <th>
+              <div class="th-head">
+                <span>Mes</span>
+                <form class="th-form" data-target="meses" autocomplete="off">
+                  <input class="th-input" type="text" placeholder="Agregar mes…">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+            <th>
+              <div class="th-head">
+                <span>Tipo de visita</span>
+                <form class="th-form" data-target="tipoVisita" autocomplete="off">
+                  <input class="th-input" type="text" placeholder="Agregar tipo…">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+            <th>
+              <div class="th-head">
+                <span>Ciclo escolar</span>
+                <form class="th-form" data-target="cicloEscolar" autocomplete="off">
+                  <input class="th-input" type="text" placeholder="Agregar ciclo…">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+            <th>
+              <div class="th-head">
+                <span>Asesoría</span>
+                <form class="th-form" data-target="asesoria" autocomplete="off">
+                  <input class="th-input" type="text" placeholder="Agregar asesoría…">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"><!-- render JS --></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal Circuitos -->
+  <div id="circuitosModal" class="modal modal--auth" role="dialog" aria-modal="true" aria-labelledby="circuitosTitle" hidden>
+    <div class="modal__backdrop" data-close></div>
+
+    <div class="withe_square" aria-live="polite">
+      <div class="auth-wrap">
+        <div class="auth-card" id="circuitosCard">
+          <div class="card-top">
+            <img id="icono_1" src="tabs-ffffff.png" alt="Circuitos">
+            <h2 class="card-title" id="circuitosTitle">Circuitos</h2>
+            <p class="card-sub">Agrega o elimina centros por circuito</p>
+          </div>
+
+          <div class="card-body">
+            <div class="circuit-tabs" role="tablist" aria-label="Circuitos">
+              <button class="tab is-active" role="tab" aria-selected="true" data-circuit="circuito01">Circuito01</button>
+              <button class="tab" role="tab" aria-selected="false" data-circuit="circuito02">Circuito02</button>
+              <button class="tab" role="tab" aria-selected="false" data-circuit="circuito03">Circuito03</button>
+              <button class="tab" role="tab" aria-selected="false" data-circuit="circuito04">Circuito04</button>
+              <button class="tab" role="tab" aria-selected="false" data-circuit="circuito05">Circuito05</button>
+            </div>
+
+            <form class="circuit-add" autocomplete="off">
+              <input id="circuitInput" type="text" class="modal_input" placeholder="Nuevo centro educativo…">
+              <button class="btn_primary" type="submit">Agregar</button>
+            </form>
+
+            <div class="table-circuito-wrap">
+              <table class="tabla-circuito">
+                <thead>
+                  <tr><th>Centro educativo</th><th style="width:110px">Acciones</th></tr>
+                </thead>
+                <tbody id="circuitTbody"><!-- render JS --></tbody>
+              </table>
+            </div>
+
+            <div class="modal_actions">
+              <button class="btn_secondary" type="button" data-close>Cerrar</button>
+            </div>
+          </div>
+        </div> <!-- /auth-card -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts globales -->
+  <script src="nada_fuera_de_lo_comun.js"></script>
+
+  <!-- Lógica de esta vista -->
+  <script src="marco_referencia.js" defer></script>
+</body>
+</html>
