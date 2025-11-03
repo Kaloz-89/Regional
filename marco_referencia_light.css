@@ -60,7 +60,7 @@ html[data-theme="light"] .tabla-catalogos tbody tr:hover{ background: var(--tr-h
 
 /* === Circuitos en LIGHT (cambia estética) === */
 html[data-theme="light"] .modal--auth .withe_square{
-  background: rgba(15,23,42,.06);
+  background: rgb(255, 255, 255);
 }
 html[data-theme="light"] .modal--auth .auth-card{
   background:#fff; color: var(--text);

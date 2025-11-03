@@ -135,7 +135,7 @@ main.container{
 
 /* Fondo negro + panel translúcido (estilo provisto) */
 .modal--auth .withe_square{
-  background: #4a4a4a44;
+  background: #0f0f0f;
   width: 40%;
   height: 100%;
   margin: auto;
