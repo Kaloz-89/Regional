@@ -67,7 +67,7 @@ html[data-theme="light"] .modal--auth .auth-card{
   border:1px solid var(--line); box-shadow: var(--shadow-card);
 }
 html[data-theme="light"] .modal--auth .card-top{
-  background: linear-gradient(180deg, #0036a2 0%, #1557d6 100%);
+  background: linear-gradient(180deg, #000a1d 0%, #001947 100%);
   color:#fff; border-bottom: 1px solid rgba(255,255,255,.25);
 }
 html[data-theme="light"] .modal--auth .card-body{
@@ -83,9 +83,9 @@ html[data-theme="light"] .circuit-add .modal_input{
   background:#fff; color:var(--text); border:1px solid var(--line);
 }
 html[data-theme="light"] .circuit-add .btn_primary{
-  background:#0036a2; color:#fff; border:1px solid transparent;
+  background:#000c25; color:#fff; border:1px solid transparent;
 }
-html[data-theme="light"] .circuit-add .btn_primary:hover{ background:#1557d6; }
+html[data-theme="light"] .circuit-add .btn_primary:hover{ background:#001c50; }
 html[data-theme="light"] .table-circuito-wrap{
   background:#fff; border:1px solid var(--line);
 }

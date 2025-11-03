@@ -97,7 +97,7 @@ html[data-theme="light"] .profile-card--btn{
   color: var(--text);
 }
 html[data-theme="light"] .profile-card--btn:hover{
-  background:#fff; box-shadow: var(--shadow-pop);
+  background:#222222d8; box-shadow: var(--shadow-pop);
 }
 html[data-theme="light"] .profile-card--btn:focus-visible{
   outline: var(--focus-ring);

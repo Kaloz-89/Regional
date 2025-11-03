@@ -26,14 +26,11 @@
 
   const defaultData = () => ({
     circuito01: [], circuito02: [], circuito03: [], circuito04: [], circuito05: [],
-    meses: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"],
-    tipoVisita: ["V. Técnica","V. Colegiada","Acompañamiento","FEA","ERAP","Convivir","Permanencia","STEAM","Otra","CRAEUD1"],
-    cicloEscolar: ["Preescolar","I Ciclo","II Ciclo","III Ciclo","Diversificada","Nivel EPJA (Primaria)","Nivel EPJA (Tercer Ciclo)","Nivel EPJA (Diversificada)"],
+    meses: [""],
+    tipoVisita: [""],
+    cicloEscolar: [""],
     asesoria: [
-      "Capacitación y Desarrollo","Artes Plásticas","Ciencias","Educación Física","Educación Musical",
-      "Educación Especial","Educación Cívica","Educación Jóvenes y Adultos","Educación Preescolar",
-      "Educación Religiosa","Evaluación","Estudios Sociales","Español","Vivamos la Guanacastequidad",
-      "Inglés","Matemática","Orientación","ETIR – Docencia Básica I","ETIR – Psicología","ETIR – Trabajo Social","ETIR – Docencia Básica II"
+      ""
     ]
   });
 
