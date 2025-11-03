@@ -1,7 +1,8 @@
-/* Control de Visitas — perfil delgado pegado al header.
+/* Control de Visitas — perfil delgado, dropdown en header y 7x3.
    - Exige login si tu guard existe.
-   - Obtiene el nombre con la MISMA lógica que la página principal.
-   - No añade lógica de negocio a los botones (placeholders). */
+   - Resuelve el nombre como en la página principal.
+   - Maneja el dropdown "Datos de la Empresa" si no lo hace header.js.
+*/
 
 (function () {
   // 1) Enforce login (si tu app expone un guard)
@@ -10,7 +11,7 @@
   // 2) (Opcional) clave de página para tu sistema de años
   try { window.registerPageKey?.('control_visitas'); } catch (_) {}
 
-  // === Copia compacta de la lógica de la principal para resolver nombre ===
+  // === Lógica compacta (igual a la principal) para obtener nombre ===
   const SESSION_KEY = 'session_user';
   const USERS_KEY   = 'datos_administrativos_v1';
   const ADMINS_KEY  = 'usuarios_admin_v1';
@@ -70,6 +71,34 @@
   const nameEl = document.querySelector('[data-profile-name]');
   if (nameEl) nameEl.textContent = resolveName();
 
-  // 3) Si tienes inicialización de header mínima, engánchate (opcional)
+  // 3) Dropdown "Datos de la Empresa" (por si header.js no lo maneja)
+  (function initDropdown(){
+    const dd = document.querySelector('.nav-dropdown');
+    if (!dd || dd.dataset.init === '1') return;
+    dd.dataset.init = '1';
+
+    const trigger = dd.querySelector('.has-caret');
+    const menu    = dd.querySelector('.dropdown-menu');
+    if (!trigger || !menu) return;
+
+    const open  = () => { dd.classList.add('open'); dd.setAttribute('aria-expanded','true'); };
+    const close = () => { dd.classList.remove('open'); dd.setAttribute('aria-expanded','false'); };
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      dd.classList.contains('open') ? close() : open();
+    });
+
+    // Cierre al hacer click fuera
+    document.addEventListener('click', (e) => {
+      if (!dd.contains(e.target)) close();
+    });
+
+    // Evitar propagación interna
+    menu.addEventListener('click', (e) => e.stopPropagation());
+    trigger.addEventListener('click', (e) => e.stopPropagation());
+  })();
+
+  // 4) Si tienes inicialización de header mínima, engánchate (opcional)
   try { window.initHeaderMinimal?.(); } catch (_) {}
 })();

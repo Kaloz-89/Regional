@@ -1,0 +1,183 @@
+/* =========================================================
+   MODO CLARO — Control de Visitas
+   Aplica solo cuando <html data-theme="light"> está activo
+   ========================================================= */
+
+html[data-theme="light"]{
+  /* Tipografía / medidas */
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --r: 14px;
+
+  --shadow-card: 0 10px 28px rgba(0,0,0,.12);
+  --shadow-pop: 0 8px 20px rgba(0,0,0,.14);
+
+  /* Texto y estados */
+  --text: #0f172a;      /* slate-900 */
+  --text-dim: #334155;  /* slate-700 */
+  --muted: #64748b;     /* slate-500 */
+
+  /* Marca / acentos */
+  --brand: #0036a2;
+  --brand-ink: #ffffff;
+  --brand-hover: #1557d6;
+  --focus-ring: 0 0 0 3px rgba(30,102,245,.25);
+
+  /* Fondo principal (arte claro) */
+  --bg-image: url("fondo_dorado_withe.jpg");
+  --overlay:
+    radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+
+  /* Superficies / bordes */
+  --surface-1: rgba(255,255,255,.92);
+  --surface-2: rgba(255,255,255,.78);
+  --surface-3: rgba(255,255,255,.64);
+  --bd-weak: rgba(15,23,42,.06);
+  --bd-strong: rgba(15,23,42,.12);
+  --hover-tint: rgba(2,6,23,.06);
+
+  /* Header */
+  --hdr-bg: rgb(1, 0, 57);
+  --hdr-bd: rgba(2,6,23,.08);
+  --hdr-blur: saturate(120%) blur(10px);
+
+  /* Tarjetas / mosaicos */
+  --tile-bg: #36363678;  /* como indicaste */
+  --tile-ink: #0f172a;
+
+  color-scheme: light;
+}
+
+/* Fondo, tipografía base */
+html[data-theme="light"] body{
+  background: var(--overlay), var(--bg-image) center / cover no-repeat fixed;
+  color: var(--text);
+  font-family: var(--ff);
+}
+
+/* ===== Header y navegación ===== */
+html[data-theme="light"] header{
+  background: var(--hdr-bg);
+  backdrop-filter: var(--hdr-blur);
+  -webkit-backdrop-filter: var(--hdr-blur);
+  border-bottom: 1px solid var(--hdr-bd);
+}
+
+/* Links del header (blancos) */
+html[data-theme="light"] header .nav-links a{ color:#fff; }
+html[data-theme="light"] header .nav-links a:hover{ background: rgba(255,255,255,.10); }
+
+/* Dropdown del header */
+html[data-theme="light"] .nav-dropdown > .has-caret::after{ color:#fff; }
+html[data-theme="light"] .dropdown-menu{
+  background-color:#0b1220ee;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow: var(--shadow-pop);
+}
+html[data-theme="light"] .dropdown-menu a{ color:#fff; }
+html[data-theme="light"] .nav-dropdown.open > .has-caret{ background: rgba(255,255,255,.10); }
+
+/* ===== Perfil / tarjetas superiores ===== */
+html[data-theme="light"] .profile-card{
+  background:#2424249a;            /* según tu cambio */
+  border:1px solid var(--bd-weak);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-card);
+  color: var(--text);
+}
+html[data-theme="light"] .profile-photo{ border-color: var(--bd-weak); }
+html[data-theme="light"] .profile-name{ color:#fff; }  /* legible sobre fondo oscuro */
+
+/* Botones apilados (Jefatura / Formulario) con look de tarjeta */
+html[data-theme="light"] .profile-card--btn{
+  background:#2424249a;            /* según tu cambio */
+  border:1px solid var(--bd-weak);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-card);
+  color: var(--text);
+}
+html[data-theme="light"] .profile-card--btn:hover{
+  background:#fff; box-shadow: var(--shadow-pop);
+}
+html[data-theme="light"] .profile-card--btn:focus-visible{
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Texto blanco sobre las dos tarjetas superiores */
+html[data-theme="light"] .profile-name,
+html[data-theme="light"] .profile-btn-label{ color:#fff; }
+
+/* ===== Grilla 7x3 (21 botones) ===== */
+html[data-theme="light"] .buttons-grid .vis-btn{
+  background: var(--tile-bg);
+  color: var(--tile-ink);
+  border:1px solid var(--bd-weak);
+  box-shadow: var(--shadow-card);
+}
+html[data-theme="light"] .buttons-grid .vis-btn:hover{
+  background: color-mix(in oklab, var(--tile-bg) 90%, #f5f7fb);
+  box-shadow: var(--shadow-pop);
+}
+html[data-theme="light"] .buttons-grid .vis-btn:focus-visible{
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ===== Utilidades ===== */
+html[data-theme="light"] .top-cards .profile-card,
+html[data-theme="light"] .top-cards .profile-card--btn{
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+html[data-theme="light"] .nav-links .boton_salida a{
+  background: rgba(255,255,255,.18);
+  border-color: transparent;
+  color:#fff;
+}
+
+/* === Móvil: dropdown centrado y SCROLL === */
+@media (max-width: 760px){
+  html[data-theme="light"] .dropdown-menu{
+    left:50%; transform:translate(-50%,0);
+    min-width:0; width:min(92vw,280px);
+    top:calc(100% + 8px);
+  }
+}
+@media (max-width: 720px){
+  html[data-theme="light"],
+  html[data-theme="light"] body{
+    height:auto; min-height:100svh;
+  }
+  html[data-theme="light"] body{
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  html[data-theme="light"] main.container{
+    height:auto; min-height:unset; padding-bottom:28px;
+  }
+
+  /* Mantener lado a lado y escalar como en oscuro */
+  :root{
+    --card-w: clamp(200px, 42vw, 260px);
+    --card-h: calc(var(--card-w) * 0.80);
+    --stack-gap: 6px;
+  }
+  html[data-theme="light"] .profile-photo{
+    width: clamp(64px, calc(var(--card-w) * 0.30), 86px);
+    height: clamp(64px, calc(var(--card-w) * 0.30), 86px);
+  }
+  html[data-theme="light"] .profile-name,
+  html[data-theme="light"] .profile-card--btn .profile-btn-label{
+    font-size: clamp(14px, 4.2vw, 1.1rem);
+  }
+  html[data-theme="light"] .top-cards{
+    grid-template-columns: repeat(2, var(--card-w));
+    justify-content:center;
+  }
+}
+@media (max-width: 560px){
+  html[data-theme="light"] .buttons-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 420px){
+  html[data-theme="light"] .buttons-grid{ grid-template-columns: 1fr; }
+  html[data-theme="light"] .dropdown-menu{ width:min(94vw,300px); }
+}

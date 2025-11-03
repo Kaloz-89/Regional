@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
 
   <!-- Estilos de esta vista -->
-  <link rel="stylesheet" href="control_visitas.css">
+  <link rel="stylesheet" href="control_visitas.css">            <!-- Modo oscuro -->
+  <link rel="stylesheet" href="control_visitas_light.css">      <!-- Modo claro -->
 
   <link rel="icon" href="book-closed-ffffff.png" type="image/png">
 </head>
@@ -26,6 +27,17 @@
     <nav>
       <ul class="nav-links">
         <li class="nav-volver"><a href="pagina_principal_regional_administradores.html">Inicio</a></li>
+
+        <!-- Desplegable Datos de la Empresa -->
+        <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+          <a href="#" class="has-caret">Datos de la Empresa</a>
+          <ul class="dropdown-menu" aria-label="submenu">
+            <li><a href="datos_administrativos.html">Datos Administrativos</a></li>
+            <li><a href="justificacion.html">Justificación</a></li>
+            <li><a href="mvv.html">Ideas Rectoras</a></li>
+          </ul>
+        </li>
+
         <li class="boton_salida"><a href="index.html">Cerrar sesión</a></li>
       </ul>
     </nav>
@@ -37,13 +49,26 @@
 
   <main class="container" aria-label="Control de visitas">
     <section class="menu-wrap">
-      <!-- Tarjeta de perfil delgada, pegada al header -->
-      <div class="profile-card">
-        <img class="profile-photo" src="icono_perfil_admin.png" alt="Perfil">
-        <h3 class="profile-name" data-profile-name>—</h3>
+      <!-- Fila superior: Perfil + (Jefatura/Formulario apilados) -->
+      <div class="top-cards">
+        <!-- Tarjeta de perfil delgada -->
+        <div class="profile-card">
+          <img class="profile-photo" src="icono_perfil_admin.png" alt="Perfil">
+          <h3 class="profile-name" data-profile-name>—</h3>
+        </div>
+
+        <!-- Contenedor apilado con dos botones del mismo alto -->
+        <div class="stack-cards" role="group" aria-label="Accesos rápidos">
+          <a href="#" class="profile-card--btn" id="btnJefatura" role="button" aria-label="Jefatura">
+            <span class="profile-btn-label">Jefatura</span>
+          </a>
+          <a href="#" class="profile-card--btn" id="btnFormulario" role="button" aria-label="Formulario">
+            <span class="profile-btn-label">Formulario</span>
+          </a>
+        </div>
       </div>
 
-      <!-- Grilla 7 x 3 = 21 botones, centrados -->
+      <!-- Grilla 7 x 3 = 21 botones -->
       <div class="buttons-grid" role="grid" aria-label="Menú principal Control de Visitas">
         <!-- Fila 1 -->
         <a href="#" class="vis-btn" id="v1"  role="gridcell">Asesoría Regional<br>Capacitación y<br>Desarrollo</a>
@@ -53,7 +78,6 @@
         <a href="#" class="vis-btn" id="v5"  role="gridcell">Asesoría Regional<br>Educación Musical</a>
         <a href="#" class="vis-btn" id="v6"  role="gridcell">Asesoría Regional<br>Educación Especial</a>
         <a href="#" class="vis-btn" id="v7"  role="gridcell">Asesoría Regional<br>Educación Cívica</a>
-
         <!-- Fila 2 -->
         <a href="#" class="vis-btn" id="v8"  role="gridcell">Asesoría Regional<br>Educación Jóvenes<br>y Adultos</a>
         <a href="#" class="vis-btn" id="v9"  role="gridcell">Asesoría Regional<br>Educación Preescolar</a>
@@ -62,7 +86,6 @@
         <a href="#" class="vis-btn" id="v12" role="gridcell">Asesoría Regional<br>Estudios Sociales</a>
         <a href="#" class="vis-btn" id="v13" role="gridcell">Asesoría Regional<br>Español</a>
         <a href="#" class="vis-btn" id="v14" role="gridcell">Coordinadora Programa<br>Vivamos la<br>Guanacastequidad</a>
-
         <!-- Fila 3 -->
         <a href="#" class="vis-btn" id="v15" role="gridcell">Asesoría Regional<br>Inglés</a>
         <a href="#" class="vis-btn" id="v16" role="gridcell">Asesoría Regional<br>Matemática</a>
@@ -78,8 +101,7 @@
   <!-- Scripts globales (si existen) -->
   <script src="nada_fuera_de_lo_comun.js"></script>
   <script src="header.js"></script>
-
-  <!-- JS de esta vista -->
-  <script src="control_visitas.js" defer></script>
+  <script src="theme-toggle.js"></script>
+  <script src="control_visitas.js"></script>
 </body>
 </html>
