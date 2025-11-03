@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Control de Visitas</title>
+
+  <!-- Early theme (evita FOUC si usas tema global) -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Estilos globales (si los usas) -->
+  <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
+
+  <!-- Estilos de esta vista -->
+  <link rel="stylesheet" href="control_visitas.css">
+
+  <link rel="icon" href="book-closed-ffffff.png" type="image/png">
+</head>
+<body class="visitas-page">
+  <header>
+    <div class="logo_direca">
+      <img src="logo_direca.png" alt="DIRECA">
+    </div>
+
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="pagina_principal_regional_administradores.html">Inicio</a></li>
+        <li class="boton_salida"><a href="index.html">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="MEP">
+    </div>
+  </header>
+
+  <main class="container" aria-label="Control de visitas">
+    <section class="menu-wrap">
+      <!-- Tarjeta de perfil delgada, pegada al header -->
+      <div class="profile-card">
+        <img class="profile-photo" src="icono_perfil_admin.png" alt="Perfil">
+        <h3 class="profile-name" data-profile-name>—</h3>
+      </div>
+
+      <!-- Grilla 7 x 3 = 21 botones, centrados -->
+      <div class="buttons-grid" role="grid" aria-label="Menú principal Control de Visitas">
+        <!-- Fila 1 -->
+        <a href="#" class="vis-btn" id="v1"  role="gridcell">Asesoría Regional<br>Capacitación y<br>Desarrollo</a>
+        <a href="#" class="vis-btn" id="v2"  role="gridcell">Asesoría Regional<br>Artes Plásticas</a>
+        <a href="#" class="vis-btn" id="v3"  role="gridcell">Asesoría Regional<br>Ciencias</a>
+        <a href="#" class="vis-btn" id="v4"  role="gridcell">Asesoría Regional<br>Educación Física</a>
+        <a href="#" class="vis-btn" id="v5"  role="gridcell">Asesoría Regional<br>Educación Musical</a>
+        <a href="#" class="vis-btn" id="v6"  role="gridcell">Asesoría Regional<br>Educación Especial</a>
+        <a href="#" class="vis-btn" id="v7"  role="gridcell">Asesoría Regional<br>Educación Cívica</a>
+
+        <!-- Fila 2 -->
+        <a href="#" class="vis-btn" id="v8"  role="gridcell">Asesoría Regional<br>Educación Jóvenes<br>y Adultos</a>
+        <a href="#" class="vis-btn" id="v9"  role="gridcell">Asesoría Regional<br>Educación Preescolar</a>
+        <a href="#" class="vis-btn" id="v10" role="gridcell">Asesoría Regional<br>Educación Religiosa</a>
+        <a href="#" class="vis-btn" id="v11" role="gridcell">Asesoría Regional<br>Evaluación</a>
+        <a href="#" class="vis-btn" id="v12" role="gridcell">Asesoría Regional<br>Estudios Sociales</a>
+        <a href="#" class="vis-btn" id="v13" role="gridcell">Asesoría Regional<br>Español</a>
+        <a href="#" class="vis-btn" id="v14" role="gridcell">Coordinadora Programa<br>Vivamos la<br>Guanacastequidad</a>
+
+        <!-- Fila 3 -->
+        <a href="#" class="vis-btn" id="v15" role="gridcell">Asesoría Regional<br>Inglés</a>
+        <a href="#" class="vis-btn" id="v16" role="gridcell">Asesoría Regional<br>Matemática</a>
+        <a href="#" class="vis-btn" id="v17" role="gridcell">Asesoría Regional<br>Orientación</a>
+        <a href="#" class="vis-btn" id="v18" role="gridcell">ETIR – Docencia<br>Básica I</a>
+        <a href="#" class="vis-btn" id="v19" role="gridcell">ETIR – Psicología</a>
+        <a href="#" class="vis-btn" id="v20" role="gridcell">ETIR – Trabajo<br>Social</a>
+        <a href="#" class="vis-btn" id="v21" role="gridcell">ETIR – Docencia<br>Básica II</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts globales (si existen) -->
+  <script src="nada_fuera_de_lo_comun.js"></script>
+  <script src="header.js"></script>
+
+  <!-- JS de esta vista -->
+  <script src="control_visitas.js" defer></script>
+</body>
+</html>
