@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" data-page="reporte-asesoria">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte por Asesoría</title>
+
+  <!-- Tema temprano -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Estilos base ya existentes -->
+  <link rel="stylesheet" href="jefatura.css">
+  <link rel="stylesheet" href="jefatura_light.css">
+  <!-- Estilos mínimos para la grilla y tarjetas -->
+  <link rel="stylesheet" href="reporte_asesoria.css">
+
+  <link rel="icon" href="government-ffffff.png" type="image/png">
+</head>
+<body>
+  <!-- Header igual al resto -->
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h1 class="title">Formulario de Control de Visitas — <span id="yearPill">Año</span></h1>
+      </div>
+
+      <!-- Filtro de asesoría -->
+      <div class="filtro-asesoria">
+        <label for="selAsesoria"></label>
+        <select id="selAsesoria" class="select-lg" aria-label="Seleccionar asesoría">
+          <option hidden selected value="">Seleccionar asesoría…</option>
+        </select>
+      </div>
+
+      <!-- Disposición: tabla a la izquierda, tarjetas a la derecha -->
+      <div class="dashboard-grid">
+        <!-- Tabla -->
+        <div class="table-wrap scroll-x" role="region" aria-label="Visitas por asesoría" tabindex="0">
+          <table class="tabla-visitas" id="tblAsesoria">
+            <thead>
+              <tr>
+                <th>Asesoría</th>
+                <th>Circuito</th>
+                <th>Institución</th>
+                <th>Mes</th>
+                <th>Fecha</th>
+                <th>Tipo de visita</th>
+                <th>Ciclo escolar</th>
+                <th>Temática</th>
+                <th>Prioridad</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAsesoria"><!-- filas por JS --></tbody>
+          </table>
+        </div>
+
+        <!-- Resúmenes -->
+        <aside class="cards">
+          <div class="card">
+            <h3 class="card-title">Tabulación de datos</h3>
+
+            <div class="kpi">
+              <h4>Tipo de visita</h4>
+              <table class="kpi-table" id="kpiTipoVisita">
+                <thead><tr><th>Tipo</th><th class="num">Cantidad</th></tr></thead>
+                <tbody><!-- JS --></tbody>
+                <tfoot><tr><th>Total</th><th class="num" id="kpiTipoTotal">0</th></tr></tfoot>
+              </table>
+            </div>
+
+            <div class="kpi">
+              <h4>Circuito educativo</h4>
+              <table class="kpi-table" id="kpiCircuito">
+                <thead><tr><th>Circuito visitado</th><th class="num">Cantidad</th></tr></thead>
+                <tbody><!-- JS --></tbody>
+              </table>
+            </div>
+
+            <div class="kpi">
+              <h4>Mes</h4>
+              <table class="kpi-table" id="kpiMes">
+                <thead><tr><th>Mes visitado</th><th class="num">Cantidad</th></tr></thead>
+                <tbody><!-- JS --></tbody>
+              </table>
+            </div>
+
+            <div class="kpi">
+              <h4>Prioridad de la visita</h4>
+              <table class="kpi-table" id="kpiPrioridad">
+                <thead><tr><th>Prioridad</th><th class="num">Cantidad</th></tr></thead>
+                <tbody><!-- JS --></tbody>
+              </table>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="theme-toggle.js"></script>
+  <script src="reporte_asesoria.js" defer></script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   /* =========================================================
      JEFATURA — Admin
      Depende SOLO de marco_referencia_catalogos_v1_<AÑO>
-     + Soporta claves antiguas -> MIGRA a formato canónico
+     Meses: SIEMPRE los 12 meses precargados (ignora valores viejos)
   ========================================================= */
 
   // ---------- Helpers ----------
@@ -18,6 +18,12 @@
     .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ')
     .trim();
   const val = (v) => (v==null ? "" : String(v));
+
+  // Meses precargados (únicos permitidos en UI)
+  const DEFAULT_MESES = [
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  ];
 
   function canonCircuitKey(input){
     const raw = String(input||"").trim();
@@ -44,17 +50,19 @@
   const MR_PREFIX = "marco_referencia_catalogos_v1";
   const mrKeyForYear = (y) => `${MR_PREFIX}_${y}`;
 
-  // ---------- MR: lectura robusta + normalización ----------
+  // ---------- MR: lectura robusta (meses forzados por defecto) ----------
   function normalizeMR(objRaw){
+    // Forzamos meses a DEFAULT_MESES — ignoramos lo que venga en MR para meses
     const out = {
-      meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[],
+      meses: [...DEFAULT_MESES],
+      tipoVisita: [], cicloEscolar: [], asesoria: [],
       circuits: { circuito01:[], circuito02:[], circuito03:[], circuito04:[], circuito05:[] }
     };
+
     const pick = (k, ...aliases) => {
       const src = [k, ...aliases].map(key => objRaw?.[key]).find(v => Array.isArray(v));
       return uniqSorted(src || []);
     };
-    out.meses        = pick('meses','Meses','mes');
     out.tipoVisita   = pick('tipoVisita','Tipo de visita','tipo','Tipo');
     out.cicloEscolar = pick('cicloEscolar','Ciclo escolar','ciclo','Ciclo');
     out.asesoria     = pick('asesoria','Asesoría','Asesoria','asesorias');
@@ -189,7 +197,7 @@
     tbody.innerHTML = "";
 
     const asesList = CATALOGS.asesoria;
-    const mesList  = CATALOGS.meses;
+    const mesList  = CATALOGS.meses;           // <- siempre DEFAULT_MESES
     const tvList   = CATALOGS.tipoVisita;
     const ceList   = CATALOGS.cicloEscolar;
 
@@ -211,7 +219,6 @@
         sel.addEventListener('change', ()=>{
           const canon = sel.value; // circuito0X
           updateRow(row.id, { circuito: canon, institucion: "" });
-          // refresca instituciones del select vecino si existe
           if (instSelRef){
             const list = uniqSorted((CIRCUITS_MAP[canon]||[]));
             fillSelectDOM(instSelRef, list, list.length ? "Institución…" : "No hay instituciones");
@@ -229,7 +236,7 @@
         instSelRef = sel;
         td.appendChild(sel); tr.appendChild(td); }
 
-      // 4) Mes
+      // 4) Mes (solo DEFAULT_MESES)
       { const td = tdCell();
         const sel = optSel(mesList, row.mes, "Mes…");
         sel.addEventListener('change', ()=> updateRow(row.id, { mes: sel.value }));
@@ -327,7 +334,13 @@
   // ---------- Carga / Reactividad ----------
   function refreshAll(){
     const mr = readMR(YEAR);
-    CATALOGS = { meses:mr.meses, tipoVisita:mr.tipoVisita, cicloEscolar:mr.cicloEscolar, asesoria:mr.asesoria };
+    // Meses SIEMPRE por defecto:
+    CATALOGS = {
+      meses: [...DEFAULT_MESES],
+      tipoVisita: mr.tipoVisita,
+      cicloEscolar: mr.cicloEscolar,
+      asesoria: mr.asesoria
+    };
     CIRCUITS_MAP = { ...mr.circuits }; // {circuito01:[..],...}
     ROWS = readRowsByYear(YEAR);
     render();

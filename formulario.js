@@ -4,8 +4,8 @@
   /* =========================================================
      FORMULARIO — Catálogos y Circuitos dependientes por AÑO
      Fuente única: marco_referencia_catalogos_v1_<AÑO>
-     (migración/normalización incluida para evitar llaves raras)
-     ========================================================= */
+     Meses: SIEMPRE los 12 meses estándar (Enero–Diciembre)
+  ========================================================= */
 
   // ---------- Helpers ----------
   const $  = (sel, ctx=document) => ctx.querySelector(sel);
@@ -19,6 +19,12 @@
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
     .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ')
     .trim();
+
+  // Meses estándar (únicos permitidos en la UI)
+  const DEFAULT_MESES = [
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  ];
 
   function canonCircuitKey(input){
     const n = norm(input);
@@ -36,7 +42,7 @@
   function validInstitution(x){
     const t = String(x||'').trim();
     if (t.length < 2) return false;           // descarta vacíos y 1 char
-    if (/^[\p{N}]+$/u.test(t)) return false;  // sólo números (e.g. "98")
+    if (/^[\p{N}]+$/u.test(t)) return false;  // solo números (e.g. "98")
     if (!/[\p{L}]/u.test(t)) return false;    // sin letras
     return true;
   }
@@ -59,9 +65,11 @@
 
   // ---------- Migración/normalización del MR (in-place) ----------
   function migrateMRObject(obj){
-    if (!obj || typeof obj !== 'object') return { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
+    if (!obj || typeof obj !== 'object')
+      return { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
 
     const out = { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
+
     // Copia catálogos si existen (arrays)
     out.meses        = Array.isArray(obj.meses)        ? uniqSorted(obj.meses)        : [];
     out.tipoVisita   = Array.isArray(obj.tipoVisita)   ? uniqSorted(obj.tipoVisita)   : [];
@@ -110,8 +118,6 @@
     const key = MR_KEY(year);
     const raw = readJSON(key, null) || {};
     const cleaned = migrateMRObject(raw);
-
-    // Si difiere del guardado, persiste saneado (evita que reaparezcan “98”, etc.)
     try {
       const before = JSON.stringify(raw);
       const after  = JSON.stringify(cleaned);
@@ -124,7 +130,8 @@
   function loadCatalogsByYear(year){
     const obj = readMRYearClean(year);
     return {
-      meses:        obj.meses,
+      // Meses FORZADOS a DEFAULT_MESES (no usamos obj.meses para evitar ruido viejo)
+      meses:        [...DEFAULT_MESES],
       tipoVisita:   obj.tipoVisita,
       cicloEscolar: obj.cicloEscolar,
       asesoria:     obj.asesoria,
@@ -161,7 +168,6 @@
   function ensureCircuitOptions(){
     const selCircuito = $("#circuito");
     if (!selCircuito) return;
-    // Fuerza SIEMPRE las 5 opciones canónicas (evita valores raros)
     const keep = selCircuito.value;
     selCircuito.innerHTML = "";
     const ph = document.createElement("option");
@@ -279,7 +285,7 @@
     window.addEventListener("storage", (ev)=>{
       if (!ev.key) return;
       const y = getYear();
-      if (ev.key === MR_KEY(y)) renderForYear(y);   // refresca sólo el año activo
+      if (ev.key === MR_KEY(y)) renderForYear(y);   // refresca solo el año activo
     });
   }
 

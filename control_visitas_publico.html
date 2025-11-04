@@ -12,7 +12,7 @@
   <!-- Estilos globales (si los usas) -->
   <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
 
-  <!-- Estilos de esta vista -->
+  <!-- Estilos de esta vista (CSS compartido con admin) -->
   <link rel="stylesheet" href="control_visitas.css">            <!-- Modo oscuro -->
   <link rel="stylesheet" href="control_visitas_light.css">      <!-- Modo claro -->
 
@@ -49,7 +49,7 @@
 
   <main class="container" aria-label="Control de visitas">
     <section class="menu-wrap">
-      <!-- Fila superior: Perfil + (Jefatura/Formulario apilados) -->
+      <!-- Fila superior: Perfil + (3 accesos) -->
       <div class="top-cards">
         <!-- Tarjeta de perfil delgada -->
         <div class="profile-card">
@@ -57,7 +57,7 @@
           <h3 class="profile-name" data-profile-name>—</h3>
         </div>
 
-        <!-- Contenedor apilado con dos botones del mismo alto -->
+        <!-- Contenedor apilado con tres botones grandes -->
         <div class="stack-cards" role="group" aria-label="Accesos rápidos">
           <a href="jefatura_publico.html" class="profile-card--btn" id="btnJefatura" role="button" aria-label="Jefatura">
             <span class="profile-btn-label">Jefatura</span>
@@ -65,38 +65,16 @@
           <a href="formulario.html" class="profile-card--btn" id="btnFormulario" role="button" aria-label="Formulario">
             <span class="profile-btn-label">Formulario</span>
           </a>
+          <a href="reporte_asesoria_publico.html" class="profile-card--btn" id="btnReporteAsesoria" role="button" aria-label="Datos por Asesoría">
+            <span class="profile-btn-label">Datos por Asesoría</span>
+          </a>
         </div>
       </div>
-      <div class="line">
 
-      </div>
-      <!-- Grilla 7 x 3 = 21 botones -->
-      <div class="buttons-grid" role="grid" aria-label="Menú principal Control de Visitas">
-        <!-- Fila 1 -->
-        <a href="#" class="vis-btn" id="v1"  role="gridcell">Asesoría Regional<br>Capacitación y<br>Desarrollo</a>
-        <a href="#" class="vis-btn" id="v2"  role="gridcell">Asesoría Regional<br>Artes Plásticas</a>
-        <a href="#" class="vis-btn" id="v3"  role="gridcell">Asesoría Regional<br>Ciencias</a>
-        <a href="#" class="vis-btn" id="v4"  role="gridcell">Asesoría Regional<br>Educación Física</a>
-        <a href="#" class="vis-btn" id="v5"  role="gridcell">Asesoría Regional<br>Educación Musical</a>
-        <a href="#" class="vis-btn" id="v6"  role="gridcell">Asesoría Regional<br>Educación Especial</a>
-        <a href="#" class="vis-btn" id="v7"  role="gridcell">Asesoría Regional<br>Educación Cívica</a>
-        <!-- Fila 2 -->
-        <a href="#" class="vis-btn" id="v8"  role="gridcell">Asesoría Regional<br>Educación Jóvenes<br>y Adultos</a>
-        <a href="#" class="vis-btn" id="v9"  role="gridcell">Asesoría Regional<br>Educación Preescolar</a>
-        <a href="#" class="vis-btn" id="v10" role="gridcell">Asesoría Regional<br>Educación Religiosa</a>
-        <a href="#" class="vis-btn" id="v11" role="gridcell">Asesoría Regional<br>Evaluación</a>
-        <a href="#" class="vis-btn" id="v12" role="gridcell">Asesoría Regional<br>Estudios Sociales</a>
-        <a href="#" class="vis-btn" id="v13" role="gridcell">Asesoría Regional<br>Español</a>
-        <a href="#" class="vis-btn" id="v14" role="gridcell">Coordinadora Programa<br>Vivamos la<br>Guanacastequidad</a>
-        <!-- Fila 3 -->
-        <a href="#" class="vis-btn" id="v15" role="gridcell">Asesoría Regional<br>Inglés</a>
-        <a href="#" class="vis-btn" id="v16" role="gridcell">Asesoría Regional<br>Matemática</a>
-        <a href="#" class="vis-btn" id="v17" role="gridcell">Asesoría Regional<br>Orientación</a>
-        <a href="#" class="vis-btn" id="v18" role="gridcell">ETIR – Docencia<br>Básica I</a>
-        <a href="#" class="vis-btn" id="v19" role="gridcell">ETIR – Psicología</a>
-        <a href="#" class="vis-btn" id="v20" role="gridcell">ETIR – Trabajo<br>Social</a>
-        <a href="#" class="vis-btn" id="v21" role="gridcell">ETIR – Docencia<br>Básica II</a>
-      </div>
+      <!-- Separador fino -->
+      <div class="line" aria-hidden="true"></div>
+
+      <!-- Se eliminó la grilla 7x3 de asesorías -->
     </section>
   </main>
 

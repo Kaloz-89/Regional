@@ -1,0 +1,129 @@
+/* Reutiliza tokens y base de jefatura.css */
+
+/* ====== Encabezado + filtro compactos (para que quepa sin scroll) ====== */
+.page-head .title,
+.title{
+  /* título más pequeño */
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1.1;
+  margin: 2px 0 4px;
+}
+
+/* Filtro arriba */
+.filtro-asesoria{
+  display:flex; align-items:flex-end; gap:10px;
+  margin: 0 2px 6px;                 /* sin margen superior para “pegar” al header */
+}
+.filtro-asesoria label{
+  font-weight:800; font-size:12px;   /* más pequeño */
+}
+
+/* Selector grande pero compacto */
+.select-lg{
+  flex:1 1 auto;
+  height: 32px;                      /* más bajo */
+  padding: 6px 10px;                 /* menos padding */
+  border-radius:10px; border:1px solid var(--line);
+  background: rgba(255,255,255,.14); color:#fff;
+  font-size: 12px; line-height: 20px;
+  appearance: auto;                  /* deja que el SO pinte el desplegable */
+}
+
+/* Asegura contraste dentro del menú de opciones (dark y light) */
+.select-lg option{
+  background: #fff !important;
+  color: #111 !important;
+}
+html[data-theme="light"] .select-lg{
+  background:#fff; color:#111; border-color: #d1d5db;
+}
+
+/* ====== Layout principal ====== */
+/* Tabla grande a la izquierda, tarjetas derechas ~70% más estrechas */
+.dashboard-grid{
+  display:grid;
+  grid-template-columns: 1fr 0.30fr;
+  gap:14px;
+  align-items:start;
+  /* intenta mantener todo visible sin scroll vertical típico */
+  /* ajusta el 92svh si tu header es más alto/bajo */
+  max-height: 92svh; 
+  overflow: hidden;
+}
+@media (max-width: 960px){
+  .dashboard-grid{ grid-template-columns: 1fr; max-height: none; }
+}
+
+/* Scroll horizontal sutil para móvil / tablas anchas */
+.scroll-x{
+  overflow:auto; border-radius:12px;
+  /* permite ver head + 1ra fila sin desbordar */
+  max-height: 100%;
+}
+
+/* ====== Tabla principal: siempre visible, incluso sin datos ====== */
+.tabla-principal{
+  width:100%; border-collapse: collapse; table-layout: auto;
+  background: #fff; color:#111; border-radius: 12px; overflow:hidden;
+  box-shadow: var(--shadow);
+}
+.tabla-principal thead th{
+  background:#000; color:#fff; text-align:left; font-weight:800;
+  padding: 8px 10px; font-size: 12px;
+}
+.tabla-principal td, .tabla-principal th{
+  border:1px solid #d0d0d0; padding: 6px 8px; font-size: 11px;
+}
+
+/* Estado “vacío”: muestra una fila fantasma con mensaje,
+   pero mantiene visible el marco de la tabla */
+.tabla-principal tbody:empty{
+  position: relative;
+  height: 42px;               /* altura mínima para que “se vea tabla” */
+}
+.tabla-principal tbody:empty::after{
+  content: "No hay datos para la asesoría seleccionada";
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #666; background: #fafafa;
+  border-top: 1px solid #e5e7eb;
+  font-size: 11px; font-weight: 700;
+}
+
+/* ====== Tarjetas derechas — versión compacta ====== */
+.cards{ 
+  display:grid; gap:12px; 
+  max-width: 320px;            /* más estrecho que antes (360 -> 320) */
+}
+.card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px;                /* menos padding */
+  box-shadow: var(--shadow);
+}
+
+/* Titulares/kpis (~70%) */
+.card-title{ margin: 0 0 4px; font-size: 11px; font-weight: 800; }
+.kpi{ margin-top: 4px; }
+.kpi h4{ margin: 4px 0 3px; font-size: 9.5px; font-weight: 800; }
+
+/* Tablas KPI compactas (~70%) */
+.kpi-table{
+  width:100%; border-collapse:collapse; table-layout: fixed;
+  background:#fff; color:#111; 
+  font-size: 8px; line-height:1.15;
+  border-radius: 8px; overflow: hidden;
+}
+.kpi-table th, .kpi-table td{
+  border:1px solid #d0d0d0; padding:4px 6px; white-space:nowrap;
+}
+.kpi-table thead th{ background:#000; color:#fff; text-align:center; }
+.kpi-table .num{ text-align:right; width:50px; }
+
+/* Pequeños refuerzos responsivos */
+@media (max-width: 560px){
+  .kpi-table{ font-size: 9.5px; }
+  .card-title{ font-size: 12px; }
+  .kpi h4{ font-size: 10.5px; }
+}

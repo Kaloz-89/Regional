@@ -2,6 +2,7 @@
    MARCO DE REFERENCIA — Tabla + Circuitos (localStorage)
    Modal 100% interactuable, sin oscurecer ni cerrar al hacer click fuera
    + MIGRACIÓN a claves canónicas de circuito (circuito01..05)
+   + Se elimina el UI de "Mes", pero se conservan 12 meses internos
    ========================================================= */
 
 (() => {
@@ -16,6 +17,11 @@
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
     .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ')
     .trim();
+
+  const DEFAULT_MESES = [
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  ];
 
   // “Circuito 1”, “c3”, “03” -> "circuito01"
   function canonCircuitKey(input){
@@ -46,20 +52,27 @@
   const keyForYear = (y) => `${LS_KEY_PREFIX}_${y}`;
 
   const defaultData = () => ({
-    circuito01: [], circuito02: [], circuito03: [], circuito04: [], circuito05: [],
-    meses: [], tipoVisita: [], cicloEscolar: [], asesoria: []
+    // Meses internos (no se editan en esta vista)
+    meses: [...DEFAULT_MESES],
+    // Catálogos editables
+    tipoVisita: [], cicloEscolar: [], asesoria: [],
+    // Circuitos
+    circuito01: [], circuito02: [], circuito03: [], circuito04: [], circuito05: []
   });
 
   // Normaliza y MIGRA cualquier forma vieja a {circuito01..05}
   function normalizeStateKeys(objRaw){
     const base = defaultData();
 
-    // Copia sanas para catálogos
+    // Copia sanas para catálogos (si existen en el almacen viejo)
     const copyArr = (key, ...aliases) => {
       const src = [key, ...aliases].map(k => objRaw?.[k]).find(v => Array.isArray(v));
-      base[key] = uniqSorted(src || []);
+      if (src && src.length) base[key] = uniqSorted(src);
     };
+    // Meses: si el viejo tiene meses, respétalos; si no, deja los 12 por defecto
     copyArr('meses', 'Meses', 'mes');
+    if (!base.meses.length) base.meses = [...DEFAULT_MESES];
+
     copyArr('tipoVisita', 'Tipo de visita', 'tipo', 'Tipo');
     copyArr('cicloEscolar', 'Ciclo escolar', 'ciclo', 'Ciclo');
     copyArr('asesoria', 'Asesoría', 'Asesoria', 'asesorias');
@@ -112,9 +125,8 @@
   let YEAR  = AppYear.getYear();
   let state = readYearData(YEAR);
 
-  // ===== Tabla principal (Mes / Tipo / Ciclo / Asesoría) =====
+  // ===== Tabla principal (UI) — *Sin* columna Mes =====
   const COLUMNS = [
-    { key: "meses",        title: "Mes" },
     { key: "tipoVisita",   title: "Tipo de visita" },
     { key: "cicloEscolar", title: "Ciclo escolar" },
     { key: "asesoria",     title: "Asesoría" }
@@ -156,7 +168,7 @@
     renderTable();
   });
 
-  // Agregar desde thead
+  // Agregar desde thead (ya no existe “meses” aquí)
   function wireThForms(){
     document.querySelectorAll(".th-form[data-target]").forEach(form => {
       const key = form.dataset.target;
