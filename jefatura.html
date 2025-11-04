@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" data-page="jefatura">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jefatura</title>
+
+  <!-- Tema temprano -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Estilos de esta vista -->
+  <link rel="stylesheet" href="jefatura.css">
+  <link rel="stylesheet" href="jefatura_light.css">
+
+  <link rel="icon" href="book-closed-ffffff.png" type="image/png">
+</head>
+<body>
+  <!-- Header: solo volver -->
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h1 class="title">Jefatura</h1>
+        <div class="actions">
+          <button id="btnAddRow" class="btn btn--primary">Agregar fila</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="Visitas administrables" tabindex="0">
+        <table class="tabla-visitas" aria-describedby="help">
+          <thead>
+            <tr>
+              <th>Asesoría</th>
+              <th>Circuito</th>
+              <th>Institución</th>
+              <th>Mes</th>
+              <th>Fecha</th>
+              <th>Tipo de visita</th>
+              <th>Ciclo escolar</th>
+              <th>Temática</th>
+              <th>Prioridad</th>
+              <th>Observación</th>
+              <th>Validación <br>jefatura</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="jefTbody"><!-- filas por JS --></tbody>
+        </table>
+      </div>
+      <p id="help" class="help"> <strong></strong>
+
+      </p>
+    </section>
+  </main>
+
+  <script src="header.js"></script>
+  <script src="theme-toggle.js"></script>
+
+  <script src="jefatura.js" defer></script>
+</body>
+</html>
