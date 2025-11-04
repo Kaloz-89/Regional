@@ -1,14 +1,35 @@
 /* =========================================================
    MARCO DE REFERENCIA — Tabla + Circuitos (localStorage)
-   Modal 100% interactuable:
-   • NO se oscurece el fondo
-   • NO se cierra al hacer click afuera ni con ESC
-   • Los clics fuera se bloquean (no navegan ni activan nada)
-   • Lista de circuitos con scroll y “Cerrar” siempre visible
+   Modal 100% interactuable, sin oscurecer ni cerrar al hacer click fuera
+   + MIGRACIÓN a claves canónicas de circuito (circuito01..05)
    ========================================================= */
 
 (() => {
   "use strict";
+
+  // ===== Utilidades comunes =====
+  const readJSON  = (k, fb=null) => { try { return JSON.parse(localStorage.getItem(k)||'null') ?? fb; } catch { return fb; } };
+  const writeJSON = (k, v)      => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  const uniqSorted = (arr) => Array.from(new Set((arr||[]).map(v=>String(v).trim()))).filter(Boolean)
+                                   .sort((a,b)=>a.localeCompare(b,'es',{numeric:true,sensitivity:'base'}));
+  const normText = (s) => String(s||"")
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ')
+    .trim();
+
+  // “Circuito 1”, “c3”, “03” -> "circuito01"
+  function canonCircuitKey(input){
+    const raw = String(input||"").trim();
+    if (!raw) return "";
+    const nrm = normText(raw);
+    const m = nrm.match(/\d+/);
+    if (m) {
+      const num = Math.max(1, Math.min(99, parseInt(m[0],10)));
+      return `circuito${String(num).padStart(2,'0')}`;
+    }
+    if (nrm.includes('circuit')) return 'circuito01';
+    return "";
+  }
 
   // ===== Año (usa el existente si está definido) =====
   const AppYear = window.AppYear || (() => {
@@ -26,23 +47,67 @@
 
   const defaultData = () => ({
     circuito01: [], circuito02: [], circuito03: [], circuito04: [], circuito05: [],
-    meses: [""],
-    tipoVisita: [""],
-    cicloEscolar: [""],
-    asesoria: [
-      ""
-    ]
+    meses: [], tipoVisita: [], cicloEscolar: [], asesoria: []
   });
 
+  // Normaliza y MIGRA cualquier forma vieja a {circuito01..05}
+  function normalizeStateKeys(objRaw){
+    const base = defaultData();
+
+    // Copia sanas para catálogos
+    const copyArr = (key, ...aliases) => {
+      const src = [key, ...aliases].map(k => objRaw?.[k]).find(v => Array.isArray(v));
+      base[key] = uniqSorted(src || []);
+    };
+    copyArr('meses', 'Meses', 'mes');
+    copyArr('tipoVisita', 'Tipo de visita', 'tipo', 'Tipo');
+    copyArr('cicloEscolar', 'Ciclo escolar', 'ciclo', 'Ciclo');
+    copyArr('asesoria', 'Asesoría', 'Asesoria', 'asesorias');
+
+    // Recolecta posibles listas de instituciones de claves variadas
+    const pushMany = (kCanon, list) => {
+      base[kCanon].push(...uniqSorted(list||[]));
+      base[kCanon] = uniqSorted(base[kCanon]);
+    };
+
+    const takeInstitutions = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return uniqSorted(val.map(String));
+      if (typeof val==='object'){
+        const bags = [];
+        for (const cand of ['instituciones','centros','escuelas','colegios','lista','items']) {
+          if (Array.isArray(val[cand])) bags.push(...val[cand]);
+        }
+        if (val.nombre) bags.push(String(val.nombre));
+        return uniqSorted(bags);
+      }
+      return [String(val)];
+    };
+
+    // 1) Si ya existen las canónicas, se integran tal cual
+    for (let i=1;i<=5;i++){
+      const k = `circuito${String(i).padStart(2,'0')}`;
+      if (Array.isArray(objRaw?.[k])) pushMany(k, objRaw[k]);
+    }
+    // 2) Explora TODAS las claves del objeto y migra variantes
+    Object.keys(objRaw || {}).forEach(k => {
+      if (['meses','Meses','mes','tipoVisita','Tipo de visita','tipo','Tipo','cicloEscolar','Ciclo escolar','ciclo','Ciclo','asesoria','Asesoría','Asesoria','asesorias'].includes(k)) return;
+      const canon = canonCircuitKey(k);
+      if (canon) pushMany(canon, takeInstitutions(objRaw[k]));
+    });
+
+    return base;
+  }
+
   const readYearData = (year) => {
-    try {
-      const raw = localStorage.getItem(keyForYear(year));
-      return raw ? JSON.parse(raw) : defaultData();
-    } catch { return defaultData(); }
+    const raw = readJSON(keyForYear(year), null);
+    if (!raw) return defaultData();
+    const norm = normalizeStateKeys(raw);
+    // Si cambió, MIGRA
+    if (JSON.stringify(norm) !== JSON.stringify(raw)) writeYearData(year, norm);
+    return norm;
   };
-  const writeYearData = (year, data) => {
-    try { localStorage.setItem(keyForYear(year), JSON.stringify(data)); } catch {}
-  };
+  const writeYearData = (year, data) => writeJSON(keyForYear(year), data);
 
   let YEAR  = AppYear.getYear();
   let state = readYearData(YEAR);
@@ -100,14 +165,9 @@
         ev.preventDefault();
         const val = (input?.value || "").trim();
         if (!val) return;
-        state[key] = state[key] || [];
-        const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-        if (!state[key].some(x => norm(x) === norm(val))) {
-          state[key].push(val);
-          state[key].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
-          writeYearData(YEAR, state);
-          renderTable();
-        }
+        state[key] = uniqSorted([...(state[key]||[]), val]);
+        writeYearData(YEAR, state);
+        renderTable();
         input.value = ""; input.focus();
       });
     });
@@ -126,24 +186,19 @@
   const tableWrap = modal ? modal.querySelector(".table-circuito-wrap") : null;
   let currentCircuit = "circuito01";
 
-  // --- BLOQUEO seguro de eventos externos (no cierra, no navega) ---
+  // Trampas para bloquear exterior
   let removeTraps = () => {};
   function addGlobalTraps(){
     const handler = (ev) => {
       if (!modal || modal.hidden) return;
-      // Si el click NO es dentro de la tarjeta, bloquea todo
       if (card && !card.contains(ev.target)) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.stopImmediatePropagation();
+        ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation();
       }
     };
     const types = ["click","mousedown","mouseup","pointerdown","pointerup","touchstart","touchend","contextmenu"];
     types.forEach(t => document.addEventListener(t, handler, true));
-    // Ignora ESC
     const esc = (e) => { if (!modal || modal.hidden) return; if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); } };
     document.addEventListener("keydown", esc, true);
-
     removeTraps = () => {
       types.forEach(t => document.removeEventListener(t, handler, true));
       document.removeEventListener("keydown", esc, true);
@@ -151,89 +206,43 @@
     };
   }
 
-  // --- Layout para que la lista scrollee y Cerrar siempre esté visible ---
   function applyModalLayout(){
     if (!card || !cardBody || !tableWrap) return;
-
-    // Sin oscurecido y sin interceptar clics (los bloquea el trap)
     if (modal)   { modal.style.background = "transparent"; }
-    if (backdrop){
-      backdrop.style.background    = "transparent";
-      backdrop.style.pointerEvents = "none";
-    }
-
-    // Contenedor principal
-    card.style.maxHeight     = "90vh";
-    card.style.width         = "min(920px, 96vw)";
-    card.style.display       = "flex";
-    card.style.flexDirection = "column";
-    card.style.position      = "relative";
-    card.style.zIndex        = "10002";
-
-    // Cuerpo flexible
-    cardBody.style.display       = "flex";
-    cardBody.style.flexDirection = "column";
-    cardBody.style.flex          = "1 1 auto";
-    cardBody.style.minHeight     = "0";
-
-    // Área scrollable
-    tableWrap.style.flex      = "1 1 auto";
-    tableWrap.style.minHeight = "0";
-    tableWrap.style.overflowY = "auto";
-    tableWrap.style.webkitOverflowScrolling = "touch";
+    if (backdrop){ backdrop.style.background = "transparent"; backdrop.style.pointerEvents = "none"; }
+    card.style.maxHeight="90vh"; card.style.width="min(920px,96vw)";
+    card.style.display="flex"; card.style.flexDirection="column"; card.style.position="relative";
+    cardBody.style.display="flex"; cardBody.style.flexDirection="column"; cardBody.style.flex="1 1 auto"; cardBody.style.minHeight="0";
+    tableWrap.style.flex="1 1 auto"; tableWrap.style.minHeight="0"; tableWrap.style.overflowY="auto"; tableWrap.style.webkitOverflowScrolling="touch";
   }
 
-  function openModal(){
-    if (!modal) return;
-    modal.hidden = false;
-    document.body.classList.add('modal-open');
-    renderCircuitTable();
-    applyModalLayout();
-    addGlobalTraps();
-    setTimeout(()=> inputAdd?.focus(), 0);
-  }
-  function closeModal(){
-    if (!modal) return;
-    modal.hidden = true;
-    document.body.classList.remove('modal-open');
-    removeTraps();
-  }
+  function openModal(){ if (!modal) return; modal.hidden=false; document.body.classList.add('modal-open'); renderCircuitTable(); applyModalLayout(); addGlobalTraps(); setTimeout(()=> inputAdd?.focus(),0); }
+  function closeModal(){ if (!modal) return; modal.hidden=true; document.body.classList.remove('modal-open'); removeTraps(); }
 
   openBtn?.addEventListener("click", openModal);
   closeBtns.forEach(btn => btn.addEventListener("click", closeModal));
 
-  // Tabs de circuitos
   document.querySelectorAll(".circuit-tabs .tab").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".circuit-tabs .tab.is-active").forEach(b=>b.classList.remove("is-active"));
       btn.classList.add("is-active");
       currentCircuit = btn.dataset.circuit;
-      renderCircuitTable();
-      applyModalLayout();
-      inputAdd?.focus();
+      renderCircuitTable(); applyModalLayout(); inputAdd?.focus();
     });
   });
 
-  // Render de la tabla de un circuito
   function renderCircuitTable(){
     if (!tbody) return;
-    const arr = state[currentCircuit] || [];
+    const arr = uniqSorted(state[currentCircuit] || []);
     let html = "";
     for (let i=0; i<arr.length; i++){
       const val = arr[i];
-      html += `
-        <tr>
-          <td>${escapeHtml(val)}</td>
-          <td><button class="btn-del" data-i="${i}">Eliminar</button></td>
-        </tr>`;
+      html += `<tr><td>${escapeHtml(val)}</td><td><button class="btn-del" data-i="${i}">Eliminar</button></td></tr>`;
     }
-    if (arr.length === 0){
-      html = `<tr><td colspan="2" style="opacity:.8">Sin registros en ${currentCircuit}.</td></tr>`;
-    }
+    if (arr.length === 0){ html = `<tr><td colspan="2" style="opacity:.8">Sin registros en ${currentCircuit}.</td></tr>`; }
     tbody.innerHTML = html;
   }
 
-  // Eliminar fila en circuitos
   tbody?.addEventListener("click", (e) => {
     const btn = e.target.closest(".btn-del");
     if (!btn) return;
@@ -244,42 +253,26 @@
     renderCircuitTable();
   });
 
-  // Agregar fila en circuitos
   formAdd?.addEventListener("submit", (e) => {
     e.preventDefault();
     const val = (inputAdd?.value || "").trim();
     if (!val) return;
-    const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-    state[currentCircuit] = state[currentCircuit] || [];
-    if (!state[currentCircuit].some(x => norm(x) === norm(val))) {
-      state[currentCircuit].push(val);
-      state[currentCircuit].sort((a,b)=>a.localeCompare(b,'es',{sensitivity:'base'}));
-      writeYearData(YEAR, state);
-      renderCircuitTable();
-    }
+    state[currentCircuit] = uniqSorted([...(state[currentCircuit]||[]), val]);
+    writeYearData(YEAR, state);
+    renderCircuitTable();
     inputAdd.value = ""; inputAdd.focus();
   });
 
-  // Utilidad
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 
   // Arranque
-  function start(){
-    wireThForms();
-    renderTable();
-  }
+  function start(){ wireThForms(); renderTable(); }
   window.addEventListener("yearchange", () => {
-    YEAR = AppYear.getYear();
-    state = readYearData(YEAR);
-    renderTable();
-    renderCircuitTable();
-    applyModalLayout();
+    const y = AppYear.getYear();
+    if (y !== YEAR){ state = readYearData(y); YEAR = y; }
+    renderTable(); renderCircuitTable(); applyModalLayout();
   });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-  } else { start(); }
-
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', start); }
+  else { start(); }
 })();
