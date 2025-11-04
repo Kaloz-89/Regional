@@ -9,7 +9,7 @@ html[data-theme="light"]{
   --panel: rgba(255,255,255,.92);
   --hdr-bg: rgb(1, 0, 57); --hdr-bd: rgba(2,6,23,.08);
   --line: rgba(15,23,42,.12);
-  --table-head:#000; --table-fg:#fff; --bd:#d0d0d0; --zebra:#f7f7f7;
+  --table-head:#010040; --table-fg:#fff; --bd:#d0d0d0; --zebra:#f7f7f7;
 }
 
 html[data-theme="light"] body{
@@ -30,7 +30,7 @@ html[data-theme="light"] .panel{ background: var(--panel); border-color: var(--l
 html[data-theme="light"] .tabla-visitas{ background:#fff; color:#111; }
 html[data-theme="light"] .tabla-visitas th,
 html[data-theme="light"] .tabla-visitas td{ background:#fff; color:#111; border-color: var(--bd); }
-html[data-theme="light"] .tabla-visitas thead th{ background:#000; color:#fff; border-color:#2a2a2a; }
+html[data-theme="light"] .tabla-visitas thead th{ background:#000a31; color:#fff; border-color:#2a2a2a; }
 
 /* Inputs/selects transparentes + flecha */
 html[data-theme="light"] .cell :is(input,select,textarea){
@@ -60,7 +60,7 @@ html[data-theme="light"] .tabla-visitas tbody td:nth-child(13){
 }
 
 /* Botón Agregar fila: gris MUY oscuro también en claro */
-html[data-theme="light"] .btn--primary{ background:#0f0f0f; color:#fff; border:1px solid #000; }
+html[data-theme="light"] .btn--primary{ background:#020041; color:#fff; border:1px solid #000; }
 html[data-theme="light"] .btn--primary:hover{ background:#151515; }
 
 /* Botón eliminar: sólo icono (blanco) sobre gris oscuro */
@@ -109,7 +109,7 @@ html[data-theme="light"] .cell select option:checked{
 html[data-theme="light"] .cell select::-webkit-scrollbar{ width: 10px; }
 html[data-theme="light"] .cell select::-webkit-scrollbar-track{ background: #f1f5f9; border-radius: 8px; }
 html[data-theme="light"] .cell select::-webkit-scrollbar-thumb{
-  background: rgba(2,6,23,.25);
+  background: rgb(0, 16, 85);
   border-radius: 8px;
   border: 2px solid #f1f5f9;
 }
@@ -118,7 +118,7 @@ html[data-theme="light"] .cell select::-webkit-scrollbar-thumb{
 html[data-theme="light"] .btn--danger{
   width: 28px; height: 28px; padding: 0;
   border-radius: 8px;
-  background: #111; border: 1px solid #000;
+  background: #03003d; border: 1px solid #000;
   font-size: 0; background-image: none;
 }
 html[data-theme="light"] .btn--danger::before{
@@ -130,4 +130,7 @@ html[data-theme="light"] .btn--danger:hover{ background:#0c0c0c; }
 html[data-theme="light"] .btn--danger::before{
   font-size: 12px;   /* antes 16px */
   margin-left: 4px;
+}
+html[data-theme="light"] tr {
+    background-color: #010040;
 }
