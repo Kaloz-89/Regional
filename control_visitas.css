@@ -265,3 +265,10 @@ main.container{
   .buttons-grid{ grid-template-columns: 1fr; }
   .dropdown-menu{ width:min(94vw,300px); }
 }
+
+.line {
+  background-color: #1d1d1d;
+width: 1400px;
+height: 10px;
+border-radius: 10px;
+}

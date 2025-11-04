@@ -181,3 +181,9 @@ html[data-theme="light"] .nav-links .boton_salida a{
   html[data-theme="light"] .buttons-grid{ grid-template-columns: 1fr; }
   html[data-theme="light"] .dropdown-menu{ width:min(94vw,300px); }
 }
+html[data-theme="light"] .line {
+  background-color: #00003a;
+width: 1400px;
+height: 10px;
+border-radius: 10px;
+}
