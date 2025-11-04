@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" data-page="jefatura_publico">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jefatura — Público</title>
+
+  <!-- Tema temprano -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Estilos compartidos (mismos que Jefatura admin) -->
+  <link rel="stylesheet" href="jefatura.css">
+  <link rel="stylesheet" href="jefatura_light.css">
+
+  <link rel="icon" href="government-ffffff.png" type="image/png">
+</head>
+<body>
+  <!-- Header: solo volver -->
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas_publico.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h1 class="title">Jefatura — Público</h1>
+        <!-- Sin acciones en modo público -->
+      </div>
+
+      <div class="table-wrap" role="region" aria-label="Visitas (público)" tabindex="0">
+        <table class="tabla-visitas" aria-describedby="helpPub">
+          <thead>
+            <tr>
+              <th>Asesoría</th>
+              <th>Circuito</th>
+              <th>Institución</th>
+              <th>Mes</th>
+              <th>Fecha</th>
+              <th>Tipo de visita</th>
+              <th>Ciclo escolar</th>
+              <th>Temática</th>
+              <th>Prioridad</th>
+              <th>Observación</th>
+              <th>Validación <br>jefatura</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="jefPubTbody"><!-- filas por JS --></tbody>
+        </table>
+      </div>
+      <p id="helpPub" class="help"></p>
+    </section>
+  </main>
+
+  <!-- (opcionales, si los usas en el resto del sitio) -->
+  <script src="header.js"></script>
+  <script src="theme-toggle.js"></script>
+
+  <!-- Lógica solo-lectura -->
+  <script src="jefatura_publico.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" data-page="formulario_visita">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario de Control de Visitas</title>
+
+  <!-- Tema temprano -->
+  <script src="theme-boot.js"></script>
+
+  <!-- Estilos de esta vista -->
+  <link rel="stylesheet" href="formulario.css">
+  <link rel="stylesheet" href="formulario_light.css">
+
+  <link rel="icon" href="book-closed-ffffff.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas_publico.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h1 class="title">Formulario de Control de Visitas</h1>
+        <div class="year-pill" id="yearPill" title="Año activo"></div>
+      </div>
+
+      <form id="frmVisita" novalidate>
+        <div class="form-grid">
+          <!-- 1) Asesoría a todo el ancho -->
+          <div class="field field--full">
+            <label for="asesoria">Asesoría</label>
+            <select id="asesoria" required></select>
+            <p class="hint"></p>
+          </div>
+
+          <!-- 2) Circuito e Institución alineados -->
+          <div class="row-two">
+            <div class="field">
+              <label for="circuito">Circuito</label>
+              <select id="circuito" required>
+                <option value="" selected hidden>Seleccionar…</option>
+                <option value="Circuito01">Circuito01</option>
+                <option value="Circuito02">Circuito02</option>
+                <option value="Circuito03">Circuito03</option>
+                <option value="Circuito04">Circuito04</option>
+                <option value="Circuito05">Circuito05</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="institucion">Institución</label>
+              <select id="institucion" required disabled>
+                <option value="" selected hidden>Elija circuito primero…</option>
+              </select>
+              <p class="hint">Lista dependiente del circuito.</p>
+            </div>
+          </div>
+
+          <!-- 3) Izquierda: desplegables | Derecha: textos + FECHA -->
+          <div class="cols-2">
+            <div class="col-left">
+              <div class="field">
+                <label for="mes">Mes</label>
+                <select id="mes" required></select>
+              </div>
+              <div class="field">
+                <label for="tipoVisita">Tipo de visita</label>
+                <select id="tipoVisita" required></select>
+              </div>
+              <div class="field">
+                <label for="cicloEscolar">Ciclo escolar</label>
+                <select id="cicloEscolar" required></select>
+              </div>
+            </div>
+
+            <div class="col-right">
+              <div class="field">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" required/>
+              </div>
+              <div class="field">
+                <label for="tematica">Temática</label>
+                <textarea id="tematica" rows="3" placeholder="Descripción corta…"></textarea>
+              </div>
+              <div class="field">
+                <label for="observacion">Observación</label>
+                <textarea id="observacion" rows="3" placeholder="Notas u observaciones…"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">Guardar</button>
+          <button type="button" class="btn btn--ghost" id="btnLimpiar">Limpiar</button>
+          <a class="btn btn--ghost" id="btnJefatura" href="jefatura.html" hidden>Ir a Jefatura</a>
+        </div>
+
+        <p class="foot-note">* Los select se alimentan de <strong>Marco de Referencia</strong> y las <strong>instituciones</strong> del modal de <strong>Circuitos</strong>.</p>
+      </form>
+    </section>
+  </main>
+
+  <script src="formulario.js" defer></script>
+  <script src="theme-toggle.js"></script>
+  <script src="header.js"></script>
+</body>
+</html>
+
+

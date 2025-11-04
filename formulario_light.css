@@ -1,0 +1,59 @@
+html[data-theme="light"]{
+  --text:#0f172a;
+  --bg-image:url("fondo_dorado_withe.jpg");
+  --overlay:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0));
+  --panel:rgba(255,255,255,.92);
+  --hdr-bg: rgb(1, 0, 57); --hdr-bd: rgba(2,6,23,.08);
+  --line: rgba(15,23,42,.12);
+
+  --fld-bg:#ffffff; --fld-ink:#0f172a; --fld-bd:#d0d0d0; --fld-focus:#1e66f5;
+}
+
+html[data-theme="light"] body{
+  color: var(--text);
+  background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
+}
+
+html[data-theme="light"] .panel{
+  background: var(--panel); border-color: var(--line);
+  position: relative; z-index: 10; overflow: visible;
+}
+html[data-theme="light"] .nav-volver a{
+  color:#fff; background: rgba(255,255,255,.18); border-color: transparent;
+}
+html[data-theme="light"] .nav-volver a:hover{ background: rgba(255,255,255,.24); }
+
+html[data-theme="light"] select,
+html[data-theme="light"] input[type="date"],
+html[data-theme="light"] textarea{
+  background: var(--fld-bg); color: var(--fld-ink); border-color: var(--fld-bd);
+  position: relative; z-index: 1;
+  -webkit-appearance: none; appearance: none;
+  background-image:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%23444"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+}
+html[data-theme="light"] input[type="date"]{
+  background-image: none;
+}
+html[data-theme="light"] select:focus,
+html[data-theme="light"] input[type="date"]:focus,
+html[data-theme="light"] textarea:focus{
+  border-color: var(--fld-focus); box-shadow:0 0 0 3px rgba(17, 17, 17, 0.22);
+  z-index: 999;
+}
+
+/* contenedores sin clipping para los menús */
+html[data-theme="light"] .form-grid,
+html[data-theme="light"] .row-two,
+html[data-theme="light"] .cols-2,
+html[data-theme="light"] .col-left,
+html[data-theme="light"] .col-right,
+html[data-theme="light"] .field{
+  position: relative; overflow: visible;
+}
+html[data-theme="light"] .field label {
+    color: #0f172a;
+}
