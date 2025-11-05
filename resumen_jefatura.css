@@ -1,0 +1,297 @@
+/* ===== Resumen Jefatura — CSS exclusivo (Oscuro/Base) ===== */
+
+/* Reset y base */
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color:#eef2f6;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.70)),
+    url("gpt7.jpg") center / cover no-repeat fixed;
+  display:grid;
+  grid-template-rows:auto 1fr; /* header + main */
+}
+
+/* Header */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:12px 18px;
+  background: rgba(8,9,11,0.55);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.20);
+  position:relative; z-index:10;
+}
+.logo_direca img{ width:70px; display:block; }
+.logo img{ width: clamp(160px, 22vw, 300px); display:block; }
+nav{ flex:1 1 auto; display:flex; justify-content:center; }
+.nav-links{ display:flex; align-items:center; gap:18px; list-style:none; margin:0; padding:0; }
+.nav-links a{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  font-weight:800; color:#fff; text-decoration:none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.nav-links a:hover{ background: rgba(255,255,255,.10); transform: translateY(-1px); }
+
+/* Contenido principal */
+main.container{ padding: 12px 14px 24px; }
+
+/* “Pizarrón” (grilla de la sección) */
+.board{
+  width: min(1400px, 96vw);
+  margin: 0 auto;
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: auto;
+  gap: 16px;
+}
+
+/* Título */
+.title{
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  text-align:center;
+  font-weight: 900;
+  font-size: clamp(18px, 2.6vw, 28px);
+  letter-spacing:.2px;
+}
+
+/* Franja semitransparente que contiene la tabla */
+.glass-strip{
+  grid-column: 1 / -1;
+  border-radius: 16px;
+  background: rgba(255,255,255,.24);
+  border: 1px solid rgba(255,255,255,.18);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.25);
+  padding: 12px;
+}
+
+/* Wrapper con scroll si la tabla crece */
+.summary-wrap{
+  width: 100%;
+  overflow: auto;               /* scroll x/y cuando haga falta */
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  border: 1px solid rgba(0,0,0,.08);
+}
+
+/* Tabla del pizarrón */
+.summary-table{
+  width: 100%;                /* fuerza scroll-x si la viewport es angosta */
+  border-collapse: collapse;
+  color: #111;
+  background: #fff;
+}
+.summary-table th, .summary-table td{
+  border: 1px solid #d0d0d0;
+  padding: 6px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.summary-table thead th{
+  background: #0a0a0a;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.summary-table .col-asesoria { font-weight: 800; width: 100%; }
+.summary-table tfoot th{ background: #111; color:#fff; }
+
+/* Resaltado de subgrupos en thead (separadores visuales) */
+.summary-table .group{
+  background:#1c1c1c;
+  color:#fff;
+  font-weight: 600;
+  text-align:center;
+}
+
+/* Fila total */
+.summary-table .row-total th{
+  background:#000; color:#fff;
+  position: sticky; bottom: 0; z-index: 1;
+}
+
+
+/* Responsive */
+@media (max-width: 980px){
+  .lane--left, .lane--right{ grid-column: 1 / -1; }
+  .lane{ min-height: 160px; }
+  .summary-table{ width: 1100px; }
+}
+@media (max-width: 560px){
+  .summary-table{ width: 1000px; }
+}
+/* ===== Lanes alternados a ancho de viewport (no toca la tabla) ===== */
+:root{
+  /* cuánto “recortar” el otro lado (espacio que no alcanza) */
+  --lane-inset: 200px;
+  --lane-gap-y: 56px;            /* separación vertical entre lanes y respecto a la tabla */
+}
+
+/* base visual (igual estilo que ya usabas) */
+.lane{
+  min-height: 280px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  box-shadow: 0 16px 32px rgba(0,0,0,.20);
+}
+
+/* 1) Comienza a la IZQUIERDA y termina un poco antes de la derecha */
+.lane--left{
+  width: calc(100vw - var(--lane-inset));
+  margin-left: calc(50% - 50vw);   /* pega al borde izquierdo real de la página */
+  margin-right: auto;
+  margin-top: var(--lane-gap-y);
+}
+
+/* 2) Comienza a la DERECHA y termina un poco antes de la izquierda */
+.lane--right{
+  width: calc(100vw - var(--lane-inset));
+  margin-right: calc(50% - 50vw);  /* pega al borde derecho real de la página */
+  margin-left: auto;
+  margin-top: var(--lane-gap-y);
+}
+
+@media (max-width: 700px){
+  /* en móvil recortamos menos para que se vean cómodos */
+  :root{ --lane-inset: clamp(20px, 5vw, 72px); --lane-gap-y: 40px; }
+  .lane{ min-height: 220px; }
+}
+/* ====== Tarjeta de gráfico ====== */
+.chart-card{
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #ffffff;           /* el lane ya es blanco; mantenemos limpio */
+  height: 850%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+}
+
+.chart-title{
+  margin: 0;
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 900;
+  letter-spacing: .3px;
+  color: #0b1220;
+  text-transform: uppercase;
+}
+
+.chart-wrap{
+  position: relative;
+  width: 100%;
+  height: clamp(320px, 48svh, 460px); /* parecido al alto del ejemplo */
+  overflow: hidden;
+}
+
+/* En móvil un poco más compacto */
+@media (max-width: 600px){
+  .chart-wrap{ height: 320px; }
+}
+/* ===== Botonera entre tabla y gráfico ===== */
+.actions{
+  width: min(1400px, 96vw);
+  margin: 12px auto 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.btn{
+  appearance: none;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #ffffff;
+  color: #0b1220;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.btn:hover{ filter: brightness(1.03); }
+.btn--primary{
+  background: #1a1a1a; /* azul MEP-like */
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ===== Impresión en 2 páginas: 1) tabla  2) gráfico + 2º cuadro ===== */
+@media print{
+  /* limpiar fondo y elementos no necesarios */
+  body{ background: #fff !important; }
+  header, .nav-links, .actions{ display: none !important; }
+
+  /* página 1: sólo la tabla */
+  .glass-strip{
+    box-shadow: none; border: 0; background: #fff;
+    page-break-after: always;            /* ← salto de página tras la tabla */
+  }
+
+  /* página 2: lanes juntos */
+  .lane{
+    width: auto !important;
+    margin: 0 0 18px 0 !important;
+    box-shadow: none; border: 1px solid #ddd;
+    break-inside: avoid;                 /* evita cortes dentro del cuadro */
+    page-break-inside: avoid;
+  }
+  .lane--left{ break-after: avoid; }     /* intenta mantenerlos en la misma hoja */
+  .lane--right{ break-before: avoid; }
+
+  /* el gráfico más alto en papel para que se lea cómodo */
+  .chart-wrap{ height: 65vh !important; }
+}
+/* ====== Tabla compacta (mismo look, tamaño menor) ====== */
+
+/* celdas más pequeñas */
+.summary-table th,
+.summary-table td{
+  padding: 4px 6px;          /* antes 6px 8px */
+  font-size: 11px;           /* antes 12px */
+  line-height: 1.15;
+}
+
+/* encabezados (ambas filas) un poco más chicos */
+.summary-table thead th{
+  padding: 5px 6px;          /* antes 6px 8px */
+  font-size: 11.5px;         /* antes ~12px */
+}
+
+/* títulos de grupo (fila superior del thead) */
+.summary-table .group{
+  padding: 5px 6px;
+  font-size: 11.5px;
+  text-align: center;
+}
+
+/* fila de totales pegada abajo */
+.summary-table .row-total th{
+  padding: 5px 6px;
+  font-size: 11.5px;
+}
+
+/* columna de texto (asesoría) mantiene el resto del ancho pero con tipografía menor */
+.summary-table .col-asesoria{
+  font-size: 11px;
+}
+
+/* columnas numéricas: más angostas pero legibles */
+.summary-table td.num,
+.summary-table th.num{
+  min-width: 34px;           /* compacta los números (2 dígitos) */
+  text-align: right;
+}
+
+/* en responsive, reduce un poco el ancho mínimo para que scrollee menos */
+@media (max-width: 980px){
+  .summary-table{ width: 1000px; }   /* antes 1100px */
+}
+@media (max-width: 560px){
+  .summary-table{ width: 900px; }    /* antes 1000px */
+}
+.cir {background-color: #c3c3c3;}

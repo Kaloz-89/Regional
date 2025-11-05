@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" data-page="resumen-jefatura">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pizarrón de Tabulaciones</title>
+
+  <!-- Tema temprano (si ya lo usas) -->
+  <script src="theme-boot.js"></script>
+
+  <!-- CSS exclusivo de esta página -->
+  <link rel="stylesheet" href="resumen_jefatura.css">
+  <link rel="stylesheet" href="resumen_jefatura_light.css">
+
+  <link rel="icon" href="government-ffffff.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="control_visitas.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="container">
+    <section class="board">
+      <h1 class="title">Pizarrón de Tabulaciones</h1>
+
+      <!-- Franja blanca semitransparente CON la tabla global -->
+      <div class="glass-strip">
+        <div class="summary-wrap">
+          <table class="summary-table" id="tblPizarron" aria-label="Pizarrón de tabulaciones por asesoría">
+            <thead id="theadPizarron"><!-- se rellena por JS --></thead>
+            <tbody id="tbodyPizarron"><!-- se rellena por JS --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bloques blancos alternados (por ahora vacíos, como pediste) -->
+      
+    </section>
+    <div class="actions">
+  <button id="btnIrJefatura" class="btn btn--primary">Ir a Jefatura</button>
+  <button id="btnImprimir"  class="btn">Imprimir</button>
+</div>
+      <div class="lane lane--left" aria-label="Bloque izquierdo con gráfico">
+        <div class="chart-card">
+            <h2 class="chart-title">Cantidad de visitas por asesoría</h2>
+          <div class="chart-wrap">
+            <canvas id="chartVisitasAsesoria"></canvas>
+          </div>
+        </div>
+      </div>
+
+<!-- LANE derecho (vacío por ahora) -->
+<div class="lane lane--right" aria-label="Bloque derecho vacío"></div>
+
+<!-- Carga Chart.js y tu JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="resumen_jefatura.js" defer></script>
+</body>
+</html>

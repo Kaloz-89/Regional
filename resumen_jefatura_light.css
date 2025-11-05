@@ -1,0 +1,52 @@
+/* ===== Resumen Jefatura — Modo Claro (exclusivo) ===== */
+/* Aplica cuando <html data-theme="light"> */
+
+html[data-theme="light"] body{
+  color:#0f172a;
+  background:
+    radial-gradient(1200px 600px at 60% -5%, rgba(255,255,255,0), transparent 60%),
+    url("fondo_dorado_withe.jpg") center / cover no-repeat fixed;
+}
+
+/* Header en claro */
+html[data-theme="light"] header{
+  background: rgb(1, 0, 57);
+  border-bottom: 1px solid rgba(2,6,23,.08);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  backdrop-filter: saturate(120%) blur(10px);
+}
+html[data-theme="light"] .nav-links a{ color:#fff; }
+html[data-theme="light"] .nav-links a:hover{ background: rgba(255,255,255,.10); }
+
+/* Título */
+html[data-theme="light"] .title{
+  color:#0f172a;
+}
+
+/* Franja semitransparente clara */
+html[data-theme="light"] .glass-strip{
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(15,23,42,.08);
+  box-shadow: 0 10px 24px rgba(0,0,0,.14);
+}
+
+/* Bloques blancos */
+html[data-theme="light"] .lane{
+  background:#07002a;
+  border: 1px solid rgba(15,23,42,.12);
+  box-shadow: 0 12px 26px rgba(0,0,0,.12);
+}
+html[data-theme="light"] .summary-table .group {
+    background-color: #0f172a;
+}
+html[data-theme="light"] .summary-table thead th {
+    background-color: #000612;
+}
+html[data-theme="light"] .summary-table .row-total th {
+    background-color: #0e234d;
+}
+html[data-theme="light"] .btn--primary{
+  background: #0f0856; /* azul MEP-like */
+  color: #fff;
+  border-color: transparent;
+}
