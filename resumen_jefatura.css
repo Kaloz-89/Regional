@@ -71,7 +71,7 @@ main.container{ padding: 12px 14px 24px; }
 
 /* Wrapper con scroll si la tabla crece */
 .summary-wrap{
-  width: 100%;
+  width: 99%;
   overflow: auto;               /* scroll x/y cuando haga falta */
   background: #ffffff;
   border-radius: 12px;
@@ -251,7 +251,7 @@ main.container{ padding: 12px 14px 24px; }
 /* celdas más pequeñas */
 .summary-table th,
 .summary-table td{
-  padding: 4px 6px;          /* antes 6px 8px */
+  padding: 3px 5px;          /* antes 6px 8px */
   font-size: 11px;           /* antes 12px */
   line-height: 1.15;
 }
@@ -295,3 +295,37 @@ main.container{ padding: 12px 14px 24px; }
   .summary-table{ width: 900px; }    /* antes 1000px */
 }
 .cir {background-color: #c3c3c3;}
+/* ===== Colores por grupos de columnas (21+ columnas) =====
+   1: Asesoría | 2: Cant.
+   3–7: Circuitos        → gris claro
+   8–19: Meses           → (sin cambio)
+   20: Prioridad Alta    → rojo claro
+   21: Prioridad Media   → amarillo claro
+   22: N/A               → verde claro
+*/
+
+/* Cuerpo y totales: columnas de Circuitos (3–7) en gris claro */
+.summary-table tbody td:nth-child(n+3):nth-child(-n+7),
+.summary-table tfoot th:nth-child(n+3):nth-child(-n+7){
+  background: #eeeeee;   /* gris sutil */
+}
+
+/* Prioridades (20–22) */
+.summary-table tbody td:nth-child(20),
+.summary-table tfoot th:nth-child(20){
+  background: #fee2e2;   /* rojo claro */
+  color: #7f1d1d;
+  font-weight: 700;
+}
+.summary-table tbody td:nth-child(21),
+.summary-table tfoot th:nth-child(21){
+  background: #fef3c7;   /* amarillo claro */
+  color: #7c3e03;
+  font-weight: 700;
+}
+.summary-table tbody td:nth-child(22),
+.summary-table tfoot th:nth-child(22){
+  background: #dcfce7;   /* verde claro (N/A) */
+  color: #14532d;
+  font-weight: 700;
+}
