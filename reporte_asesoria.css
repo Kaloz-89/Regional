@@ -1,119 +1,164 @@
-/* Reutiliza tokens y base de jefatura.css */
+/* ===== Reporte por Asesoría — CSS exclusivo (Oscuro/Base) ===== */
 
-/* ====== Encabezado + filtro compactos (para que quepa sin scroll) ====== */
-.page-head .title,
-.title{
-  /* título más pequeño */
-  font-size: clamp(16px, 2.2vw, 20px);
-  line-height: 1.1;
-  margin: 2px 0 4px;
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+:root{
+  /* (puedes dejarlo para futuros ajustes, ya no se usa para limitar altura) */
+  --table-h: 1000px;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #eef2f6;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.70)),
+    url("gpt7.jpg") center / cover no-repeat fixed;
+  display: grid;
+  grid-template-rows: auto 1fr; /* header + main */
 }
 
-/* Filtro arriba */
+/* ---------- Header ---------- */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:12px 18px;
+  background: rgba(8,9,11,0.55);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.20);
+  position:relative; z-index: 10;
+}
+.logo_direca img{ width:70px; display:block; }
+.logo img{ width: clamp(160px, 22vw, 300px); display:block; }
+nav{ flex:1 1 auto; display:flex; justify-content:center; }
+.nav-links{ display:flex; align-items:center; gap:18px; list-style:none; margin:0; padding:0; }
+.nav-links a{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  font-weight:800; color:#fff; text-decoration:none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.nav-links a:hover{ background: rgba(255,255,255,.10); transform: translateY(-1px); }
+
+/* ---------- Contenedor principal ---------- */
+main.container{ padding: 0 14px 16px; } /* sin padding-top para pegar al header */
+
+/* ---------- Panel: 2 columnas (tabla + KPIs) ---------- */
+.panel{
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0.32fr; /* izquierda grande / derecha angosta */
+  grid-auto-rows: auto;
+  gap: 12px;
+  align-items: start;
+  align-content: start;
+
+  /* IMPORTANTE: permitimos que la página haga el scroll general */
+  max-height: none;
+  overflow: visible;
+}
+
+/* Título oculto para que todo arranque arriba del todo */
+.panel-head{ display:none; }
+
+/* ---------- Filtro alineado con la tabla ---------- */
 .filtro-asesoria{
-  display:flex; align-items:flex-end; gap:10px;
-  margin: 0 2px 6px;                 /* sin margen superior para “pegar” al header */
+  grid-column: 1; /* misma columna que la tabla */
+  display:flex; gap:8px; align-items:flex-end;
+  margin: 10px 0 10px;         /* pedido: margin-top:10px */
+  width: 100%;
 }
 .filtro-asesoria label{
-  font-weight:800; font-size:12px;   /* más pequeño */
+  font-weight:800; font-size:12px; white-space: nowrap;
 }
 
-/* Selector grande pero compacto */
+/* Selector ocupa el ancho de la tabla */
 .select-lg{
-  flex:1 1 auto;
-  height: 32px;                      /* más bajo */
-  padding: 6px 10px;                 /* menos padding */
-  border-radius:10px; border:1px solid var(--line);
-  background: rgba(255,255,255,.14); color:#fff;
-  font-size: 12px; line-height: 20px;
-  appearance: auto;                  /* deja que el SO pinte el desplegable */
+  flex: 1 1 auto;
+  width: 100%;
+  height: 32px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+  background: rgba(255,255,255,.14);
+  color:#fff;
+  font-size: 12px; line-height: 18px;
+  appearance: auto;
+}
+.select-lg:focus{ outline: 2px solid rgba(255,255,255,.35); outline-offset: 2px; }
+/* Contraste dentro del desplegable */
+.select-lg option{ background:#fff !important; color:#111 !important; }
+
+/* ---------- Grilla interna: colocamos hijos directamente en .panel ---------- */
+.dashboard-grid{ display: contents; } /* .table-wrap -> col 1, .cards -> col 2 */
+
+/* ---------- Área de tabla (SIN scroll interno; usa el scroll de la página) ---------- */
+.table-wrap{
+  /* quitamos altura fija y scroll vertical interno */
+  height: auto;
+  min-height: 0;
+  border-radius: 12px;
+
+  overflow-y: visible;          /* ← deja que el scroll lo haga la página */
+  overflow-x: auto;             /* scroll HORIZONTAL cuando haga falta */
+  scrollbar-gutter: stable;
+  margin-top: 0 !important;
 }
 
-/* Asegura contraste dentro del menú de opciones (dark y light) */
-.select-lg option{
-  background: #fff !important;
-  color: #111 !important;
-}
-html[data-theme="light"] .select-lg{
-  background:#fff; color:#111; border-color: #d1d5db;
-}
-
-/* ====== Layout principal ====== */
-/* Tabla grande a la izquierda, tarjetas derechas ~70% más estrechas */
-.dashboard-grid{
-  display:grid;
-  grid-template-columns: 1fr 0.30fr;
-  gap:14px;
-  align-items:start;
-  /* intenta mantener todo visible sin scroll vertical típico */
-  /* ajusta el 92svh si tu header es más alto/bajo */
-  max-height: 92svh; 
-  overflow: hidden;
-}
-@media (max-width: 960px){
-  .dashboard-grid{ grid-template-columns: 1fr; max-height: none; }
-}
-
-/* Scroll horizontal sutil para móvil / tablas anchas */
-.scroll-x{
-  overflow:auto; border-radius:12px;
-  /* permite ver head + 1ra fila sin desbordar */
-  max-height: 100%;
-}
-
-/* ====== Tabla principal: siempre visible, incluso sin datos ====== */
-.tabla-principal{
-  width:100%; border-collapse: collapse; table-layout: auto;
+/* ---------- Tabla principal (siempre visible aunque no haya datos) ---------- */
+.tabla-visitas{
+  width:100%;
+  border-collapse: collapse; table-layout: auto;
   background: #fff; color:#111; border-radius: 12px; overflow:hidden;
-  box-shadow: var(--shadow);
+  box-shadow: 0 12px 28px rgba(0,0,0,.25);
 }
-.tabla-principal thead th{
-  background:#000; color:#fff; text-align:left; font-weight:800;
+.tabla-visitas thead th{
+  position: sticky; top: 0;          /* cabecera visible mientras se hace scroll de página */
+  background:#000; color:#fff; 
+  text-align:left; font-weight:800;
   padding: 8px 10px; font-size: 12px;
+  z-index: 1;
 }
-.tabla-principal td, .tabla-principal th{
+.tabla-visitas td, .tabla-visitas th{
   border:1px solid #d0d0d0; padding: 6px 8px; font-size: 11px;
 }
-
-/* Estado “vacío”: muestra una fila fantasma con mensaje,
-   pero mantiene visible el marco de la tabla */
-.tabla-principal tbody:empty{
+/* Estado vacío: marco + mensaje */
+.tabla-visitas tbody:empty{
   position: relative;
-  height: 42px;               /* altura mínima para que “se vea tabla” */
+  height: 42px;
 }
-.tabla-principal tbody:empty::after{
+.tabla-visitas tbody:empty::after{
   content: "No hay datos para la asesoría seleccionada";
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items:center; justify-content:center;
   color: #666; background: #fafafa;
   border-top: 1px solid #e5e7eb;
   font-size: 11px; font-weight: 700;
 }
 
-/* ====== Tarjetas derechas — versión compacta ====== */
-.cards{ 
-  display:grid; gap:12px; 
-  max-width: 320px;            /* más estrecho que antes (360 -> 320) */
+/* ---------- Cards (derecha) ---------- */
+.cards{
+  grid-column: 2;
+  display:grid; gap:12px;
+  max-width: 340px; /* estrechas para no competir con la tabla */
 }
 .card{
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: rgba(36,37,39,.36);
+  border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
-  padding: 8px;                /* menos padding */
-  box-shadow: var(--shadow);
+  padding: 8px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.25);
 }
-
-/* Titulares/kpis (~70%) */
 .card-title{ margin: 0 0 4px; font-size: 11px; font-weight: 800; }
+
+/* KPI tables */
 .kpi{ margin-top: 4px; }
 .kpi h4{ margin: 4px 0 3px; font-size: 9.5px; font-weight: 800; }
-
-/* Tablas KPI compactas (~70%) */
 .kpi-table{
   width:100%; border-collapse:collapse; table-layout: fixed;
-  background:#fff; color:#111; 
+  background:#fff; color:#111;
   font-size: 8px; line-height:1.15;
   border-radius: 8px; overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
 }
 .kpi-table th, .kpi-table td{
   border:1px solid #d0d0d0; padding:4px 6px; white-space:nowrap;
@@ -121,8 +166,23 @@ html[data-theme="light"] .select-lg{
 .kpi-table thead th{ background:#000; color:#fff; text-align:center; }
 .kpi-table .num{ text-align:right; width:50px; }
 
-/* Pequeños refuerzos responsivos */
+/* ---------- Responsive ---------- */
+@media (max-width: 980px){
+  .panel{
+    grid-template-columns: 1fr;     /* una sola columna en móvil */
+    max-height: none;               /* scroll de página permitido */
+    overflow: visible;
+  }
+  .cards{ grid-column: 1; max-width: none; }  /* KPIs van ABAJO de todo */
+
+  /* La tabla se hace más compacta y permite scroll horizontal cómodo */
+  .tabla-visitas{ min-width: 720px; }         /* fuerza scroll-x en pantallas angostas */
+  .tabla-visitas thead th{ font-size: 11px; padding: 6px 8px; }
+  .tabla-visitas td, .tabla-visitas th{ font-size: 10px; padding: 5px 6px; }
+}
+
 @media (max-width: 560px){
+  .tabla-visitas{ min-width: 640px; }
   .kpi-table{ font-size: 9.5px; }
   .card-title{ font-size: 12px; }
   .kpi h4{ font-size: 10.5px; }

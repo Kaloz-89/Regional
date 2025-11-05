@@ -1,0 +1,100 @@
+/* ===== Reporte por Asesoría — Tema Claro (override con scope de página) ===== */
+
+/* Tokens y superficies (basado en tu patrón) */
+html[data-theme="light"]{
+  --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --r: 10px;
+  --shadow-card: 0 10px 28px rgba(0,0,0,.12);
+  --shadow-pop: 0 8px 20px rgba(0,0,0,.14);
+
+  --text: #0f172a;
+  --text-dim: #334155;
+
+  --bg-image: url("fondo_dorado_withe.jpg");
+  --overlay:
+    radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+
+  --surface-1: rgba(255,255,255,.92);
+  --surface-2: rgba(255,255,255,.78);
+  --bd-weak: rgba(15,23,42,.06);
+  --bd-strong: rgba(15,23,42,.12);
+
+  --table-th-bg: #eef2f6;
+  --table-th-fg: #0f172a;
+  --table-border: rgba(15,23,42,.12);
+  --table-zebra: #f7fafc;
+
+  --hdr-bg: rgb(1, 0, 57);
+  --hdr-bd: rgba(2,6,23,.08);
+  --hdr-blur: saturate(120%) blur(10px);
+
+  color-scheme: light;
+}
+
+/* Fondo / tipografía */
+html[data-theme="light"] body{
+  background:
+    var(--overlay),
+    var(--bg-image) center / cover no-repeat fixed;
+  color: var(--text);
+  font-family: var(--ff);
+}
+
+/* Header claro */
+html[data-theme="light"] header{
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-bd);
+  -webkit-backdrop-filter: var(--hdr-blur);
+  backdrop-filter: var(--hdr-blur);
+}
+html[data-theme="light"] .nav-links a{ color: #ffffff; }
+html[data-theme="light"] .nav-links a:hover{ background: rgba(255,255,255,.10); }
+
+/* Selector de asesoría */
+html[data-theme="light"] .select-lg{
+  background:#fff; color:#111; border-color:#d1d5db;
+}
+html[data-theme="light"] .select-lg option{ background:#fff !important; color:#111 !important; }
+
+/* Cards claras */
+html[data-theme="light"] .card{
+  background: var(--surface-1);
+  border: 1px solid var(--bd-weak);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-card);
+  color: var(--text);
+}
+
+/* Tabla KPI clara */
+html[data-theme="light"] .kpi-table{
+  background:#fff; color:#111;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+}
+html[data-theme="light"] .kpi-table thead th{
+  background:#020029; color:#fff; text-align:center;
+}
+html[data-theme="light"] .kpi-table th,
+html[data-theme="light"] .kpi-table td{
+  border-color: #e5e7eb;
+}
+
+/* Tabla principal clara */
+html[data-theme="light"] .tabla-visitas{
+  background:#fff; color:#111;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+}
+html[data-theme="light"] .tabla-visitas thead th{
+  background: var(--table-th-bg);
+  color: var(--table-th-fg);
+}
+html[data-theme="light"] .tabla-visitas td,
+html[data-theme="light"] .tabla-visitas th{
+  border-color: var(--table-border);
+}
+html[data-theme="light"] .tabla-visitas tbody tr:nth-child(even){
+  background: var(--table-zebra);
+}
+html[data-theme="light"] .tabla-visitas tbody:empty::after{
+  color:#666; background:#fafafa; border-top: 1px solid #eee;
+}

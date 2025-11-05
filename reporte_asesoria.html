@@ -8,11 +8,10 @@
   <!-- Tema temprano -->
   <script src="theme-boot.js"></script>
 
-  <!-- Estilos base ya existentes -->
-  <link rel="stylesheet" href="jefatura.css">
-  <link rel="stylesheet" href="jefatura_light.css">
-  <!-- Estilos mínimos para la grilla y tarjetas -->
+
   <link rel="stylesheet" href="reporte_asesoria.css">
+  <link rel="stylesheet" href="reporte_asesoria_light.css">
+
 
   <link rel="icon" href="government-ffffff.png" type="image/png">
 </head>
@@ -34,18 +33,19 @@
         <h1 class="title">Formulario de Control de Visitas — <span id="yearPill">Año</span></h1>
       </div>
 
-      <!-- Filtro de asesoría -->
+      
+
+      <!-- Disposición: tabla a la izquierda, tarjetas a la derecha -->
+      <div class="dashboard-grid">
+        <!-- Tabla -->
+        <div class="table-wrap scroll-x" role="region" aria-label="Visitas por asesoría" tabindex="0">
+          <!-- Filtro de asesoría -->
       <div class="filtro-asesoria">
         <label for="selAsesoria"></label>
         <select id="selAsesoria" class="select-lg" aria-label="Seleccionar asesoría">
           <option hidden selected value="">Seleccionar asesoría…</option>
         </select>
       </div>
-
-      <!-- Disposición: tabla a la izquierda, tarjetas a la derecha -->
-      <div class="dashboard-grid">
-        <!-- Tabla -->
-        <div class="table-wrap scroll-x" role="region" aria-label="Visitas por asesoría" tabindex="0">
           <table class="tabla-visitas" id="tblAsesoria">
             <thead>
               <tr>
@@ -110,6 +110,7 @@
 
 
   <script src="theme-toggle.js"></script>
+  <script src="header.js"></script>
   <script src="reporte_asesoria.js" defer></script>
 </body>
 </html>
