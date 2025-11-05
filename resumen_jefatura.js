@@ -39,6 +39,17 @@
   const canonMonth = m => MONTHS_ALIASES.get(norm(m)) || MONTHS_CANON.find(x => norm(x)===norm(m)) || "";
   const canonPrio  = p => { const n=norm(p); if(n.includes("alta"))return"Alta"; if(n.includes("media"))return"Media"; return"No Aplica"; };
 
+  // Normaliza una fila a las claves canónicas
+  function normalizeRow(r){
+    const row = r || {};
+    return {
+      asesoria:  String(row.asesoria || row.Asesoría || "").trim(),
+      circuito:  canonCircuitKey(row.circuito || row.Circuito || ""),
+      mes:       canonMonth(row.mes || row.Mes || ""),
+      prioridad: canonPrio(row.prioridad || row.Prioridad || "")
+    };
+  }
+
   // Marco de referencia (asesorías)
   function readMR(year){
     const raw = readJSON(mrKeyFor(year), {}) || {};
@@ -46,13 +57,13 @@
     return uniq(ases);
   }
 
-  // Visitas por año
+  // Visitas por año (acepta [year] como array o como {rows:[]}) + normaliza filas
   function readRowsByYear(year){
     const all = readJSON(STORE_KEY, {});
     const arr = (all && Array.isArray(all[year])) ? all[year]
               : (all && all[year] && Array.isArray(all[year].rows)) ? all[year].rows
               : [];
-    return Array.isArray(arr) ? arr : [];
+    return (Array.isArray(arr) ? arr : []).map(normalizeRow);
   }
 
   // Contadores
@@ -67,11 +78,11 @@
   }
   function accumulate(bucket, row){
     bucket.total += 1;
-    const ck  = canonCircuitKey(row.circuito || row.Circuito || "");
+    const ck  = row.circuito;
     if (ck && bucket.circuits[ck] != null) bucket.circuits[ck]++;
-    const mes = canonMonth(row.mes || row.Mes || "");
+    const mes = row.mes;
     if (mes && bucket.months[mes] != null) bucket.months[mes]++;
-    const pr  = canonPrio(row.prioridad || row.Prioridad || "");
+    const pr  = row.prioridad;
     bucket.prio[pr] = (bucket.prio[pr] || 0) + 1;
   }
 
@@ -81,31 +92,51 @@
     const tbody = document.getElementById("tbodyPizarron");
     if (!thead || !tbody) return;
 
-    const [circuitCols, monthCols, prioCols] = headers.groups;
+    const [circuitColsVis, monthColsVis, prioColsVis] = headers.groups;
+
+    // Mapas VISUAL -> KEY para circuitos y meses
+    const circuitVisualToKey = {
+      "Cir 01":"circuito01","Cir 02":"circuito02","Cir 03":"circuito03","Cir 04":"circuito04","Cir 05":"circuito05"
+    };
+    const monthVisualToKey = {
+      "Ene":"Enero","Feb":"Febrero","Mar":"Marzo","Abr":"Abril","May":"Mayo","Jun":"Junio",
+      "Jul":"Julio","Ago":"Agosto","Set":"Setiembre","Oct":"Octubre","Nov":"Noviembre","Dic":"Diciembre"
+    };
 
     const trG = document.createElement("tr");
     trG.innerHTML = `
       <th class="group" rowspan="2">Asesoría</th>
       <th class="group" rowspan="2" title="Cantidad de visitas">Cant. Visitas</th>
-      <th class="group" colspan="${circuitCols.length}">Cantidad de Visitas por Circuito Escolar</th>
-      <th class="group" colspan="${monthCols.length}">Cantidad de Visitas por Mes</th>
-      <th class="group" colspan="${prioCols.length}">Visitas por Prioridad</th>
+      <th class="group" colspan="${circuitColsVis.length}">Cantidad de Visitas por Circuito Escolar</th>
+      <th class="group" colspan="${monthColsVis.length}">Cantidad de Visitas por Mes</th>
+      <th class="group" colspan="${prioColsVis.length}">Visitas por Prioridad</th>
     `;
     const trN = document.createElement("tr");
     const mk = (label) => `<th>${label}</th>`;
     trN.innerHTML =
-      circuitCols.map(mk).join("") +
-      monthCols.map(mk).join("") +
-      prioCols.map(mk).join("");
+      circuitColsVis.map(mk).join("") +
+      monthColsVis.map(mk).join("") +
+      prioColsVis.map(mk).join("");
 
     thead.innerHTML = "";
     thead.appendChild(trG);
     thead.appendChild(trN);
 
     const rowHtml = (r) => {
-      const cellsCir = circuitCols.map(k => `<td class="num">${r.circuits[k]||0}</td>`).join("");
-      const cellsMon = monthCols.map(m => `<td class="num">${r.months[m]||0}</td>`).join("");
-      const cellsPr  = prioCols.map(p => `<td class="num">${r.prio[p]||0}</td>`).join("");
+      const cellsCir = circuitColsVis
+        .map(vis => {
+          const key = circuitVisualToKey[vis];
+          return `<td class="num">${r.circuits[key]||0}</td>`;
+        }).join("");
+
+      const cellsMon = monthColsVis
+        .map(vis => {
+          const key = monthVisualToKey[vis];
+          return `<td class="num">${r.months[key]||0}</td>`;
+        }).join("");
+
+      const cellsPr  = prioColsVis.map(p => `<td class="num">${r.prio[p]||0}</td>`).join("");
+
       return `
         <tr>
           <td class="col-asesoria">${r.asesoria}</td>
@@ -117,9 +148,19 @@
 
     let html = rowsData.map(rowHtml).join("");
 
-    const totCir = circuitCols.map(k => `<th class="num">${totals.circuits[k]||0}</th>`).join("");
-    const totMon = monthCols.map(m => `<th class="num">${totals.months[m]||0}</th>`).join("");
-    const totPr  = prioCols.map(p => `<th class="num">${totals.prio[p]||0}</th>`).join("");
+    const totCir = circuitColsVis
+      .map(vis => {
+        const key = circuitVisualToKey[vis];
+        return `<th class="num">${totals.circuits[key]||0}</th>`;
+      }).join("");
+
+    const totMon = monthColsVis
+      .map(vis => {
+        const key = monthVisualToKey[vis];
+        return `<th class="num">${totals.months[key]||0}</th>`;
+      }).join("");
+
+    const totPr  = prioColsVis.map(p => `<th class="num">${totals.prio[p]||0}</th>`).join("");
 
     html += `
       <tr class="row-total">
@@ -191,7 +232,6 @@
       plugins:[valueLabels]
     });
 
-    // Asegura tamaño correcto al imprimir
     window.addEventListener('beforeprint', () => {
       try { canvas._chartInstance?.resize(); } catch {}
     });
@@ -203,13 +243,13 @@
     const rows = readRowsByYear(YEAR);
 
     const asesFromMR   = readMR(YEAR);
-    const asesFromData = uniq(rows.map(r => String(r.asesoria||r.Asesoría||"").trim()).filter(Boolean));
+    const asesFromData = uniq(rows.map(r => String(r.asesoria||"").trim()).filter(Boolean));
     const ASESORIAS    = asesFromMR.length ? asesFromMR : asesFromData;
 
     const headers = {
       groups: [
-        ["Cir 01","Cir 02","Cir 03","Cir 04","Cir 05"],
-        ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Set","Oct","Nov","Dic"],
+        ["Cir 01","Cir 02","Cir 03","Cir 04","Cir 05"],                // VISUAL
+        ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Set","Oct","Nov","Dic"], // VISUAL
         ["Alta","Media","N/A"]
       ]
     };
@@ -223,7 +263,7 @@
     const totals = emptyCounters();
 
     for (const r of rows){
-      const a = String(r.asesoria||r.Asesoria||"").trim();
+      const a = String(r.asesoria||"").trim();
       if (!a) continue;
       if (!perAses.has(a)) perAses.set(a, { asesoria:a, ...emptyCounters() });
       const bucket = perAses.get(a);
@@ -232,20 +272,15 @@
     }
 
     const rowsData = Array.from(perAses.values()).map(v => {
-      const monthsVisual = Object.fromEntries(
-        Object.entries(v.months).map(([key,count]) => {
-          const vis = Object.entries(monthVisualToKey).find(([,k]) => k===key)?.[0] || key;
-          return [vis, count];
-        })
-      );
+      // months ya están con keys canónicas; solo renderizamos con etiquetas visuales en renderTable
       const prioVisual = { "Alta": v.prio["Alta"]||0, "Media": v.prio["Media"]||0, "N/A": v.prio["No Aplica"]||0 };
-      return { asesoria:v.asesoria, total:v.total, circuits:v.circuits, months:monthsVisual, prio:prioVisual };
+      return { asesoria:v.asesoria, total:v.total, circuits:v.circuits, months:v.months, prio:prioVisual };
     });
 
     const totalsVis = {
       total: totals.total,
       circuits: totals.circuits,
-      months: Object.fromEntries(Object.entries(monthVisualToKey).map(([vis,key]) => [vis, totals.months[key]||0])),
+      months: totals.months,
       prio: { "Alta": totals.prio["Alta"]||0, "Media": totals.prio["Media"]||0, "N/A": totals.prio["No Aplica"]||0 }
     };
 
@@ -256,18 +291,27 @@
     renderChart(labelsChart, valuesChart);
   }
 
-  // ----- Auto-refresh (MR / visitas / año) -----
+  // ----- Auto-refresh (MR / visitas / año) + más señales -----
+  let rebuildTimer = null;
+  const scheduleRebuild = () => { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(buildAndRender, 40); };
+
   function wireAutoRefresh(){
     window.addEventListener('storage', (e) => {
-      const y = String(AppYear.get());
       if (!e || !e.key) return;
-      if (e.key === STORE_KEY || e.key === 'app_year_v1' || e.key === mrKeyFor(y)) {
-        buildAndRender();
+      const y = String(AppYear.get());
+      if (
+        e.key === STORE_KEY ||
+        e.key === 'visitas_jefatura_last_update' ||
+        e.key === 'app_year_v1' ||
+        e.key === mrKeyFor(y) ||
+        e.key.startsWith(MR_PREFIX)
+      ){
+        scheduleRebuild();
       }
     });
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) buildAndRender();
-    });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleRebuild(); });
+    window.addEventListener('focus', scheduleRebuild);
+    window.addEventListener('pageshow', scheduleRebuild);
   }
 
   // ----- Botones -----
@@ -275,10 +319,7 @@
     const goBtn    = document.getElementById('btnIrJefatura');
     const printBtn = document.getElementById('btnImprimir');
     if (goBtn)    goBtn.addEventListener('click', () => { window.location.href = 'jefatura.html'; });
-    if (printBtn) printBtn.addEventListener('click', () => {
-      // Pequeño delay para asegurar layout/Chart listo antes de imprimir
-      setTimeout(() => window.print(), 60);
-    });
+    if (printBtn) printBtn.addEventListener('click', () => setTimeout(() => window.print(), 60));
   }
 
   // Arranque

@@ -126,21 +126,42 @@
     };
   }
 
+  // <<< REEMPLAZADA: asegura IDs y persiste si faltaban >>>
   function readRowsByYear(year){
     const all = readJSON(STORE_KEY, {});
-    const arr = (all && Array.isArray(all[year])) ? all[year]
-              : (all && all[year] && Array.isArray(all[year].rows)) ? all[year].rows
-              : [];
-    return (arr||[]).map(normalizeRow);
+    const base = Array.isArray(all[year]) ? all[year]
+               : (all[year] && Array.isArray(all[year].rows)) ? all[year].rows
+               : [];
+
+    let needsPersist = false;
+
+    const normed = (base || []).map(src => {
+      const hadId = !!(src && src.id);
+      const n = normalizeRow(src);
+      if (!hadId) needsPersist = true;
+      return n;
+    });
+
+    if (needsPersist) writeRowsByYear(year, normed);
+    return normed;
   }
+
   function writeRowsByYear(year, rows){
     const all = readJSON(STORE_KEY, {});
-    all[year] = Array.isArray(all[year]) ? rows
-             : (all[year] && typeof all[year]==='object') ? { ...(all[year]||{}), rows }
-             : rows;
-    writeJSON(STORE_KEY, all);
+    const next = { ...all };
+
+    // Conserva el esquema flexible (array directo o {rows:[]})
+    if (Array.isArray(all[year])) {
+      next[year] = rows;
+    } else if (all[year] && typeof all[year] === 'object') {
+      next[year] = { ...(all[year]||{}), rows };
+    } else {
+      next[year] = rows;
+    }
+
+    writeJSON(STORE_KEY, next);
     try { localStorage.setItem('visitas_jefatura_last_update', String(Date.now())); } catch {}
-    window.dispatchEvent(new CustomEvent("visitas:changed", { detail:{ year } }));
+    try { window.dispatchEvent(new CustomEvent("visitas:changed", { detail:{ year } })); } catch {}
   }
 
   // ---------- Estado ----------
@@ -219,6 +240,7 @@
         sel.addEventListener('change', ()=>{
           const canon = sel.value; // circuito0X
           updateRow(row.id, { circuito: canon, institucion: "" });
+          // refresca instituciones en caliente para evitar parpadeo
           if (instSelRef){
             const list = uniqSorted((CIRCUITS_MAP[canon]||[]));
             fillSelectDOM(instSelRef, list, list.length ? "Institución…" : "No hay instituciones");
@@ -302,30 +324,34 @@
   }
 
   // ---------- Mutaciones ----------
+
+  // <<< REEMPLAZADA: edita ROWS en memoria y persiste con writeRowsByYear >>>
   function updateRow(id, patch){
-    const all = readJSON(STORE_KEY, {});
-    const yearData = Array.isArray(all[YEAR]) ? all[YEAR]
-                   : (all[YEAR] && Array.isArray(all[YEAR].rows)) ? all[YEAR].rows
-                   : ROWS;
-    const idx = yearData.findIndex(r => r.id===id);
-    if (idx<0) return;
+    const idx = ROWS.findIndex(r => r.id === id);
+    if (idx < 0) return;
 
-    if (patch && typeof patch.circuito === 'string') patch.circuito = canonCircuitKey(patch.circuito);
-    const updated = { ...yearData[idx], ...patch };
-    yearData[idx] = updated;
+    const p = { ...patch };
+    // normaliza valores clave
+    if (typeof p.circuito === 'string') {
+      p.circuito = canonCircuitKey(p.circuito) || p.circuito;
+    }
+    if (typeof p.prioridad === 'string' && /no\s*aplica/i.test(p.prioridad)) {
+      p.prioridad = 'No Aplica'; // homogeneiza variante
+    }
 
-    writeJSON(STORE_KEY, { ...all, [YEAR]: yearData });
-    try { localStorage.setItem('visitas_jefatura_last_update', String(Date.now())); } catch {}
-    ROWS = yearData.map(normalizeRow);
-    render();
+    ROWS[idx] = { ...ROWS[idx], ...p };
+    writeRowsByYear(YEAR, ROWS);  // persistencia real
+    render();                     // re-pinta
   }
+
   function deleteRow(id){
     ROWS = ROWS.filter(r => r.id!==id);
     writeRowsByYear(YEAR, ROWS);
     render();
   }
+
   function addRow(){
-    const r = normalizeRow({ prioridad:"No aplica", validacionJefatura:"Pendiente", estado:"Sin revisar" });
+    const r = normalizeRow({ prioridad:"No Aplica", validacionJefatura:"Pendiente", estado:"Sin revisar" });
     ROWS.unshift(r);
     writeRowsByYear(YEAR, ROWS);
     render();
