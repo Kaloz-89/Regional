@@ -24,7 +24,7 @@
 
   /* Tarjetas superiores */
   --card-w: 340px;   /* ↑ más ancho */
-  --card-h: 390px;   /* ↑ más alto para 3 botones grandes */
+  --card-h: 490px;   /* ↑ más alto para 3 botones grandes */
   --stack-gap: 10px;
 }
 
@@ -111,6 +111,7 @@ main.container{
   justify-content:center;
   gap:14px;
   width:100%;
+  height: 100%;
 }
 
 /* Perfil */
