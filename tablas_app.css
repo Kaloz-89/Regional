@@ -544,17 +544,17 @@ table.tabla-poa tbody td.col-num-sm{
 .fondo-blanco_2 > h1{ font-size: clamp(16px, 1.8vw, 22px); }
 
 /* Contenedor: scroll-x en móvil; en desktop intenta caber sin scroll */
-.tabla-contenedor{
+.tabla-contenedor_2{
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  width: 100%;
+
 }
 
 /* ---------- Mejora de uso en TELÉFONO ---------- */
 @media (max-width: 720px){
   /* Ancho mínimo para scroll horizontal cómodo */
-  .tabla-contenedor > #tablaOferta,
-  .tabla-contenedor > #tablaOfertaView{
+  .tabla-contenedor_2 > #tablaOferta,
+  .tabla-contenedor_2 > #tablaOfertaView{
     width: max(1100px, 100%);
   }
 
@@ -642,7 +642,7 @@ table.tabla-poa tbody td.col-num-sm{
   .fondo-blanco_2{
     background:#fff !important; border:none !important; box-shadow:none !important;
   }
-  .tabla-contenedor{
+  .tabla-contenedor_2{
     width:100% !important; max-width:none !important; overflow:visible !important;
   }
 
