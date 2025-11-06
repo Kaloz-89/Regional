@@ -4,19 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reporte por Asesoría</title>
-
-  <!-- Tema temprano -->
   <script src="theme-boot.js"></script>
-
-
   <link rel="stylesheet" href="reporte_asesoria.css">
   <link rel="stylesheet" href="reporte_asesoria_light.css">
-
-
   <link rel="icon" href="categories-ffffff.png" type="image/png">
 </head>
 <body>
-  <!-- Header igual al resto -->
   <header>
     <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
     <nav>
@@ -25,20 +18,13 @@
       </ul>
     </nav>
     <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
-  </header>
-
+  </header
   <main class="container">
     <section class="panel">
       <div class="panel-head">
-        <h1 class="title">Formulario de Control de Visitas — <span id="yearPill">Año</span></h1>
+        <h1 class="title">Formulario de Control de Visitas <span id="yearPill">Año</span></h1>
       </div>
-
-      <!-- Filtro de asesoría -->
-      
-
-      <!-- Disposición: tabla a la izquierda, tarjetas a la derecha -->
       <div class="dashboard-grid">
-        <!-- Tabla -->
         <div class="table-wrap scroll-x" role="region" aria-label="Visitas por asesoría" tabindex="0">
           <div class="filtro-asesoria">
         <label for="selAsesoria"></label>
@@ -64,12 +50,9 @@
             <tbody id="tbodyAsesoria"><!-- filas por JS --></tbody>
           </table>
         </div>
-
-        <!-- Resúmenes -->
         <aside class="cards">
           <div class="card">
             <h3 class="card-title">Tabulación de datos</h3>
-
             <div class="kpi">
               <h4>Tipo de visita</h4>
               <table class="kpi-table" id="kpiTipoVisita">
@@ -78,7 +61,6 @@
                 <tfoot><tr><th>Total</th><th class="num" id="kpiTipoTotal">0</th></tr></tfoot>
               </table>
             </div>
-
             <div class="kpi">
               <h4>Circuito educativo</h4>
               <table class="kpi-table" id="kpiCircuito">
@@ -86,7 +68,6 @@
                 <tbody><!-- JS --></tbody>
               </table>
             </div>
-
             <div class="kpi">
               <h4>Mes</h4>
               <table class="kpi-table" id="kpiMes">
@@ -94,7 +75,6 @@
                 <tbody><!-- JS --></tbody>
               </table>
             </div>
-
             <div class="kpi">
               <h4>Prioridad de la visita</h4>
               <table class="kpi-table" id="kpiPrioridad">
@@ -107,8 +87,6 @@
       </div>
     </section>
   </main>
-
-
   <script src="theme-toggle.js"></script>
   <script src="reporte_asesoria.js" defer></script>
   <script src="header.js"></script>

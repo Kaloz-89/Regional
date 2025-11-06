@@ -12,7 +12,6 @@
   --fld-bg:#ffffff; --fld-ink:#0f172a;
   --fld-bd:#d0d0d0; --fld-focus:#2563eb;
 }
-
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
@@ -20,7 +19,6 @@ body{
   background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
   display:grid; grid-template-rows:auto 1fr;
 }
-
 /* Header */
 header{
   display:flex; align-items:center; justify-content:space-between;
@@ -39,7 +37,6 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
   transition: background-color .18s ease, transform .18s ease;
 }
 .nav-volver a:hover{ background: rgba(255,255,255,.20); transform: translateY(-1px); }
-
 /* Contenido */
 .container{ padding:18px 10px 34px; }
 .panel{
@@ -52,16 +49,13 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 .panel-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; }
 .title{ margin:0; font-size: clamp(20px, 2.2vw, 28px); }
 .year-pill{ background:rgba(255,255,255,.1); border:1px solid var(--hdr-bd); color:#fff; padding:6px 10px; border-radius:999px; font-weight:800; }
-
 /* ===== Layout del formulario ===== */
 .form-grid{ display:grid; gap:16px; position: relative; overflow: visible; }
 .field--full{ grid-column: 1 / -1; }
-
 .row-two{
   display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;
   position: relative; overflow: visible;
 }
-
 .cols-2{
   display:grid; grid-template-columns: 1fr 1fr; gap:18px;
   position: relative; overflow: visible;
@@ -69,19 +63,15 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 .col-left, .col-right{
   display:grid; gap:14px; position: relative; overflow: visible;
 }
-
 /* Campos */
 .field{ display:flex; flex-direction:column; gap:6px; position: relative; overflow: visible; }
 .field label{ font-weight:800; color:#fff; }
 .hint{ margin:0; color:#cfd6de; font-size:12px; opacity:.9; }
-
 /* Controles */
 select, input[type="date"], textarea{
   background: var(--fld-bg); color: var(--fld-ink);
   border:1px solid var(--fld-bd); border-radius:10px; padding:.6rem .9rem;
   outline:none; box-shadow:0 1px 2px rgba(0,0,0,.05);
-
-  /* Mejor stacking del menú nativo */
   position: relative; z-index: 1;
   -webkit-appearance: none; appearance: none;
   background-image:
@@ -91,14 +81,12 @@ select, input[type="date"], textarea{
   background-size: 12px 12px;
 }
 input[type="date"]{
-  /* quita el ícono por defecto si molesta en algunos navegadores */
   background-image: none;
 }
 select:focus, input[type="date"]:focus, textarea:focus{
   border-color: var(--fld-focus); box-shadow:0 0 0 2px rgba(37,99,235,.18);
   z-index: 999; /* ¡traer al frente mientras está abierto/en foco! */
 }
-
 /* Botones */
 .form-actions{
   display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;
@@ -112,9 +100,7 @@ select:focus, input[type="date"]:focus, textarea:focus{
 .btn--primary:hover{ background:#171717; }
 .btn--ghost{ background:transparent; color:#fff; border:1px solid rgba(255,255,255,.22); }
 .btn--ghost:hover{ background:rgba(255,255,255,.10); }
-
 .foot-note{ margin:10px 2px 0; color:#cfd6de; font-size:12px; }
-
 /* Responsive */
 @media (max-width: 900px){
   .row-two{ grid-template-columns: 1fr; }

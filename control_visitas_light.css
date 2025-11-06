@@ -154,8 +154,6 @@ html[data-theme="light"] .nav-links .boton_salida a{
   html[data-theme="light"] main.container{
     height:auto; min-height:unset; padding-bottom:28px;
   }
-
-  /* Mantener lado a lado y escalar como en oscuro */
   :root{
     --card-w: clamp(200px, 42vw, 260px);
     --card-h: calc(var(--card-w) * 0.80);

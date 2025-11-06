@@ -1,58 +1,40 @@
-/* =========================================================
-   Filtro PRAP (PÚBLICO) — MODO CLARO
-   Archivo: filtro_prap_light.css
-   Aplica solo cuando <html data-theme="light"> está activo.
-   ========================================================= */
-
 /* -------- Tokens (claro) -------- */
 html[data-theme="light"]{
   --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
   --text: #0f172a;
   --text-dim: #334155;
-
   --bg-image: url("fondo_dorado_withe.jpg");
   --overlay:
     radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
-
   --panel-1: rgba(255,255,255,.92);
   --panel-2: rgba(255,255,255,.86);
   --line: rgba(15,23,42,.10);
-
   --hdr-bg: rgb(1, 0, 57);
   --hdr-bd: rgba(2,6,23,.08);
   --hover-tint: rgba(2,6,23,.06);
-
   --shadow-card: 0 10px 28px rgba(0,0,0,.12);
   --shadow-pop: 0 16px 40px rgba(0,0,0,.18);
-
-  --table-head: #eef2f6;     /* encabezado claro */
+  --table-head: #eef2f6;
   --table-fg:   #0f172a;
   --bd: rgba(15,23,42,.12);
   --zebra: #f7fafc;
-
   --radius: 12px;
-
   /* Controles */
   --ctrl-bg: #ffffff;
   --ctrl-bd: rgba(15,23,42,.18);
   --ctrl-fg: #0f172a;
   --ctrl-focus: #1e66f5;
-
   /* Botones */
   --btn-bg: #141414;
   --btn-bg-hover: #1b1b1b;
   --btn-fg: #ffffff;
-
   --btn-sec-bg: #f3f4f6;
   --btn-sec-fg: #0f172a;
   --btn-sec-bd: #e5e7eb;
   --btn-sec-hover: #f8fafc;
-
   color-scheme: light;
 }
-
 /* -------- Base / Fondo -------- */
 html[data-theme="light"] *{ box-sizing: border-box; }
 html[data-theme="light"] html, 
@@ -63,8 +45,7 @@ html[data-theme="light"] body{
   color:var(--text);
   background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
 }
-
-/* -------- Header (igual al resto, claro) -------- */
+/* -------- Header -------- */
 html[data-theme="light"] header{
   display:flex; align-items:center; justify-content:space-between;
   gap:16px; padding:14px 28px;
@@ -77,7 +58,6 @@ html[data-theme="light"] header{
 }
 html[data-theme="light"] .logo_direca img{ width:70px; display:block; }
 html[data-theme="light"] .logo img{ width: clamp(160px, 22vw, 300px); display:block; }
-
 html[data-theme="light"] nav{ flex:1 1 auto; display:flex; justify-content:center; }
 html[data-theme="light"] .nav-links{ display:flex; align-items:center; gap:22px; list-style:none; margin:0; padding:0; }
 html[data-theme="light"] .nav-links a{
@@ -91,8 +71,7 @@ html[data-theme="light"] .boton_salida a{
   border: 1px solid var(--hdr-bd);
   border-radius: 10px; font-weight:800;
 }
-
-/* Dropdown del header */
+/* Desplegable del header */
 html[data-theme="light"] .nav-dropdown{ position:relative; }
 html[data-theme="light"] .nav-dropdown > .has-caret::after{ content:"▾"; margin-left:6px; font-size:12px; opacity:.85; }
 html[data-theme="light"] .dropdown-menu{
@@ -111,8 +90,7 @@ html[data-theme="light"] .dropdown-menu a{
   padding:10px 12px; border-radius:8px; color:inherit; font-weight:700;
 }
 html[data-theme="light"] .dropdown-menu a:hover{ background: rgba(2,6,23,.06); }
-
-/* -------- Lienzo -------- */
+/* -------- Cuadro fondo -------- */
 html[data-theme="light"] .contenedor-principal{ padding: 18px 0 12px; }
 html[data-theme="light"] .fondo-blanco{
   width: min(92vw, 1500px);
@@ -129,7 +107,6 @@ html[data-theme="light"] .fondo-blanco h1{
   font-weight: 800;
   color: var(--text);
 }
-
 /* -------- Tarjeta de filtros -------- */
 html[data-theme="light"] .filtro-card{
   background: #ffffff;
@@ -151,7 +128,6 @@ html[data-theme="light"] .campo label{
   color: var(--text-dim);
   margin: 0 0 6px 2px;
 }
-
 /* Controles nativos */
 html[data-theme="light"] .campo select,
 html[data-theme="light"] .campo input[type="text"]{
@@ -172,7 +148,6 @@ html[data-theme="light"] .campo input[type="text"]:focus{
   border-color: var(--ctrl-focus);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--ctrl-focus) 30%, transparent);
 }
-
 /* Botones */
 html[data-theme="light"] .acciones{
   display:flex; gap:10px; align-items:end; padding-bottom: 2px;
@@ -192,8 +167,7 @@ html[data-theme="light"] .btn.secundario{
   border-color: var(--btn-sec-bd);
 }
 html[data-theme="light"] .btn.secundario:hover{ background: var(--btn-sec-hover); }
-
-/* -------- Select personalizado (Dirección) -------- */
+/* -------- Select personalizado -------- */
 html[data-theme="light"] .custom-select{ position: relative; display: grid; width: 100%; align-items: center; }
 html[data-theme="light"] .is-replaced{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 html[data-theme="light"] .cs-trigger{
@@ -216,8 +190,7 @@ html[data-theme="light"] .cs-caret{
   transition: transform .2s ease;
 }
 html[data-theme="light"] .custom-select[aria-expanded="true"] .cs-caret{ transform: rotate(180deg); }
-
-/* POP del select (no tapa el input de Responsable) */
+/* POP del select */
 html[data-theme="light"] .cs-pop{
   position:absolute; top: calc(100% + 6px); left:0;
   min-width: 100%; max-width: 100%;
@@ -227,7 +200,6 @@ html[data-theme="light"] .cs-pop{
   max-height: 60vh; overflow: auto; color: var(--text);
 }
 html[data-theme="light"] .custom-select[aria-expanded="true"] .cs-pop{ display:block; }
-
 html[data-theme="light"] .cs-list{ list-style: none; margin:0; padding:0; }
 html[data-theme="light"] .cs-item{
   padding: 8px 10px; color:inherit; border-radius: 8px;
@@ -236,8 +208,7 @@ html[data-theme="light"] .cs-item{
 html[data-theme="light"] .cs-item:hover, 
 html[data-theme="light"] .cs-item:focus{ background: var(--hover-tint); }
 html[data-theme="light"] .cs-item[aria-selected="true"]{ background: color-mix(in oklab, #1e66f5 12%, white); }
-
-/* -------- Tabla (90% del ancho de página) -------- */
+/* -------- Tabla -------- */
 html[data-theme="light"] .tabla-contenedor{
   width: 90vw;
   max-width: 1400px;
@@ -265,7 +236,6 @@ html[data-theme="light"] table.tabla-poa td{
   word-wrap: break-word; overflow-wrap: anywhere;
 }
 html[data-theme="light"] table.tabla-poa tbody tr:nth-child(even){ background: var(--zebra); }
-
 /* --- #tablaFiltro columnas --- */
 html[data-theme="light"] #tablaFiltro thead th:nth-child(4),
 html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){
@@ -273,13 +243,11 @@ html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){
 }
 html[data-theme="light"] #tablaFiltro thead th:nth-child(4){ text-align: center; }
 html[data-theme="light"] #tablaFiltro tbody td:nth-child(4){ text-align: right; }
-
 html[data-theme="light"] #tablaFiltro thead th:nth-child(8),
 html[data-theme="light"] #tablaFiltro tbody td:nth-child(8){
   width: 84px; max-width: 92px; min-width: 72px;
   text-align: center; white-space: nowrap;
 }
-
 /* Botón “Abrir” */
 html[data-theme="light"] .link-abrir{
   display:inline-flex; align-items:center; justify-content:center;
@@ -291,8 +259,7 @@ html[data-theme="light"] .link-abrir{
 }
 html[data-theme="light"] .link-abrir:hover{ background:#030040; }
 html[data-theme="light"] .link-abrir:active{ transform: translateY(1px); }
-
-/* -------- “Ver progreso” alineado a la izquierda -------- */
+/* -------- “Ver progreso” -------- */
 html[data-theme="light"] #btn_background{
   width: 90vw; max-width: 1400px;
   margin: 14px auto 28px;
@@ -308,14 +275,11 @@ html[data-theme="light"] #btn_1{
 }
 html[data-theme="light"] #btn_1:hover{ background:#000c38; }
 html[data-theme="light"] #btn_1:active{ transform: translateY(1px); }
-
 /* -------- Responsive -------- */
 @media (max-width: 900px){
   html[data-theme="light"] .filtros-grid{ grid-template-columns: 1fr; align-items: stretch; }
   html[data-theme="light"] .acciones{ padding-top: 4px; }
 }
-
-
 html[data-theme="light"] .nav-links {
     color: #fff;
 }
@@ -330,47 +294,34 @@ html[data-theme="light"] .btn:hover {
 }
 html[data-theme="light"] .link-abrir {
     background-color: #0f172a;
-}
-    
+}    
 html[data-theme="light"] .btn_background {
     background-color: #0f172a;
 }
-
-/* =========================================================
-   Filtro PRAP — MODO CLARO — MÓVIL / TABLET PEQUEÑA (≤720px)
-   (sin barras de scroll; se ajusta con tipografía y anchos %)
-   ========================================================= */
 @media (max-width: 720px){
-
   html[data-theme="light"] .fondo-blanco{
     width: 90%;
     max-width: none;
     margin: 0 auto;
     padding: 14px;
   }
-
   html[data-theme="light"] .tabla-contenedor{
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden;                 /* no mostrar barra horizontal */
+    overflow-x: hidden;
   }
-  /* Ocultar scrollbars si el navegador las pinta igual */
   html[data-theme="light"] .tabla-contenedor::-webkit-scrollbar{ display:none; }
   html[data-theme="light"] .tabla-contenedor{ -ms-overflow-style:none; scrollbar-width:none; }
-
   html[data-theme="light"] table.tabla-poa{
     width: 100%;
-    font-size: 10px;                    /* más compacto */
+    font-size: 10px;    
     line-height: 1.2;
   }
   html[data-theme="light"] table.tabla-poa th,
   html[data-theme="light"] table.tabla-poa td{
     padding: 6px 6px;
   }
-
-  /* Igual que en oscuro: “zoom hacia atrás” controlado */
   html[data-theme="light"] body{ width: 150%; }
-
   /* Reparto porcentual para 8 columnas (suma ~100%) */
   html[data-theme="light"] #tablaFiltro thead th:nth-child(1),
   html[data-theme="light"] #tablaFiltro tbody td:nth-child(1){ width: 13%; }  /* Dirección */
@@ -388,13 +339,11 @@ html[data-theme="light"] .btn_background {
   html[data-theme="light"] #tablaFiltro tbody td:nth-child(7){ width: 12%; }  /* Responsables */
   html[data-theme="light"] #tablaFiltro thead th:nth-child(8),
   html[data-theme="light"] #tablaFiltro tbody td:nth-child(8){ width: 6%;  }  /* Ver (angosta) */
-
-  /* Encabezado compacto (sin sticky para evitar saltos en zoom) */
+  /* Encabezado compacto */
   html[data-theme="light"] table.tabla-poa thead th{
     font-size: 10px;
     position: static;
   }
-
   /* Botón ancho alineado con el contenedor */
   html[data-theme="light"] #btn_background{
     width: calc(100vw - 24px);
@@ -402,18 +351,11 @@ html[data-theme="light"] .btn_background {
     margin: 12px auto 24px;
   }
 }
-
-/* =========================================================
-   Filtro PRAP — MODO CLARO — MÓVIL PEQUEÑO (≤520px)
-   ========================================================= */
 @media (max-width: 520px){
   html[data-theme="light"] .fondo-blanco{ width: 90%; }
   html[data-theme="light"] #btn_background{ width: calc(100vw - 16px); }
-
   html[data-theme="light"] table.tabla-poa{ font-size: 9px; }
   html[data-theme="light"] table.tabla-poa th,
   html[data-theme="light"] table.tabla-poa td{ padding: 5px 5px; }
-
-  /* Igual que en oscuro */
   html[data-theme="light"] body{ width: 150%; }
 }

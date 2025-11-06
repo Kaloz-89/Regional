@@ -1,29 +1,22 @@
-/* ===========================
-   1) Fondo negro y centrado
-=========================== */
 html, body { height: 100%; }
 body{
   margin: 0;
-  background: #000;                     /* negro sólido */
+  background: #000;   
   background-image: none !important;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* Panel blanco grande (detrás) y centrado */
 .withe_square{
   background: #4a4a4a44;
   width: 40%;
   height: 100%;
-  margin: auto;                         /* centra en el body */
-  display: flex;                        /* centra su contenido (la tarjeta) */
+  margin: auto;                       
+  display: flex; 
   align-items: center;
   justify-content: center;
   box-shadow: 0 46px 120px rgba(0,0,0,.55);
 }
-
-/* Wrapper por compatibilidad */
 .auth-wrap{
   width: 100%;
   padding: 24px;
@@ -31,32 +24,22 @@ body{
   align-items: center;
   justify-content: center;
 }
-
-/* ===========================
-   2) Tarjeta de login
-=========================== */
 .auth-card,
-#icono_1_container{                     /* compat con tu ID anterior */
+#icono_1_container{                    
   width: min(420px, 100%);
   background: #ffffff;
   color: #111;
   border: 1px solid rgba(0,0,0,.15);
-  border-radius: 0;                     /* esquinas cuadradas */
+  border-radius: 0;        
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,.55);
   transform: none !important;
   margin: 0 !important;
 }
-
-/* Fija centrado adicional por si el contenedor cambia */
 #icono_1_container{
   margin: 0 auto !important;
   align-self: center;
 }
-
-/* ===========================
-   3) Cabezal oscuro
-=========================== */
 .card-top{
   background:
     radial-gradient(120% 120% at 80% -10%, rgba(0, 0, 0, 0.303) 0%, transparent 60%),
@@ -67,7 +50,6 @@ body{
   padding: 28px 24px 24px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
-
 #icono_1{
   width: 84px; height: 84px;
   object-fit: contain;
@@ -75,7 +57,6 @@ body{
   margin: 0 auto 12px;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
 }
-
 .card-title{
   margin: 0;
   font-size: 22px;
@@ -83,17 +64,12 @@ body{
   letter-spacing: .2px;
   color: #ffffff;
 }
-
 .card-sub{
   margin: 6px 0 0;
   font-size: 13px;
   color: #ededed;
   opacity: .9;
 }
-
-/* ===========================
-   4) Cuerpo + campos
-=========================== */
 .card-body{
   background: #181818;
   color: #111;
@@ -101,9 +77,7 @@ body{
   gap: 12px;
   padding: 18px 20px 22px;
 }
-
 .input-group{ position: relative; }
-
 .login_input,
 .modal_input{
   width: 100%;
@@ -111,7 +85,7 @@ body{
   background: #fff;
   color: #111;
   border: 1px solid #cfd3da;
-  border-radius: 0;                     /* cuadradas */
+  border-radius: 0;            
   padding: 12px 14px;
   font-size: 16px;
   outline: none;
@@ -124,8 +98,6 @@ body{
   border-color: rgba(229,185,74,.35);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
 }
-
-/* Botón “ojo” (mostrar/ocultar) */
 .toggle-pass{
   position: absolute;
   right: 8px;
@@ -134,22 +106,16 @@ body{
   border: 0;
   background: transparent;
   padding: 6px;
-  border-radius: 0;                     /* cuadrado */
+  border-radius: 0;    
   cursor: pointer;
   line-height: 0;
   color: #6b7280;
 }
 .toggle-pass:hover{ background: rgba(0,0,0,.06); }
 .toggle-pass .eye{ width: 22px; height: 22px; fill: currentColor; display: none; }
-/* OCULTA: icono “cerrado” visible */
 .toggle-pass .eye.closed{ display: block; }
-/* VISIBLE: al presionar se muestra el “abierto” */
 .toggle-pass[aria-pressed="true"] .eye.closed{ display: none; }
 .toggle-pass[aria-pressed="true"] .eye.open{   display: block; }
-
-/* ===========================
-   5) Botones
-=========================== */
 .login_button{
   width: 100%;
   padding: 12px 14px;
@@ -167,7 +133,6 @@ body{
   background: linear-gradient(180deg, #222, #131313);
 }
 .login_button:active{ transform: translateY(1px); }
-
 .admin_link{
   justify-self: start;
   margin-top: 6px;
@@ -187,10 +152,6 @@ body{
   color: #fff;
   border-color: #414141;
 }
-
-/* ===========================
-   6) Modal (oscuro)
-=========================== */
 .modal{
   position: fixed; inset: 0;
   display: none;
@@ -198,7 +159,6 @@ body{
   background: rgba(0,0,0,.55);
   z-index: 9999;
 }
-
 .modal_content{
   width: min(560px, 92vw);
   background: #0f0f0f !important;
@@ -212,7 +172,6 @@ body{
 }
 .modal_content h3{ margin: 0; font-size: 20px; }
 .modal_desc{ margin: 0; color: #bcbcbc; font-size: 14px; }
-
 .modal_actions{
   display: flex;
   gap: 10px !important;
@@ -220,7 +179,6 @@ body{
   margin-top: 4px;
   flex-wrap: wrap;
 }
-
 .modal_input{
   background: #131313 !important;
   color: #eee !important;
@@ -231,7 +189,6 @@ body{
   border-color:#444 !important;
   box-shadow: 0 0 0 3px rgba(255,255,255,.07) !important;
 }
-
 .btn_primary, .btn_secondary{
   padding: 10px 14px;
   border-radius: 0;
@@ -256,19 +213,12 @@ body{
   background:#343434 !important;
   border-color:#4a4a4a !important;
 }
-
 .modal_msg{
   min-height: 18px;
   font-size: 14px;
   color: #ff8c8c;
 }
-
-/* Evitar scroll del fondo con modal abierto */
 body.modal-open{ overflow: hidden; }
-
-/* ===========================
-   7) Responsive
-=========================== */
 @media (max-width: 420px){
   .auth-wrap{ padding: 14px; }
   .login_button{ font-size: 15px; }
