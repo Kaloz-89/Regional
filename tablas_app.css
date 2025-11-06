@@ -468,10 +468,21 @@ table.tabla-poa tbody td.col-num-sm{
    OFERTA FORMATIVA — contenteditable (sin inputs/textarea)
    Tabla compacta para que quepa en pantalla; móvil con scroll-x
    ===================================================================== */
+.fondo-blanco_2 {
+  width: 99%;
+  background:#fff; border:none; box-shadow:none; 
+
+  margin: 0 auto;
+  background: var(--panel-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+}
 #tablaOferta, #tablaOfertaView{
   table-layout: auto !important;   /* ancho según contenido real */
   width: 100%;
-  font-size: 7.5px !important;     /* más pequeña para “caber” sin scroll */
+  font-size: 7.8px !important;     /* más pequeña para “caber” sin scroll */
   line-height: 1.16 !important;
   border-radius: 3px;
   margin: 15px 0px;
@@ -518,7 +529,7 @@ table.tabla-poa tbody td.col-num-sm{
 .fondo-blanco > h1{ font-size: clamp(16px, 1.8vw, 22px); }
 
 /* Contenedor: scroll-x en móvil; en desktop intenta caber sin scroll */
-.tabla-contenedor{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tabla-contenedor{ overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
 
 /* Móvil / tablet pequeña: permitimos ancho mínimo mayor para scroll-x */
 @media (max-width: 720px){
