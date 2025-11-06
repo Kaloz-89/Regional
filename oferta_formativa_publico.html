@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"/>
+  <title>Oferta Formativa</title>
+
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="tablas_app.css">
+  <link rel="stylesheet" href="tablas_app_light.css">
+  <link rel="icon" href="book-closed-ffffff.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="indice_colaboradores.html">Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <section class="contenedor-principal">
+    <div class="fondo-blanco">
+      <h1>Oferta Formativa <span class="muted"></span></h1>
+
+      <div class="botones-tabla">
+        <button id="ofPrintView" class="btn" type="button">Imprimir</button>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table class="tabla-poa" id="tablaOfertaView">
+          <thead>
+            <tr>
+              <th>Trimestre</th>
+              <th>Eje temáticos</th>
+              <th>Necesidad / brecha por atender</th>
+              <th>Objetivo estratégico</th>
+              <th>Nombre de la actividad</th>
+              <th>Clase de actividad</th>
+              <th>Estrategia metodológica</th>
+              <th>Modalidad</th>
+              <th>Duración (horas)</th>
+              <th>Cantidad de grupos</th>
+              <th>Población meta y cantidad (según estrato)</th>
+              <th>Fecha inicio</th>
+              <th>Fecha cierre</th>
+              <th>Sede</th>
+              <th>Instancia a la que se dirige</th>
+            </tr>
+          </thead>
+          <tbody id="ofTbodyView"><!-- filas por JS --></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script src="oferta_formativa.js" defer></script>
+  <script src="header.js" defer></script>
+  <script src="theme-toggle.js" defer></script>
+</body>
+</html>

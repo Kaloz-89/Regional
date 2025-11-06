@@ -464,3 +464,78 @@ table.tabla-poa tbody td.col-num-sm{
     min-width: 70px !important;
   }
 }
+/* =====================================================================
+   OFERTA FORMATIVA — contenteditable (sin inputs/textarea)
+   Tabla compacta para que quepa en pantalla; móvil con scroll-x
+   ===================================================================== */
+#tablaOferta, #tablaOfertaView{
+  table-layout: auto !important;   /* ancho según contenido real */
+  width: 100%;
+  font-size: 7.5px !important;     /* más pequeña para “caber” sin scroll */
+  line-height: 1.16 !important;
+  border-radius: 3px;
+  margin: 15px 0px;
+}
+#tablaOferta thead th, #tablaOfertaView thead th{
+  background: var(--table-head);
+  color: var(--table-fg);
+  text-align: center;
+  padding: 5px 6px !important;     /* ceñido */
+  border: 1px solid #2a2a2a;
+  white-space: normal;
+}
+#tablaOferta th, #tablaOferta td,
+#tablaOfertaView th, #tablaOfertaView td{
+  padding: 4px 5px !important;     /* ceñido */
+  border: 1px solid var(--bd);
+  background: #fff;
+  color: #111;
+  vertical-align: top;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Celdas editables: borde suave al foco, sin decoración extra */
+#tablaOferta td[contenteditable="true"]{
+  outline: none;
+}
+#tablaOferta td[contenteditable="true"]:focus{
+  box-shadow: inset 0 0 0 2px rgba(37,99,235,.22);
+  border-color: #b9cdfa;
+}
+
+/* Botón eliminar coherente con otras tablas */
+#tablaOferta .col-del .btn-trash{
+  width: 28px; height: 28px; border-radius: 8px;
+  background:#1a1a1a; border:1px solid #0e0e0e; color:#fff;
+  line-height: 1; font-size: 14px;
+}
+#tablaOferta .col-del{ text-align:center; white-space:nowrap; }
+
+/* H1 un poco más pequeño en esta vista para dejar más área útil */
+.fondo-blanco > h1{ font-size: clamp(16px, 1.8vw, 22px); }
+
+/* Contenedor: scroll-x en móvil; en desktop intenta caber sin scroll */
+.tabla-contenedor{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Móvil / tablet pequeña: permitimos ancho mínimo mayor para scroll-x */
+@media (max-width: 720px){
+  .tabla-contenedor > #tablaOferta,
+  .tabla-contenedor > #tablaOfertaView{
+    width: max(1100px, 100%);      /* mínimo razonable; se ve bien con scroll-x */
+  }
+}
+
+/* Impresión: solo logos + tabla */
+@media print{
+  header{ background:#fff !important; border:none !important; box-shadow:none !important; }
+  header .nav-links, .botones-tabla, .muted{ display:none !important; }
+  .logo_direca img, .logo img{ display:inline-block !important; }
+  .fondo-blanco{ background:#fff !important; border:none !important; box-shadow:none !important; }
+  .tabla-contenedor{ width:100% !important; max-width:none !important; overflow:visible !important; }
+  #tablaOferta, #tablaOfertaView{ font-size: 9.4px !important; border-radius:0 !important; }
+  #tablaOferta thead th, #tablaOfertaView thead th{ background:#000 !important; color:#fff !important; }
+  #tablaOferta tr, #tablaOfertaView tr{ break-inside: avoid; page-break-inside: avoid; }
+}
