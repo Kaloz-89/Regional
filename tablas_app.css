@@ -466,12 +466,12 @@ table.tabla-poa tbody td.col-num-sm{
 }
 /* =====================================================================
    OFERTA FORMATIVA — contenteditable (sin inputs/textarea)
-   Tabla compacta para que quepa en pantalla; móvil con scroll-x
+   Tabla compacta; móvil con scroll-x, thead sticky y 1ª columna sticky
    ===================================================================== */
-.fondo-blanco_2 {
-  width: 99%;
-  background:#fff; border:none; box-shadow:none; 
 
+/* Contenedor (tu variante) */
+.fondo-blanco_2{
+  width: 99%;
   margin: 0 auto;
   background: var(--panel-1);
   border: 1px solid var(--line);
@@ -479,25 +479,35 @@ table.tabla-poa tbody td.col-num-sm{
   box-shadow: var(--shadow-card);
   padding: 16px;
 }
+
+/* Tabla (edit y view) */
 #tablaOferta, #tablaOfertaView{
-  table-layout: auto !important;   /* ancho según contenido real */
+  table-layout: auto !important;     /* ancho según contenido real */
   width: 100%;
-  font-size: 7.8px !important;     /* más pequeña para “caber” sin scroll */
+  font-size: 7.8px !important;       /* compacto para “caber” sin scroll */
   line-height: 1.16 !important;
   border-radius: 3px;
-  margin: 15px 0px;
+  margin: 15px 0;
+  border-collapse: collapse;
 }
+
+/* Cabecera siempre visible al hacer scroll vertical */
 #tablaOferta thead th, #tablaOfertaView thead th{
+  position: center;
+  top: 0;
+  z-index: 3;
   background: var(--table-head);
   color: var(--table-fg);
   text-align: center;
-  padding: 5px 6px !important;     /* ceñido */
+  padding: 5px 6px !important;
   border: 1px solid #2a2a2a;
   white-space: normal;
 }
+
+/* Celdas */
 #tablaOferta th, #tablaOferta td,
 #tablaOfertaView th, #tablaOfertaView td{
-  padding: 4px 5px !important;     /* ceñido */
+
   border: 1px solid var(--bd);
   background: #fff;
   color: #111;
@@ -508,10 +518,14 @@ table.tabla-poa tbody td.col-num-sm{
   hyphens: auto;
 }
 
-/* Celdas editables: borde suave al foco, sin decoración extra */
-#tablaOferta td[contenteditable="true"]{
-  outline: none;
+/* Zebra suave */
+#tablaOferta tbody tr:nth-child(even),
+#tablaOfertaView tbody tr:nth-child(even){
+  background: var(--zebra);
 }
+
+/* Celdas editables (solo en edit) */
+#tablaOferta td[contenteditable="true"]{ outline: none; }
 #tablaOferta td[contenteditable="true"]:focus{
   box-shadow: inset 0 0 0 2px rgba(37,99,235,.22);
   border-color: #b9cdfa;
@@ -525,28 +539,124 @@ table.tabla-poa tbody td.col-num-sm{
 }
 #tablaOferta .col-del{ text-align:center; white-space:nowrap; }
 
-/* H1 un poco más pequeño en esta vista para dejar más área útil */
-.fondo-blanco > h1{ font-size: clamp(16px, 1.8vw, 22px); }
+/* Título un poco más pequeño para dejar más área útil */
+.fondo-blanco > h1,
+.fondo-blanco_2 > h1{ font-size: clamp(16px, 1.8vw, 22px); }
 
 /* Contenedor: scroll-x en móvil; en desktop intenta caber sin scroll */
-.tabla-contenedor{ overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+.tabla-contenedor{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100svw;
+  margin: 10px 5px 10px 5px;
+}
 
-/* Móvil / tablet pequeña: permitimos ancho mínimo mayor para scroll-x */
+/* ---------- Mejora de uso en TELÉFONO ---------- */
 @media (max-width: 720px){
+  /* Ancho mínimo para scroll horizontal cómodo */
   .tabla-contenedor > #tablaOferta,
   .tabla-contenedor > #tablaOfertaView{
-    width: max(1100px, 100%);      /* mínimo razonable; se ve bien con scroll-x */
+    width: max(1100px, 100%);
+  }
+
+  /* Ligeramente más legible en móvil sin perder compacidad */
+  #tablaOferta, #tablaOfertaView{ font-size: 8.2px !important; }
+  #tablaOferta th, #tablaOferta td,
+  #tablaOfertaView th, #tablaOfertaView td{
+    padding: 5px 6px !important;
+  }
+
+  /* Primera columna (Trimestre) fija a la izquierda durante el scroll-x */
+  #tablaOferta thead th:first-child,
+  #tablaOferta tbody td:first-child,
+  #tablaOfertaView thead th:first-child,
+  #tablaOfertaView tbody td:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    background: #e3e3e3; 
+    color: #000;           /* fondo sólido */
+    box-shadow: 2px 0 0 rgba(0,0,0,.06); /* separador visual */
+  }
+
+  /* === Anchos mínimos por tipo de columna (según tu orden) ===
+     1 Trimestre | 2 Eje | 3 Brecha | 4 Objetivo | 5 Nombre | 6 Clase
+     7 Estrategia | 8 Modalidad | 9 Horas | 10 Grupos | 11 Población
+     12 Fecha ini | 13 Fecha fin | 14 Sede | 15 Instancia */
+
+  /* 1) Trimestre (no se colapsa y no hace wrap) */
+  #tablaOferta th:nth-child(1),  #tablaOferta td:nth-child(1),
+  #tablaOfertaView th:nth-child(1), #tablaOfertaView td:nth-child(1){
+    min-width: 86px; white-space: nowrap;
+  }
+
+  /* 9) Duración (horas) y 10) Cantidad de grupos → compactas centradas */
+  #tablaOferta th:nth-child(9),  #tablaOferta td:nth-child(9),
+  #tablaOferta th:nth-child(10), #tablaOferta td:nth-child(10),
+  #tablaOfertaView th:nth-child(9),  #tablaOfertaView td:nth-child(9),
+  #tablaOfertaView th:nth-child(10), #tablaOfertaView td:nth-child(10){
+    min-width: 80px; text-align: center; white-space: nowrap;
+  }
+
+  /* 12) Fecha inicio y 13) Fecha fin → sin salto */
+  #tablaOferta th:nth-child(12), #tablaOferta td:nth-child(12),
+  #tablaOferta th:nth-child(13), #tablaOferta td:nth-child(13),
+  #tablaOfertaView th:nth-child(12), #tablaOfertaView td:nth-child(12),
+  #tablaOfertaView th:nth-child(13), #tablaOfertaView td:nth-child(13){
+    min-width: 110px; text-align: center; white-space: nowrap;
+  }
+
+  /* Columnas de texto largo */
+  #tablaOferta th:nth-child(2),  #tablaOferta td:nth-child(2),
+  #tablaOferta th:nth-child(3),  #tablaOferta td:nth-child(3),
+  #tablaOferta th:nth-child(4),  #tablaOferta td:nth-child(4),
+  #tablaOferta th:nth-child(5),  #tablaOferta td:nth-child(5),
+  #tablaOferta th:nth-child(7),  #tablaOferta td:nth-child(7),
+  #tablaOferta th:nth-child(8),  #tablaOferta td:nth-child(8),
+  #tablaOferta th:nth-child(14), #tablaOferta td:nth-child(14),
+  #tablaOferta th:nth-child(15), #tablaOferta td:nth-child(15),
+  #tablaOfertaView th:nth-child(2),  #tablaOfertaView td:nth-child(2),
+  #tablaOfertaView th:nth-child(3),  #tablaOfertaView td:nth-child(3),
+  #tablaOfertaView th:nth-child(4),  #tablaOfertaView td:nth-child(4),
+  #tablaOfertaView th:nth-child(5),  #tablaOfertaView td:nth-child(5),
+  #tablaOfertaView th:nth-child(7),  #tablaOfertaView td:nth-child(7),
+  #tablaOfertaView th:nth-child(8),  #tablaOfertaView td:nth-child(8),
+  #tablaOfertaView th:nth-child(14), #tablaOfertaView td:nth-child(14),
+  #tablaOfertaView th:nth-child(15), #tablaOfertaView td:nth-child(15){
+    min-width: 200px;
+  }
+
+  /* 6) Clase de actividad y 11) Población meta → medianas */
+  #tablaOferta th:nth-child(6),  #tablaOferta td:nth-child(6),
+  #tablaOferta th:nth-child(11), #tablaOferta td:nth-child(11),
+  #tablaOfertaView th:nth-child(6),  #tablaOfertaView td:nth-child(6),
+  #tablaOfertaView th:nth-child(11), #tablaOfertaView td:nth-child(11){
+    min-width: 130px;
   }
 }
 
-/* Impresión: solo logos + tabla */
+/* --------- Impresión: solo logos + tabla --------- */
 @media print{
   header{ background:#fff !important; border:none !important; box-shadow:none !important; }
   header .nav-links, .botones-tabla, .muted{ display:none !important; }
   .logo_direca img, .logo img{ display:inline-block !important; }
-  .fondo-blanco{ background:#fff !important; border:none !important; box-shadow:none !important; }
-  .tabla-contenedor{ width:100% !important; max-width:none !important; overflow:visible !important; }
-  #tablaOferta, #tablaOfertaView{ font-size: 9.4px !important; border-radius:0 !important; }
-  #tablaOferta thead th, #tablaOfertaView thead th{ background:#000 !important; color:#fff !important; }
-  #tablaOferta tr, #tablaOfertaView tr{ break-inside: avoid; page-break-inside: avoid; }
+
+  .fondo-blanco,
+  .fondo-blanco_2{
+    background:#fff !important; border:none !important; box-shadow:none !important;
+  }
+  .tabla-contenedor{
+    width:100% !important; max-width:none !important; overflow:visible !important;
+  }
+
+  #tablaOferta, #tablaOfertaView{
+    font-size: 9.4px !important;
+    border-radius:0 !important;
+  }
+  #tablaOferta thead th, #tablaOfertaView thead th{
+    background:#000 !important; color:#fff !important;
+  }
+  #tablaOferta tr, #tablaOfertaView tr{
+    break-inside: avoid; page-break-inside: avoid;
+  }
 }
