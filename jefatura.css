@@ -1,27 +1,17 @@
-/* =========================================================
-   JEFATURA — Estilos (MODO OSCURO) — Compacto + icon-only
-   ========================================================= */
-
 :root{
   --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
   --text: #eef2f6; --text-dim: #cfd6de;
   --bg-image: url("gpt7.jpg");
   --overlay: linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.70));
-
   --panel: rgba(36,37,39,.86);
   --line: rgba(255,255,255,.12);
-
   --hdr-bg: rgba(18,19,21,.82);
   --hdr-bd: rgba(255,255,255,.08);
   --hover-tint: rgba(255,255,255,.10);
-
   --shadow: 0 10px 28px rgba(0,0,0,.26);
   --radius: 14px;
-
   --table-head:#000000; --table-fg:#fff; --bd:#d0d0d0; --zebra:#f7f7f7;
 }
-
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
@@ -29,7 +19,6 @@ body{
   background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
   display:grid; grid-template-rows:auto 1fr;
 }
-
 /* ===== Header ===== */
 header{
   display:flex; align-items:center; justify-content:space-between;
@@ -49,7 +38,6 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
   transition: background-color .18s ease, transform .18s ease;
 }
 .nav-volver a:hover{ background: var(--hover-tint); transform: translateY(-1px); }
-
 /* ===== Contenido ===== */
 .container{ padding:5px }
 .panel{
@@ -58,24 +46,19 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 }
 .panel-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:6px 2px 12px; }
 .title{ margin:0; font-size: clamp(20px,2.2vw,28px); color:#fff; }
-
 /* Botones */
 .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; font-weight:800; cursor:pointer; }
 .btn--primary{ background:#0f0f0f; color:#fff; border:1px solid #000; }
 .btn--primary:hover{ background:#151515; }
-
 /* ===== Tabla ===== */
-
-/* 👉 Scroll horizontal (si hace falta) */
 .table-wrap{
   width:100%;
-  overflow-x:auto;            /* <- clave para móvil */
+  overflow-x:auto;        
   overflow-y:visible;
   border-radius:12px;
   box-shadow:0 2px 10px rgba(0,0,0,.18);
-  -webkit-overflow-scrolling: touch;   /* inercia iOS */
+  -webkit-overflow-scrolling: touch; 
 }
-
 .tabla-visitas{
   width:100%;
   border-collapse:collapse;
@@ -84,7 +67,7 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
   font-size:9.4px; line-height:1.16;
 }
 .tabla-visitas thead th{
-  position:sticky; top:0; z-index:2;            /* header pegajoso */
+  position:sticky; top:0; z-index:2;          
   background:var(--table-head); color:var(--table-fg);
   text-align:center; border:1px solid #2a2a2a; padding:6px 6px; font-weight:800;
 }
@@ -93,7 +76,6 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
   background:#fff; color:#111; word-wrap:break-word; overflow-wrap:anywhere;
 }
 .tabla-visitas tbody tr:nth-child(even){ background:var(--zebra); }
-
 /* ===== Inputs/selects ===== */
 .cell{ padding:0; }
 .cell input[type="text"],
@@ -105,8 +87,7 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 }
 .cell textarea{ resize:vertical; min-height:30px; }
 .cell :is(input,select,textarea):focus{ outline:2px solid rgba(37,99,235,.22); outline-offset:1px; }
-
-/* Selects: flecha sutil */
+/* Selects */
 .cell select{
   padding-right:16px !important;
   border-radius: 8px;
@@ -123,8 +104,7 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 .cell select::-webkit-scrollbar{ width:10px; }
 .cell select::-webkit-scrollbar-track{ background:#0c0c0c; border-radius:8px; }
 .cell select::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.25); border-radius:8px; border:2px solid #0c0c0c; }
-
-/* Columnas angostas (prioridad, validación, estado) */
+/* Columnas */
 .tabla-visitas thead th:nth-child(9),
 .tabla-visitas tbody td:nth-child(9),
 .tabla-visitas thead th:nth-child(11),
@@ -133,13 +113,11 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 .tabla-visitas tbody td:nth-child(12){
   width:78px; max-width:88px; white-space:nowrap; text-align:center;
 }
-/* Acciones (13) ultra angosta */
 .tabla-visitas thead th:nth-child(13),
 .tabla-visitas tbody td:nth-child(13){
   width:40px; max-width:40px; white-space:nowrap; text-align:center;
 }
-
-/* Botón eliminar — solo icono */
+/* Botón eliminar*/
 .col-actions{ background:#fff; }
 .btn--danger{
   width: 28px; height: 28px; padding: 0;
@@ -155,47 +133,33 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 }
 .btn--danger:hover{ background:#121212; }
 .btn--danger:active{ transform: translateY(1px); }
-
 /* ===== Responsive ===== */
 @media (max-width: 880px){
   .title{ font-size:20px; }
   .tabla-visitas{ font-size:9px; }
   .tabla-visitas th, .tabla-visitas td{ padding:3.5px 4px; }
 }
-
-/* ---------------------------------------------------------
-   MÓVIL: ancho mínimo fijo + scroll horizontal suave
-   --------------------------------------------------------- */
 @media (max-width: 720px){
-  /* El contenedor hace scroll horizontal */
   .table-wrap{
     overflow-x:auto;
     overflow-y:visible;
     -webkit-overflow-scrolling: touch;
   }
-  /* La tabla no se comprime: obliga a deslizar
-     (ajusta si necesitas más/menos ancho total) */
   .tabla-visitas{
-    min-width: 1080px;   /* ← clave para que aparezca el scroll-x */
+    min-width: 1080px;  
     font-size: 8.8px;
   }
   .tabla-visitas th, .tabla-visitas td{ padding:3px 3.5px; }
-
-  /* Pista visual opcional en los extremos (sombras de scroll) */
   .table-wrap{
     background:
       linear-gradient(to right, rgba(0,0,0,.22), rgba(0,0,0,0)) 0 0/12px 100% no-repeat,
       linear-gradient(to left,  rgba(0,0,0,.22), rgba(0,0,0,0)) 100% 0/12px 100% no-repeat;
   }
 }
-
-/* Móviles muy pequeños */
 @media (max-width: 420px){
   .tabla-visitas{ min-width: 1020px; font-size: 8.6px; }
   .tabla-visitas th, .tabla-visitas td{ padding:2.8px 3px; }
 }
-
-/* Accesibilidad */
 @media (prefers-reduced-motion: reduce){
   .btn, .nav-volver a{ transition: none; }
 }

@@ -1,43 +1,29 @@
-/* =========================================================
-   ÍNDICE DE COLABORADORES — MODO CLARO
-   Archivo: indice_colaboradores_light.css
-   Activo solo con <html data-theme="light">
-   ========================================================= */
-
 html[data-theme="light"]{
   /* Tokens (claro) */
   --ff: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
   --text: #0f172a;
   --text-dim: #334155;
-
   --bg-image: url("fondo_dorado_withe.jpg");
   --overlay:
     radial-gradient(1200px 600px at 60% -5%, rgba(255, 255, 255, 0), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0),rgba(255, 255, 255, 0));
-
   --panel-1: rgba(255,255,255,.92);
   --line: rgba(255, 255, 255, 0.12);
-
   --hdr-bg: rgb(1, 0, 57);
   --hdr-bd: rgba(2,6,23,.10);
   --hover-tint: rgba(85, 85, 85, 0.659);
-
-  /* Baldosas (tiles) en claro */
+  /* botones asesorias (tiles) en claro */
   --tile-grad:
     radial-gradient(160% 120% at 30% 10%, rgba(83, 83, 83, 0.04), transparent 55%),
     linear-gradient(180deg, rgba(52, 52, 52, 0.403), rgb(164, 164, 164));
   --tile-grad-hover:
     radial-gradient(160% 120% at 30% 10%, rgba(0,0,0,.06), transparent 60%),
     linear-gradient(180deg, rgba(146, 146, 146, 0.95), rgba(121, 121, 121, 0.95));
-
   --radius: 14px;
   --shadow-card: 0 10px 28px rgba(0,0,0,.12);
   --shadow-tile: 0 12px 28px rgba(0,0,0,.14);
-
   color-scheme: light;
 }
-
 /* ---- Base + fondo ---- */
 html[data-theme="light"] body{
   margin: 0;
@@ -45,7 +31,6 @@ html[data-theme="light"] body{
   color: var(--text);
   background: var(--overlay), var(--bg-image) center / cover no-repeat fixed;
 }
-
 /* ---- Header ---- */
 html[data-theme="light"] header{
   background: var(--hdr-bg);
@@ -64,8 +49,7 @@ html[data-theme="light"] .boton_salida a{
   border: 1px solid var(--hdr-bd);
   border-radius: 10px; font-weight:800;
 }
-
-/* Dropdown */
+/* Desplegable */
 html[data-theme="light"] .dropdown-menu{
   background: #ffffff;
   border: 1px solid var(--line);
@@ -73,7 +57,6 @@ html[data-theme="light"] .dropdown-menu{
 }
 html[data-theme="light"] .dropdown-menu a{ color:#0f172a; }
 html[data-theme="light"] .dropdown-menu a:hover{ background: var(--hover-tint); }
-
 /* ---- Layout 20 / 80 ---- */
 html[data-theme="light"] .indice-layout{
   width: min(1500px, 96vw);
@@ -84,8 +67,7 @@ html[data-theme="light"] .indice-layout{
   gap: 24px;
   align-items: start;
 }
-
-/* Lado izquierdo (tira vertical) */
+/* Lado izquierdo */
 html[data-theme="light"] .aside-col{
   background: #00021fd9;
   border: 1px solid var(--line);
@@ -103,8 +85,7 @@ html[data-theme="light"] .aside-box{
 }
 html[data-theme="light"] .aside-title{ color:#0f172a; }
 html[data-theme="light"] .aside-icon{ opacity:.95; }
-
-/* Lado derecho: grilla de nodos */
+/* Lado derecho */
 html[data-theme="light"] .grid-nodos{
   display:grid;
   grid-template-columns: repeat(5, 1fr);
@@ -128,8 +109,7 @@ html[data-theme="light"] .nodo:hover{
   background: var(--tile-grad-hover);
   box-shadow: 0 18px 40px rgba(0,0,0,.18);
 }
-
-/* ---- Responsive (igual que oscuro) ---- */
+/* ---- Responsive ---- */
 @media (max-width: 1360px){
   html[data-theme="light"] .grid-nodos{ grid-template-columns: repeat(4, 1fr); }
 }

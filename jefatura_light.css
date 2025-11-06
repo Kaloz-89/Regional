@@ -1,7 +1,3 @@
-/* =========================================================
-   JEFATURA — MODO CLARO (compacto + icon-only)
-   ========================================================= */
-
 html[data-theme="light"]{
   --text:#0f172a; --text-dim:#334155;
   --bg-image: url("fondo_dorado_withe.jpg");
@@ -11,27 +7,21 @@ html[data-theme="light"]{
   --line: rgba(15,23,42,.12);
   --table-head:#010040; --table-fg:#fff; --bd:#d0d0d0; --zebra:#f7f7f7;
 }
-
 html[data-theme="light"] body{
   color: var(--text);
   background: var(--overlay), var(--bg-image) center/cover no-repeat fixed;
 }
-
-/* Volver igual (blanco) */
 html[data-theme="light"] .nav-volver a{
   color:#fff; background: rgba(255,255,255,.18); border-color: transparent;
 }
 html[data-theme="light"] .nav-volver a:hover{ background: rgba(255,255,255,.24); }
-
 /* Panel */
 html[data-theme="light"] .panel{ background: var(--panel); border-color: var(--line); }
-
 /* Tabla */
 html[data-theme="light"] .tabla-visitas{ background:#fff; color:#111; }
 html[data-theme="light"] .tabla-visitas th,
 html[data-theme="light"] .tabla-visitas td{ background:#fff; color:#111; border-color: var(--bd); }
 html[data-theme="light"] .tabla-visitas thead th{ background:#000a31; color:#fff; border-color:#2a2a2a; }
-
 /* Inputs/selects transparentes + flecha */
 html[data-theme="light"] .cell :is(input,select,textarea){
   background:transparent !important; border:0 !important; color:#111 !important;
@@ -44,8 +34,7 @@ html[data-theme="light"] .cell select{
 html[data-theme="light"] .cell :is(input,select,textarea):focus{
   outline:2px solid rgba(30,102,245,.25); outline-offset:1px;
 }
-
-/* Columnas angostas coherentes con oscuro */
+/* Columnas angostas */
 html[data-theme="light"] .tabla-visitas thead th:nth-child(9),
 html[data-theme="light"] .tabla-visitas tbody td:nth-child(9),
 html[data-theme="light"] .tabla-visitas thead th:nth-child(11),
@@ -58,12 +47,10 @@ html[data-theme="light"] .tabla-visitas thead th:nth-child(13),
 html[data-theme="light"] .tabla-visitas tbody td:nth-child(13){
   width:40px; max-width:40px; white-space:nowrap; text-align:center;
 }
-
-/* Botón Agregar fila: gris MUY oscuro también en claro */
+/* Botón Agregar fila */
 html[data-theme="light"] .btn--primary{ background:#020041; color:#fff; border:1px solid #000; }
 html[data-theme="light"] .btn--primary:hover{ background:#151515; }
-
-/* Botón eliminar: sólo icono (blanco) sobre gris oscuro */
+/* Botón eliminar */
 html[data-theme="light"] .btn--danger{
   width:28px; height:28px; padding:0; border-radius:8px;
   background:#111; border:1px solid #000; font-size:0;
@@ -71,8 +58,7 @@ html[data-theme="light"] .btn--danger{
   background-repeat:no-repeat; background-position:center; background-size:15px 15px;
 }
 html[data-theme="light"] .btn--danger:hover{ background:#0c0c0c; }
-
-/* Responsive igual que oscuro */
+/* Responsive */
 @media (max-width: 880px){
   html[data-theme="light"] .tabla-visitas{ font-size:9px; }
   html[data-theme="light"] .tabla-visitas th, html[data-theme="light"] .tabla-visitas td{ padding:3.5px 4px; }
@@ -81,7 +67,7 @@ html[data-theme="light"] .btn--danger:hover{ background:#0c0c0c; }
   html[data-theme="light"] .tabla-visitas{ font-size:8.8px; }
   html[data-theme="light"] .tabla-visitas th, html[data-theme="light"] .tabla-visitas td{ padding:3px 3.5px; }
 }
-/* ===== Desplegables (select) — estilo mejorado (claro) ===== */
+/* ===== Desplegables (select) ===== */
 html[data-theme="light"] .cell select{
   border-radius: 8px;
   padding-right: 18px !important;
@@ -101,11 +87,10 @@ html[data-theme="light"] .cell select optgroup{
   padding: 4px 8px;
 }
 html[data-theme="light"] .cell select option:checked{
-  background: #e6eefc;    /* azulito suave de selección */
+  background: #e6eefc;
   color: #0f172a;
 }
-
-/* Scrollbar del menú (webkit) */
+/* Scrollbar del menú */
 html[data-theme="light"] .cell select::-webkit-scrollbar{ width: 10px; }
 html[data-theme="light"] .cell select::-webkit-scrollbar-track{ background: #f1f5f9; border-radius: 8px; }
 html[data-theme="light"] .cell select::-webkit-scrollbar-thumb{
@@ -113,8 +98,7 @@ html[data-theme="light"] .cell select::-webkit-scrollbar-thumb{
   border-radius: 8px;
   border: 2px solid #f1f5f9;
 }
-
-/* ===== Botón Eliminar — solo icono ===== */
+/* ===== Botón Eliminar ===== */
 html[data-theme="light"] .btn--danger{
   width: 28px; height: 28px; padding: 0;
   border-radius: 8px;
