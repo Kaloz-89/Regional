@@ -493,7 +493,7 @@ table.tabla-poa tbody td.col-num-sm{
 
 /* Cabecera siempre visible al hacer scroll vertical */
 #tablaOferta thead th, #tablaOfertaView thead th{
-  position: center;
+  position: sticky;
   top: 0;
   z-index: 3;
   background: var(--table-head);
@@ -507,7 +507,7 @@ table.tabla-poa tbody td.col-num-sm{
 /* Celdas */
 #tablaOferta th, #tablaOferta td,
 #tablaOfertaView th, #tablaOfertaView td{
-
+  padding: 4px 5px !important;
   border: 1px solid var(--bd);
   background: #fff;
   color: #111;
@@ -547,8 +547,7 @@ table.tabla-poa tbody td.col-num-sm{
 .tabla-contenedor{
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  width: 100svw;
-  margin: 10px 5px 10px 5px;
+  width: 100%;
 }
 
 /* ---------- Mejora de uso en TELÉFONO ---------- */
@@ -574,9 +573,7 @@ table.tabla-poa tbody td.col-num-sm{
     position: sticky;
     left: 0;
     z-index: 4;
-    background: #e3e3e3; 
-    color: #000;           /* fondo sólido */
-    box-shadow: 2px 0 0 rgba(0,0,0,.06); /* separador visual */
+
   }
 
   /* === Anchos mínimos por tipo de columna (según tu orden) ===
