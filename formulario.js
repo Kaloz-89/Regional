@@ -1,302 +1,317 @@
 (() => {
   "use strict";
 
-  /* =========================================================
-     FORMULARIO — Catálogos y Circuitos dependientes por AÑO
-     Fuente única: marco_referencia_catalogos_v1_<AÑO>
-     Meses: SIEMPRE los 12 meses estándar (Enero–Diciembre)
-  ========================================================= */
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const readJSON  = (k, fb = null) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? fb; } catch { return fb; } };
+  const writeJSON = (k, v)        => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
-  // ---------- Helpers ----------
-  const $  = (sel, ctx=document) => ctx.querySelector(sel);
-  const readJSON  = (k, fb=null) => { try{ return JSON.parse(localStorage.getItem(k)||'null') ?? fb; }catch{ return fb; } };
-  const writeJSON = (k, v)      => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} };
-  const uniqSorted = (arr=[]) => Array.from(new Set(arr.map(v=>String(v).trim())))
-                                      .filter(Boolean)
-                                      .sort((a,b)=>a.localeCompare(b,'es',{numeric:true,sensitivity:'base'}));
+  // ===== Año activo (mismo esquema que jefatura.js) =====
+  const AppYear = window.AppYear || (() => {
+    const KEY = "app_year_v1";
+    const DEF = 2025;
+    return {
+      getYear: () => parseInt(localStorage.getItem(KEY) || DEF, 10) || DEF
+    };
+  })();
 
-  const norm = (s) => String(s||"")
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ')
-    .trim();
+  async function resolveYearInfo() {
+    const year = AppYear.getYear();
+    let yearId = 0;
 
-  // Meses estándar (únicos permitidos en la UI)
+    try {
+      const resp = await fetch("php/anio_listar.php");
+      const data = await resp.json().catch(() => null);
+      if (resp.ok && data && data.ok && Array.isArray(data.anios)) {
+        for (const item of data.anios) {
+          if (Number(item.anio) === Number(year)) {
+            yearId = Number(item.id_anio ?? item.id); // por si tu campo se llama id_anio
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      console.error("anio_listar.php error", e);
+    }
+
+    if (!yearId) yearId = 1; // fallback
+
+    return { year: String(year), yearId };
+  }
+
+  // ===== Estado =====
+  let YEAR    = "2025";
+  let YEAR_ID = 1;
+
+  let CATALOGS = {
+    meses:        [],
+    tipoVisita:   [],
+    cicloEscolar: [],
+    asesoria:     []
+  };
+
+  let CIRCUITOS = {
+    circuito01: [],
+    circuito02: [],
+    circuito03: [],
+    circuito04: [],
+    circuito05: []
+  };
+
+  const STORAGE_KEY = "visitas_jefatura_v1";
+
   const DEFAULT_MESES = [
     "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    "Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"
   ];
 
-  function canonCircuitKey(input){
+  const uniqSorted = (arr=[]) =>
+    Array.from(new Set(arr.map(v => String(v).trim())))
+      .filter(Boolean)
+      .sort((a,b)=>a.localeCompare(b,"es",{numeric:true,sensitivity:"base"}));
+
+  const norm = s => String(s||"")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase();
+
+  // Circuito "Circuito 02" / "Circuito02" -> "circuito02"
+  const canonCircuitKey = (input) => {
     const n = norm(input);
     const m = n.match(/\d+/);
-    if (m) return `circuito${String(Math.max(1,Math.min(99,parseInt(m[0],10))).toString().padStart(2,'0'))}`;
-    if (n.includes('circuit')) return 'circuito01';
-    return '';
-  }
-
-  function selectedText(sel){
-    const opt = sel?.options?.[sel.selectedIndex];
-    return opt ? opt.text : '';
-  }
-
-  function validInstitution(x){
-    const t = String(x||'').trim();
-    if (t.length < 2) return false;           // descarta vacíos y 1 char
-    if (/^[\p{N}]+$/u.test(t)) return false;  // solo números (e.g. "98")
-    if (!/[\p{L}]/u.test(t)) return false;    // sin letras
-    return true;
-  }
-
-  // ---------- Año activo ----------
-  const AppYearShim = (() => {
-    const FALLBACK = 2025;
-    const fromLS = parseInt(localStorage.getItem("app_year_v1")||"", 10);
-    const val = (window.AppYear && typeof window.AppYear.getYear==="function")
-      ? window.AppYear.getYear()
-      : (Number.isFinite(fromLS) ? fromLS : FALLBACK);
-    return { get: () => val };
-  })();
-  const getYear = () => String(AppYearShim.get());
-
-  // ---------- Claves ----------
-  const MR_PREFIX   = "marco_referencia_catalogos_v1";
-  const MR_KEY      = (y) => `${MR_PREFIX}_${String(y)}`;
-  const VISITS_SINK = "visitas_jefatura_v1";
-
-  // ---------- Migración/normalización del MR (in-place) ----------
-  function migrateMRObject(obj){
-    if (!obj || typeof obj !== 'object')
-      return { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
-
-    const out = { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
-
-    // Copia catálogos si existen (arrays)
-    out.meses        = Array.isArray(obj.meses)        ? uniqSorted(obj.meses)        : [];
-    out.tipoVisita   = Array.isArray(obj.tipoVisita)   ? uniqSorted(obj.tipoVisita)   : [];
-    out.cicloEscolar = Array.isArray(obj.cicloEscolar) ? uniqSorted(obj.cicloEscolar) : [];
-    out.asesoria     = Array.isArray(obj.asesoria)     ? uniqSorted(obj.asesoria)     : [];
-
-    // Recolector genérico de instituciones
-    const map = {};
-    const pushMany = (keyLike, val) => {
-      const cKey = canonCircuitKey(keyLike);
-      if (!cKey) return;
-      map[cKey] = map[cKey] || [];
-      if (Array.isArray(val)) {
-        for (const v of val) {
-          if (v && typeof v !== 'object') map[cKey].push(String(v));
-          else if (v && typeof v === 'object' && v.nombre) map[cKey].push(String(v.nombre));
-        }
-      } else if (val && typeof val === 'object') {
-        const buckets = ['instituciones','centros','escuelas','colegios','lista','items'];
-        for (const b of buckets) {
-          if (Array.isArray(val[b])) val[b].forEach(x => map[cKey].push(String(x)));
-        }
-      } else if (val != null) {
-        map[cKey].push(String(val));
-      }
-    };
-
-    // Recorre todas las claves del objeto buscando “circuito*”
-    for (const k of Object.keys(obj)) {
-      if (!k) continue;
-      if (norm(k).includes('circuit')) pushMany(k, obj[k]);
+    if (m) {
+      const num = Math.max(1, Math.min(99, parseInt(m[0],10)));
+      return `circuito${String(num).padStart(2,"0")}`;
     }
+    if (n.includes("circuit")) return "circuito01";
+    return "";
+  };
 
-    // Asegura 5 circuitos canónicos filtrando basura
-    for (let i=1;i<=5;i++){
-      const k = `circuito${String(i).padStart(2,'0')}`;
-      const arr = (map[k] || []).filter(validInstitution);
-      out[k] = uniqSorted(arr);
-    }
-
-    return out;
-  }
-
-  // Lee/sanea y, si cambió, lo escribe de vuelta para unificar formato
-  function readMRYearClean(year){
-    const key = MR_KEY(year);
-    const raw = readJSON(key, null) || {};
-    const cleaned = migrateMRObject(raw);
+  // ===== Carga desde PHP (mismos endpoints que usa jefatura.js) =====
+  async function loadCatalogsFromDB() {
     try {
-      const before = JSON.stringify(raw);
-      const after  = JSON.stringify(cleaned);
-      if (before !== after) writeJSON(key, cleaned);
-    } catch {}
-    return cleaned;
-  }
+      const resp = await fetch("php/marco_referencia_listar.php?anio=" + encodeURIComponent(YEAR_ID));
+      const data = await resp.json().catch(() => null);
 
-  // ---------- Carga por AÑO ----------
-  function loadCatalogsByYear(year){
-    const obj = readMRYearClean(year);
-    return {
-      // Meses FORZADOS a DEFAULT_MESES (no usamos obj.meses para evitar ruido viejo)
-      meses:        [...DEFAULT_MESES],
-      tipoVisita:   obj.tipoVisita,
-      cicloEscolar: obj.cicloEscolar,
-      asesoria:     obj.asesoria,
-    };
-  }
+      if (!resp.ok || !data || !data.ok) {
+        console.error("marco_referencia_listar.php error", data && data.error);
+        CATALOGS = {
+          meses:        [...DEFAULT_MESES],
+          tipoVisita:   [],
+          cicloEscolar: [],
+          asesoria:     []
+        };
+        return;
+      }
 
-  function loadCircuitsMapByYear(year){
-    const obj = readMRYearClean(year);
-    const map = {};
-    for (let i=1;i<=5;i++){
-      const k = `circuito${String(i).padStart(2,'0')}`;
-      map[k] = Array.isArray(obj[k]) ? obj[k] : [];
+      CATALOGS = {
+        meses:        [...DEFAULT_MESES], // meses vienen fijos
+        tipoVisita:   (data.tipoVisita   || []).map(r => r.texto),
+        cicloEscolar: (data.cicloEscolar || []).map(r => r.texto),
+        asesoria:     (data.asesoria     || []).map(r => r.texto)
+      };
+
+      CATALOGS.meses = uniqSorted(CATALOGS.meses);
+      CATALOGS.tipoVisita   = uniqSorted(CATALOGS.tipoVisita);
+      CATALOGS.cicloEscolar = uniqSorted(CATALOGS.cicloEscolar);
+      CATALOGS.asesoria     = uniqSorted(CATALOGS.asesoria);
+
+    } catch (e) {
+      console.error("loadCatalogsFromDB", e);
+      CATALOGS = {
+        meses:        [...DEFAULT_MESES],
+        tipoVisita:   [],
+        cicloEscolar: [],
+        asesoria:     []
+      };
     }
-    return map;
   }
 
-  // ---------- UI helpers ----------
-  function fillSelect(sel, values, placeholder="Seleccionar…") {
-    const el = typeof sel === "string" ? $(sel) : sel;
+  async function loadCircuitsFromDB() {
+    try {
+      const resp = await fetch("php/circuito_listar.php?anio=" + encodeURIComponent(YEAR_ID));
+      const data = await resp.json().catch(() => null);
+
+      if (!resp.ok || !data || !data.ok || !data.circuitos) {
+        console.error("circuito_listar.php error", data && data.error);
+        return;
+      }
+
+      const out = { circuito01:[], circuito02:[], circuito03:[], circuito04:[], circuito05:[] };
+      for (const key of Object.keys(out)) {
+        const arr = data.circuitos[key] || [];
+        out[key] = uniqSorted(arr.map(r => r.texto));
+      }
+      CIRCUITOS = out;
+
+    } catch (e) {
+      console.error("loadCircuitsFromDB", e);
+    }
+  }
+
+  // ===== UI helpers =====
+  function fillSelect(el, values, placeholder) {
     if (!el) return;
-    const prev = el.value;
     el.innerHTML = "";
-    const o0 = document.createElement("option");
-    o0.value = ""; o0.textContent = placeholder; o0.hidden = true; o0.selected = true;
-    el.appendChild(o0);
-    (values||[]).forEach(v=>{
-      const opt = document.createElement("option");
-      opt.value = v; opt.textContent = v;
-      el.appendChild(opt);
-    });
-    if (prev && (values||[]).includes(prev)) el.value = prev;
-  }
 
-  function ensureCircuitOptions(){
-    const selCircuito = $("#circuito");
-    if (!selCircuito) return;
-    const keep = selCircuito.value;
-    selCircuito.innerHTML = "";
-    const ph = document.createElement("option");
-    ph.value=""; ph.hidden=true; ph.selected=true; ph.textContent="Seleccionar circuito…";
-    selCircuito.appendChild(ph);
-    for (let i=1;i<=5;i++){
-      const txt = `Circuito ${String(i).padStart(2,'0')}`;
+    const opt0 = document.createElement("option");
+    opt0.value = "";
+    opt0.hidden = true;
+    opt0.selected = true;
+    opt0.textContent = placeholder;
+    el.appendChild(opt0);
+
+    (values || []).forEach(v => {
       const o = document.createElement("option");
-      o.value = txt; o.textContent = txt;
-      selCircuito.appendChild(o);
+      o.value = v;
+      o.textContent = v;
+      el.appendChild(o);
+    });
+  }
+
+  function updateInstitucionesPorCircuito() {
+    const selC = $("#circuito");
+    const selI = $("#institucion");
+    if (!selC || !selI) return;
+
+    const key = canonCircuitKey(selC.value || selC.options[selC.selectedIndex]?.text);
+    const lista = CIRCUITOS[key] || [];
+
+    if (!lista.length) {
+      selI.disabled = true;
+      selI.innerHTML = '<option value="" hidden selected>No hay instituciones</option>';
+      return;
     }
-    if (keep) selCircuito.value = keep;
+
+    fillSelect(selI, lista, "Seleccionar institución…");
+    selI.disabled = false;
   }
 
-  function disableInstitucionPlaceholder(){
-    const selInst = $("#institucion");
-    if (!selInst) return;
-    selInst.disabled = true;
-    selInst.innerHTML = '<option hidden selected value="">Elija circuito primero…</option>';
-  }
-
-  // ---------- Estado por AÑO ----------
-  let CATALOGS = { meses:[], tipoVisita:[], cicloEscolar:[], asesoria:[] };
-  let CIRCUITS_MAP = {};
-
-  function renderForYear(year){
-    CATALOGS     = loadCatalogsByYear(year);
-    CIRCUITS_MAP = loadCircuitsMapByYear(year);
-
+  function renderCombos() {
     fillSelect($("#asesoria"),     CATALOGS.asesoria,     "Seleccionar asesoría…");
     fillSelect($("#mes"),          CATALOGS.meses,        "Seleccionar mes…");
     fillSelect($("#tipoVisita"),   CATALOGS.tipoVisita,   "Seleccionar tipo…");
     fillSelect($("#cicloEscolar"), CATALOGS.cicloEscolar, "Seleccionar ciclo…");
 
-    ensureCircuitOptions();
-    const selCircuito = $("#circuito");
-    const selInst     = $("#institucion");
-    if (!selCircuito || !selInst) return;
-
-    const refreshInst = () => {
-      const val = selCircuito.value || "";
-      const txt = selectedText(selCircuito) || "";
-      const cKey = canonCircuitKey(val) || canonCircuitKey(txt);
-      const list = cKey && Array.isArray(CIRCUITS_MAP[cKey]) ? CIRCUITS_MAP[cKey] : [];
-      fillSelect(selInst, uniqSorted(list), list.length ? "Seleccionar…" : "No hay instituciones");
-      selInst.disabled = list.length === 0;
-    };
-
-    if (selCircuito.__depHandler) selCircuito.removeEventListener("change", selCircuito.__depHandler);
-    selCircuito.__depHandler = () => refreshInst();
-    selCircuito.addEventListener("change", selCircuito.__depHandler);
-
-    disableInstitucionPlaceholder();
-    refreshInst();
-
     const pill = $("#yearPill");
-    if (pill) pill.textContent = `Año ${year}`;
+    if (pill) pill.textContent = `Año ${YEAR}`;
+
+    // circuito -> instituciones dependientes
+    const selC = $("#circuito");
+    if (selC) {
+      selC.addEventListener("change", updateInstitucionesPorCircuito);
+      updateInstitucionesPorCircuito(); // primera vez
+    }
   }
 
-  // ---------- Submit (guarda por AÑO) ----------
-  function bindFormSubmit(){
+  // ===== Envío del formulario =====
+  function bindSubmit() {
     const form = $("#frmVisita");
     if (!form) return;
 
-    form.addEventListener("submit", (ev)=>{
+    form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
 
-      const data = {
-        year:          AppYearShim.get(),
-        asesoria:      $("#asesoria")?.value || "",
-        circuito:      $("#circuito")?.value || "",
-        institucion:   $("#institucion")?.value || "",
-        mes:           $("#mes")?.value || "",
-        fecha:         $("#fecha")?.value || "",
-        tipoVisita:    $("#tipoVisita")?.value || "",
-        cicloEscolar:  $("#cicloEscolar")?.value || "",
-        tematica:      $("#tematica")?.value || "",
-        observacion:   $("#observacion")?.value || ""
+      const payload = {
+        year:        parseInt(YEAR, 10),
+        asesoria:    $("#asesoria").value || "",
+        circuito:    $("#circuito").value || "",
+        institucion: $("#institucion").value || "",
+        mes:         $("#mes").value || "",
+        fecha:       $("#fecha").value || "",
+        tipoVisita:  $("#tipoVisita").value || "",
+        cicloEscolar:$("#cicloEscolar").value || "",
+        tematica:    $("#tematica").value || "",
+        observacion: $("#observacion").value || ""
       };
 
-      if (!data.asesoria || !data.circuito || !data.institucion ||
-          !data.mes || !data.tipoVisita || !data.cicloEscolar || !data.fecha) {
+      if (
+        !payload.asesoria ||
+        !payload.circuito ||
+        !payload.institucion ||
+        !payload.mes ||
+        !payload.fecha ||
+        !payload.tipoVisita ||
+        !payload.cicloEscolar
+      ) {
         alert("Faltan campos obligatorios.");
         return;
       }
 
-      const sink = readJSON(VISITS_SINK, {});
-      const y = String(data.year || "sinYear");
-      sink[y] = Array.isArray(sink[y]) ? sink[y] : [];
-      sink[y].push(data);
-      writeJSON(VISITS_SINK, sink);
+      try {
+        const resp = await fetch("php/jefatura_insertar.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-      try { localStorage.setItem('visitas_jefatura_last_update', String(Date.now())); } catch {}
+        const txt  = await resp.text();
+        let data   = null;
+        try { data = JSON.parse(txt); } catch { data = null; }
 
-      alert("Guardado en el año " + y);
-      form.reset();
-      disableInstitucionPlaceholder();
-    });
+        if (!resp.ok || !data || !data.ok) {
+          console.error("jefatura_insertar.php respuesta:", txt);
+          const msg = (data && data.error) ? data.error : "Error al guardar";
+          throw new Error(msg);
+        }
 
-    const btnLimpiar = $("#btnLimpiar");
-    if (btnLimpiar) {
-      btnLimpiar.addEventListener("click", ()=>{
+        alert("Visita guardada correctamente.");
+
+        // Actualizar espejo en localStorage para que resumen / reporte se refresquen
+        const store = readJSON(STORAGE_KEY, {});
+        const arr   = store[YEAR] || [];
+
+        arr.push({
+          id:          data.id || Date.now(),
+          asesoria:    payload.asesoria,
+          circuito:    payload.circuito,
+          institucion: payload.institucion,
+          mes:         payload.mes,
+          fecha:       payload.fecha,
+          tipoVisita:  payload.tipoVisita,
+          cicloEscolar:payload.cicloEscolar,
+          tematica:    payload.tematica,
+          prioridad:   "No Aplica",
+          observacion: payload.observacion,
+          validacionJefatura: "Pendiente",
+          estado:            "Sin revisar"
+        });
+
+        store[YEAR] = arr;
+        writeJSON(STORAGE_KEY, store);
+        localStorage.setItem("visitas_jefatura_last_update", String(Date.now()));
+
         form.reset();
-        disableInstitucionPlaceholder();
-      });
-    }
-  }
+        updateInstitucionesPorCircuito(); // dejar instituciones en "no hay"
 
-  // ---------- Reacciones a cambio de año / edición MR ----------
-  function bindYearAndStorage(){
-    window.addEventListener("yearchange", (ev)=>{
-      const y = String(ev?.detail?.year ?? getYear());
-      renderForYear(y);
+      } catch (e) {
+        console.error("Error al guardar visita:", e);
+        alert("Error al guardar visita: " + e.message);
+      }
     });
-    window.addEventListener("storage", (ev)=>{
-      if (!ev.key) return;
-      const y = getYear();
-      if (ev.key === MR_KEY(y)) renderForYear(y);   // refresca solo el año activo
+
+    $("#btnLimpiar")?.addEventListener("click", () => {
+      form.reset();
+      updateInstitucionesPorCircuito();
     });
   }
 
-  // ---------- Init ----------
-  function start(){
-    const y = getYear();
-    renderForYear(y);
-    bindFormSubmit();
-    bindYearAndStorage();
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
-  else start();
+  // ===== Init =====
+  async function start() {
+    const info = await resolveYearInfo();
+    YEAR    = info.year;
+    YEAR_ID = info.yearId;
 
+    await Promise.all([
+      loadCatalogsFromDB(),
+      loadCircuitsFromDB()
+    ]);
+
+    renderCombos();
+    bindSubmit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
 })();

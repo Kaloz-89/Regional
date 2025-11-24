@@ -141,7 +141,7 @@ table.tabla-admin tbody tr:nth-child(even),
 #tablaUsuarios tbody tr:nth-child(even){
   background: var(--zebra);
 }
-/* --- DATOS ADMIN (Admin) — 1=N°, 5=Usuario, 7=Acciones --- */
+/* --- DATOS ADMIN (Admin) — 1=N°, 5=Usuario,  --- */
 #tablaAdmin thead th:nth-child(1),
 #tablaAdmin tbody td:nth-child(1){
   width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
@@ -153,8 +153,8 @@ table.tabla-admin tbody tr:nth-child(even),
   width: 160px; max-width: 160px; white-space: nowrap;
   text-overflow: ellipsis; overflow: hidden;
 }
-#tablaAdmin thead th:nth-child(7),
-#tablaAdmin tbody td:nth-child(7){
+#tablaAdmin thead th:nth-child(8),
+#tablaAdmin tbody td:nth-child(8){
   width: 56px; max-width: 56px; white-space: nowrap; text-align: center;
 }
 /* --- DATOS ADMIN --- */
@@ -279,8 +279,8 @@ table.tabla-admin tbody tr:nth-child(even),
 @media (max-width: 680px){
   #tablaAdmin thead th:nth-child(1),
   #tablaAdmin tbody td:nth-child(1),
-  #tablaAdmin thead th:nth-child(7),
-  #tablaAdmin tbody td:nth-child(7),
+  #tablaAdmin thead th:nth-child(8),
+  #tablaAdmin tbody td:nth-child(8),
   #tablaAdminPublic thead th:nth-child(1),
   #tablaAdminPublic tbody td:nth-child(1),
   #tablaUsuarios thead th:nth-child(1),
@@ -344,8 +344,8 @@ table.tabla-admin tbody tr:nth-child(even),
   }
   #tablaAdmin thead th:nth-child(1),
   #tablaAdmin tbody td:nth-child(1),
-  #tablaAdmin thead th:nth-child(7),
-  #tablaAdmin tbody td:nth-child(7),
+  #tablaAdmin thead th:nth-child(8),
+  #tablaAdmin tbody td:nth-child(8),
   #tablaAdminPublic thead th:nth-child(1),
   #tablaAdminPublic tbody td:nth-child(1),
   #tablaUsuarios thead th:nth-child(1),

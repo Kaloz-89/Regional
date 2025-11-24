@@ -5,15 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Marco de Referencia</title>
 
-  <!-- Tema temprano -->
   <script src="theme-boot.js"></script>
 
-  <!-- Globales -->
   <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
-
-  <!-- Estilos de esta vista -->
-  <link rel="stylesheet" href="marco_referencia.css">         <!-- Oscuro -->
-  <link rel="stylesheet" href="marco_referencia_light.css">   <!-- Claro -->
+  <link rel="stylesheet" href="marco_referencia.css">
+  <link rel="stylesheet" href="marco_referencia_light.css">
 
   <link rel="icon" href="book-closed-ffffff.png" type="image/png">
 </head>
@@ -36,50 +32,76 @@
       </div>
     </section>
 
-    <!-- Tabla principal -->
     <div class="table-wrap" role="region" aria-label="Catálogos principales" tabindex="0">
       <table class="tabla-catalogos">
         <thead>
-  <tr>
-    <th>
-      <div class="th-head">
-        <span>Tipo de visita</span>
-        <form class="th-form" data-target="tipoVisita" autocomplete="off">
-          <input class="th-input" type="text" placeholder="Agregar tipo…">
-          <button class="btn btn--small" type="submit">+</button>
-        </form>
-      </div>
-    </th>
-    <th>
-      <div class="th-head">
-        <span>Ciclo escolar</span>
-        <form class="th-form" data-target="cicloEscolar" autocomplete="off">
-          <input class="th-input" type="text" placeholder="Agregar ciclo…">
-          <button class="btn btn--small" type="submit">+</button>
-        </form>
-      </div>
-    </th>
-    <th>
-      <div class="th-head">
-        <span>Asesoría</span>
-        <form class="th-form" data-target="asesoria" autocomplete="off">
-          <input class="th-input" type="text" placeholder="Agregar asesoría…">
-          <button class="btn btn--small" type="submit">+</button>
-        </form>
-      </div>
-    </th>
-  </tr>
-</thead>
+          <tr>
+            <th>
+              <div class="th-head">
+                <span>Tipo de visita</span>
+                <form
+                  class="th-form"
+                  data-target="tipoVisita"
+                  autocomplete="off"
+                  action="php/marco_referencia_guardar.php"
+                  method="post">
+                  <input
+                    class="th-input"
+                    type="text"
+                    name="valor"
+                    placeholder="Agregar tipo…">
+                  <input type="hidden" name="campo" value="tipoVisita">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+            <th>
+              <div class="th-head">
+                <span>Ciclo escolar</span>
+                <form
+                  class="th-form"
+                  data-target="cicloEscolar"
+                  autocomplete="off"
+                  action="php/marco_referencia_guardar.php"
+                  method="post">
+                  <input
+                    class="th-input"
+                    type="text"
+                    name="valor"
+                    placeholder="Agregar ciclo…">
+                  <input type="hidden" name="campo" value="cicloEscolar">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+            <th>
+              <div class="th-head">
+                <span>Asesoría</span>
+                <form
+                  class="th-form"
+                  data-target="asesoria"
+                  autocomplete="off"
+                  action="php/marco_referencia_guardar.php"
+                  method="post">
+                  <input
+                    class="th-input"
+                    type="text"
+                    name="valor"
+                    placeholder="Agregar asesoría…">
+                  <input type="hidden" name="campo" value="asesoria">
+                  <button class="btn btn--small" type="submit">+</button>
+                </form>
+              </div>
+            </th>
+          </tr>
+        </thead>
 
-        <tbody id="tblBody"><!-- render JS --></tbody>
+        <tbody id="tblBody"></tbody>
       </table>
     </div>
   </main>
 
-  <!-- Modal Circuitos -->
   <div id="circuitosModal" class="modal modal--auth" role="dialog" aria-modal="true" aria-labelledby="circuitosTitle" hidden>
-    <div class="modal__backdrop" data-close></div>
-
     <div class="withe_square" aria-live="polite">
       <div class="auth-wrap">
         <div class="auth-card" id="circuitosCard">
@@ -98,8 +120,18 @@
               <button class="tab" role="tab" aria-selected="false" data-circuit="circuito05">Circuito05</button>
             </div>
 
-            <form class="circuit-add" autocomplete="off">
-              <input id="circuitInput" type="text" class="modal_input" placeholder="Nuevo centro educativo…">
+            <!-- Form para circuitos -->
+            <form class="circuit-add" autocomplete="off" action="php/circuito_guardar.php" method="post">
+              <input
+                id="circuitInput"
+                type="text"
+                class="modal_input"
+                name="valor"
+                placeholder="Nuevo centro educativo…"
+                required>
+              <input type="hidden" name="circuito" id="circuitoHidden" value="circuito01">
+              <!-- AQUÍ va el id_anio que usamos en PHP -->
+              <input type="hidden" name="anio" id="circuitoAnioHidden" value="">
               <button class="btn_primary" type="submit">Agregar</button>
             </form>
 
@@ -108,7 +140,7 @@
                 <thead>
                   <tr><th>Centro educativo</th><th style="width:110px">Acciones</th></tr>
                 </thead>
-                <tbody id="circuitTbody"><!-- render JS --></tbody>
+                <tbody id="circuitTbody"></tbody>
               </table>
             </div>
 
@@ -116,15 +148,12 @@
               <button class="btn_secondary" type="button" data-close>Cerrar</button>
             </div>
           </div>
-        </div> <!-- /auth-card -->
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Scripts globales -->
   <script src="nada_fuera_de_lo_comun.js"></script>
-
-  <!-- Lógica de esta vista -->
   <script src="marco_referencia.js" defer></script>
 </body>
 </html>

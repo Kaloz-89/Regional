@@ -29,8 +29,8 @@
 
   // Campos de la tabla (orden = columnas)
   const FIELDS = [
-    "trimestre","eje","brecha","objetivo","nombre","clase","estrategia",
-    "modalidad","horas","grupos","poblacion","fecha_ini","fecha_fin","sede","instancia"
+    "trimestre","brecha","objetivo","nombre","clase","estrategia",
+    "modalidad","horas","grupos","poblacion","fecha_ini","fecha_fin","instancia","actividad_realizada","cant_hombres","cant_mujeres"
   ];
 
   const el = (sel, ctx=document) => ctx.querySelector(sel);

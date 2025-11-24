@@ -69,7 +69,12 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 
 /* Dropdown “Datos de la Empresa” */
 .nav-dropdown{ position:relative; }
-.nav-dropdown > .has-caret::after{ content:"▾"; margin-left:6px; font-size:12px; opacity:.85; }
+.nav-dropdown > .has-caret::after{
+  content: "\25BE";          /* ▼ flechita segura en cualquier encoding */
+  margin-left:6px;
+  font-size:12px;
+  opacity:.85;
+}
 .dropdown-menu{
   position:absolute; top: calc(100% + 10px); left:0; min-width:240px;
   padding:8px; border-radius:12px; background: rgba(16,18,20,.96);
@@ -83,22 +88,68 @@ nav{ flex:1 1 auto; display:flex; justify-content:center; }
 .dropdown-menu a:hover{ background: rgba(255,255,255,.10); }
 
 /* YearTab */
-.nav-links .year-tab{ display:inline-block; position:relative; }
+.nav-links .year-tab{
+  display:inline-block;
+  position:relative;
+}
 .year-tab .yt-pill{
-  display:inline-flex; align-items:center; gap:.5rem; padding:8px 12px; border-radius:999px;
-  color:var(--text); font-weight:800; background: rgba(255,255,255,.08); border: 1px solid var(--hdr-bd);
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:8px 12px;
+  border-radius:999px;
+  color:var(--text);
+  font-weight:800;
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--hdr-bd);
   transition: background-color .18s ease, transform .18s ease;
 }
-.year-tab .yt-pill::after{ content:"▾"; font-size:12px; opacity:.9; }
-.year-tab .yt-pill:hover{ background: rgba(255,255,255,.14); transform: translateY(-1px); }
-.year-tab .yt-pop{
-  position:absolute; right:0; top: calc(100% + 10px); min-width: 160px; padding:8px; border-radius:12px;
-  background: rgba(16,18,20,.96); border: 1px solid var(--line); box-shadow: var(--shadow-pop);
+.year-tab .yt-pill::after{
+  content:"\25BE";
+  font-size:12px;
+  opacity:.9;
 }
-.year-tab .yt-list{ list-style:none; margin:0; padding:0; max-height:240px; overflow:auto; }
-.year-tab .yt-item{ padding:10px 12px; border-radius:8px; color:#fff; cursor:pointer; font-weight:700; }
-.year-tab .yt-item:hover{ background: rgba(255,255,255,.10); }
-.year-tab .yt-item.active{ background: rgba(255,255,255,.18); }
+.year-tab .yt-pill:hover{
+  background: rgba(255,255,255,.14);
+  transform: translateY(-1px);
+}
+
+/* POP: caja pequeña con scroll vertical (≈ 4 items) */
+.year-tab .yt-pop{
+  position:absolute;
+  right:0;
+  top: calc(100% + 10px);
+  min-width: 160px;
+  padding:8px;
+  border-radius:12px;
+  background: rgba(16,18,20,.96);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pop);
+
+  max-height: 176px;          /* ~4 filas */
+  overflow-y: auto;
+}
+
+/* Lista interna */
+.year-tab .yt-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.year-tab .yt-item{
+  padding:10px 12px;
+  border-radius:8px;
+  color:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
+.year-tab .yt-item:hover{
+  background: rgba(255,255,255,.10);
+}
+.year-tab .yt-item.active{
+  background: rgba(255,255,255,.18);
+}
+
 
 /* ========= LAYOUT PRINCIPAL ========= */
 main.container{
