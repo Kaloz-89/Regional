@@ -154,41 +154,47 @@
         fecha_fin: r.fecha_fin,
         instancia: r.instancia,
         actividad_realizada: r.actividad_realizada === "1" ? 1 : 0,
-        cant_hombres:
-          r.cant_hombres === "" ? null : Number(r.cant_hombres || 0),
-        cant_mujeres:
-          r.cant_mujeres === "" ? null : Number(r.cant_mujeres || 0),
+        cant_hombres: r.cant_hombres === "" ? null : Number(r.cant_hombres || 0),
+        cant_mujeres: r.cant_mujeres === "" ? null : Number(r.cant_mujeres || 0),
       })),
     };
 
     const json = JSON.stringify(payload);
 
     try {
-      if (!blocking && navigator.sendBeacon) {
-        const blob = new Blob([json], { type: "application/json" });
-        navigator.sendBeacon("php/oferta_formativa_guardar_lote.php", blob);
-      } else {
-        const resp = await fetch("php/oferta_formativa_guardar_lote.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: json,
-        });
-        const txt = await resp.text();
-        let data = null;
-        try {
-          data = JSON.parse(txt);
-        } catch {}
-        if (!resp.ok || !data || !data.ok) {
-          const msg =
-            (data &&
-              (data.error ||
-                (data.errors && data.errors.join("\n")))) ||
-            "Error al guardar oferta formativa: " + txt;
-          alert(msg);
-          console.error(msg);
-          return;
-        }
+      // Siempre usar fetch, más confiable que sendBeacon
+      const resp = await fetch("php/oferta_formativa_guardar_lote.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: json,
+      });
+
+      const txt = await resp.text();
+      let data = null;
+      try {
+        data = JSON.parse(txt);
+      } catch (e) {
+        console.error("Respuesta no es JSON:", txt);
       }
+
+      if (!resp.ok || !data || !data.ok) {
+        const msg =
+          (data &&
+            (data.error ||
+              (data.errors && data.errors.join("\n")))) ||
+          "Error al guardar oferta formativa: " + txt;
+        alert(msg);
+        console.error(msg);
+        return;
+      }
+
+      console.log(
+        "Oferta formativa guardada:",
+        data.insertados,
+        "insertados,",
+        data.actualizados,
+        "actualizados"
+      );
 
       DIRTY = false;
     } catch (e) {
@@ -375,6 +381,7 @@
     if (IS_ADMIN) {
       window.addEventListener("beforeunload", () => {
         if (!DIRTY) return;
+        // no podemos hacer await aquí, pero al menos se intenta
         saveAllToDB(false);
       });
     }
