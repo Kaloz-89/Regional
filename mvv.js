@@ -1,81 +1,195 @@
+// Bloquear botón atrás en esta vista
 (function () {
-  try { history.replaceState({ noForward: true }, "", location.href); } catch {}
-  window.addEventListener("popstate", function (e) {
-    try {
-      if (e.state && e.state.noForward) {
-        history.pushState({ noForward: true }, "", location.href);
-      }
-    } catch {}
-  });
+  try {
+    history.replaceState({ noForward: true }, "", location.href);
+    window.addEventListener("popstate", function (e) {
+      try {
+        if (e.state && e.state.noForward) {
+          history.pushState({ noForward: true }, "", location.href);
+        }
+      } catch {}
+    });
+  } catch {}
 })();
+
+// Lógica Ideas Rectoras (ADMIN)
 (function () {
   const STORAGE_KEY = "mvv_paneles_v1";
-  const grid = document.getElementById("cardsGrid");
-  const msg  = document.getElementById("estadoMsg");
-  const plantilla = () => ([
-    { title:"", body:"" }, // Misión
-    { title:"", body:"" }, // Visión
-    { title:"", body:"" }, // Valores
-  ]);
-  function leer(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const data = raw ? JSON.parse(raw) : null;
-      return Array.isArray(data) && data.length===3 ? data : plantilla();
-    }catch{ return plantilla(); }
+  const API_URL     = "php/mvv_api.php";
+  const YEAR_KEY    = "app_year_v1";
+
+  function getLogicalYear() {
+    const params = new URLSearchParams(location.search);
+    const yUrl = parseInt(params.get("year") || "", 10);
+    if (Number.isFinite(yUrl)) {
+      localStorage.setItem(YEAR_KEY, String(yUrl));
+      return yUrl;
+    }
+    const yLs = parseInt(localStorage.getItem(YEAR_KEY) || "", 10);
+    if (Number.isFinite(yLs)) return yLs;
+    return new Date().getFullYear();
   }
-  function escribir(data){
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      feedback("✔ Guardado");
-    } catch(e){
-      feedback("No se pudo guardar (storage lleno o bloqueado)");
-      console.warn(e);
+
+  const ANIO_LOGICO = getLogicalYear();
+  const grid = document.querySelector("[data-mvv-grid]");
+  const estadoMsg = document.getElementById("estadoMsg");
+  if (!grid) return;
+
+  function setEstado(msg) {
+    if (estadoMsg) estadoMsg.textContent = msg || "";
+  }
+
+  function readKey(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
     }
   }
-  function feedback(t){
-    if(!msg) return;
-    msg.textContent=t;
-    clearTimeout(feedback._t);
-    feedback._t=setTimeout(()=>msg.textContent="",1200);
+
+  function normalizar(data) {
+    const out = {
+      title: "IDEAS RECTORAS",
+      cards: [
+        { title: "MISIÓN",  body: "Escribe la misión…" },
+        { title: "VISIÓN",  body: "Escribe la visión…" },
+        { title: "VALORES", body: "Lista de valores…" }
+      ]
+    };
+
+    if (!data) return out;
+    if (Array.isArray(data.cards)) {
+      for (let i = 0; i < Math.min(3, data.cards.length); i++) {
+        out.cards[i].title = String(data.cards[i]?.title || out.cards[i].title);
+        out.cards[i].body  = String(data.cards[i]?.body  || out.cards[i].body);
+      }
+    }
+    return out;
   }
-  function aplicar(data){
-    const cards = grid.querySelectorAll(".info-card");
-    cards.forEach((card,i)=>{
-      card.querySelector(".editable-title").textContent = data[i]?.title ?? "";
-      card.querySelector(".editable-body").textContent  = data[i]?.body ?? "";
+
+  function leerLocal() {
+    const raw = readKey(STORAGE_KEY);
+    return normalizar(raw);
+  }
+
+  function escribirLocal(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch {}
+  }
+
+  function leerDesdeDOM() {
+    const cards = [];
+    grid.querySelectorAll("[data-mvv-card]").forEach(cardEl => {
+      const titleEl = cardEl.querySelector(".editable-title");
+      const bodyEl  = cardEl.querySelector(".editable-body");
+      cards.push({
+        title: titleEl ? titleEl.textContent.trim() : "",
+        body:  bodyEl  ? bodyEl.textContent.trim()  : ""
+      });
+    });
+    return normalizar({ cards });
+  }
+
+  function aplicar(data) {
+    const norm = normalizar(data);
+    grid.querySelectorAll("[data-mvv-card]").forEach((cardEl, index) => {
+      const titleEl = cardEl.querySelector(".editable-title");
+      const bodyEl  = cardEl.querySelector(".editable-body");
+      if (titleEl) titleEl.textContent = norm.cards[index].title;
+      if (bodyEl)  bodyEl.textContent  = norm.cards[index].body;
     });
   }
-  function leerDesdeDOM(){
-    return [...grid.querySelectorAll(".info-card")].map(card=>({
-      title:(card.querySelector(".editable-title")?.textContent||"").trim(),
-      body :(card.querySelector(".editable-body") ?.textContent||"").trim(),
-    }));
+
+  async function cargarDesdeServidor() {
+    setEstado("Cargando desde la base de datos…");
+    try {
+      const resp = await fetch(`${API_URL}?anio=${encodeURIComponent(ANIO_LOGICO)}`);
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+
+      const json = await resp.json();
+      if (json.ok && Array.isArray(json.data) && json.data.length) {
+        const cards = json.data.map(row => ({
+          title: row.titulo    || "",
+          body:  row.contenido || ""
+        }));
+        const obj = normalizar({ cards });
+        escribirLocal(obj);
+        aplicar(obj);
+        setEstado("Datos cargados desde la base de datos.");
+        return;
+      }
+
+      aplicar(leerLocal());
+      setEstado("Sin datos en BD. Usando plantilla local.");
+    } catch (err) {
+      console.error("Error al cargar MVV desde la BD", err);
+      aplicar(leerLocal());
+      setEstado("No se pudo conectar a la BD. Usando datos locales.");
+    }
   }
-  grid.addEventListener("input", e=>{
-    if(!e.target.closest(".editable")) return;
-    escribir(leerDesdeDOM());
+
+  let timeoutGuardar = null;
+  function programarGuardadoServidor() {
+    if (timeoutGuardar) clearTimeout(timeoutGuardar);
+    setEstado("Guardando…");
+
+    timeoutGuardar = setTimeout(async () => {
+      const data = leerLocal();
+      try {
+        const resp = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ anio: ANIO_LOGICO, cards: data.cards })
+        });
+        const json = await resp.json();
+        if (!json.ok) {
+          console.error("Error al guardar en BD", json);
+          setEstado("Error al guardar en la BD.");
+        } else {
+          setEstado("");
+        }
+      } catch (err) {
+        console.error("Error de conexión al guardar MVV", err);
+        setEstado("No se pudo guardar en la BD (conexión).");
+      }
+    }, 800);
+  }
+
+  grid.addEventListener("input", e => {
+    if (!e.target.closest(".editable")) return;
+    const data = leerDesdeDOM();
+    escribirLocal(data);
+    programarGuardadoServidor();
   });
-  grid.addEventListener("keydown", e=>{
-    if(e.target.matches(".editable-title") && e.key==="Enter"){
-      e.preventDefault(); e.target.blur();
+
+  grid.addEventListener("keydown", e => {
+    if (e.target.matches(".editable-title") && e.key === "Enter") {
+      e.preventDefault();
+      e.target.blur();
     }
   });
-  window.addEventListener("storage", e=>{ if(e.key===STORAGE_KEY) aplicar(leer()); });
-  aplicar(leer());
+
+  window.addEventListener("storage", e => {
+    if (e.key === STORAGE_KEY) aplicar(leerLocal());
+  });
+
+  cargarDesdeServidor();
 })();
-(function(){
-  document.addEventListener('click', function(e){
+
+// Dropdown del header
+(function () {
+  document.addEventListener('click', function (e) {
     const btn = e.target.closest('.nav-dropdown > .has-caret');
     const dd  = e.target.closest('.nav-dropdown');
-    document.querySelectorAll('.nav-dropdown.abierto').forEach(el=>{
-      if (!el.contains(e.target)) el.classList.remove('abierto');
-    });
-    if (btn && dd) { e.preventDefault(); dd.classList.toggle('abierto'); }
-  });
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.nav-dropdown.abierto').forEach(el=> el.classList.remove('abierto'));
-    }
+
+    if (!btn || !dd) return;
+
+    const isOpen = dd.classList.contains('open');
+    document.querySelectorAll('.nav-dropdown.open')
+            .forEach(el => el.classList.remove('open'));
+
+    if (!isOpen) dd.classList.add('open');
   });
 })();

@@ -18,3 +18,17 @@
 @media (pointer: coarse) {
   .nada-fuera-de-lo-comun { width: 1px; height: 1px; }
 }
+
+/* Fix línea que aparece al pasar el mouse por Inicio / header */
+.home-page .nav-links a,
+.visitas-page .nav-links a {
+  transform: none !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Por si algún :hover vuelve a meter transform */
+.home-page .nav-links a:hover,
+.visitas-page .nav-links a:hover {
+  transform: none !important;
+}

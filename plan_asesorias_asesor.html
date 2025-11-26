@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plan de Asesorías</title>
+  <script src="theme-boot.js"></script>
+  <link rel="stylesheet" href="prap_avance.css">
+  <link rel="stylesheet" href="prap_avance_light.css">
+  <link rel="stylesheet" href="desplegable_plan_asesorias.css">
+  <link rel="icon" href="table-ffffff.png" type="image/png">
+</head>
+<body>
+  <header>
+    <div class="logo_direca"><img src="logo_direca.png" alt="DIRECA"></div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver"><a href="pagina_principal_regional.html">← Volver</a></li>
+      </ul>
+    </nav>
+    <div class="logo"><img src="logo_mep_sinfondo.png" alt="MEP"></div>
+  </header>
+
+  <main class="page-wrap">
+    <section class="card">
+      <h2>Plan de Asesorías</h2>
+      <p class="tf-text" id="ayuda"></p>
+
+      <!-- En lugar de desplegable, mostramos nombre y asesoría del usuario que inició sesión -->
+      <div class="form-controls">
+        <label>
+          <div class="asesoria-display">
+            <div id="nombreAsesor"   class="asesor-nombre"></div>
+            <div id="nombreAsesoria" class="asesor-asesoria"></div>
+          </div></label>
+        <div class="ofdiv">
+          <a href="oferta_formativa_publico.html" class="of-fmtv">Oferta Formativa</a>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data" id="tablaAvances" aria-describedby="ayuda">
+          <thead>
+            <tr>
+              <th>Objetivo específico o del producto</th>
+              <th>Indicador</th>
+              <th class="num">Cantidad</th>
+              <th>Actividades</th>
+              <th>Período</th>
+              <th>Responsables</th>
+              <th class="num">I Periodo (abs)</th>
+              <th class="num">I Periodo (%)</th>
+              <th class="num">II Periodo (abs)</th>
+              <th class="num">II Periodo (%)</th>
+              <th class="num">Avance total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="table-toolbar nonprint">
+        <button id="btnPrintAsesor" class="btn-print" type="button">
+          Imprimir / PDF
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script src="plan_asesorias_asesor.js"></script>
+  <script src="header.js"></script>
+</body>
+</html>

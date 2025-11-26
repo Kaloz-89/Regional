@@ -1,186 +1,223 @@
-(function oneWayNav() {
-  function isInternalHtmlLink(a) {
-    if (!a || !a.href) return false;
-    const href = a.getAttribute('href') || '';
-    const lowered = href.trim().toLowerCase();
-    if (
-      lowered.startsWith('mailto:') ||
-      lowered.startsWith('tel:') ||
-      lowered.startsWith('javascript:') ||
-      lowered.startsWith('blob:') ||
-      a.hasAttribute('download')
-    ) return false;
-    const url = new URL(a.href, location.href);
-    const isSameOrigin = url.origin === location.origin;
-    const isHtml = /\.html($|[?#])/i.test(url.pathname);
-    return isSameOrigin && isHtml;
-  }
-
-  document.addEventListener('click', (ev) => {
-    const a = ev.target.closest('a');
-    if (!a) return;
-    if (!isInternalHtmlLink(a)) return;
-    if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || a.target === '_blank') return;
-    ev.preventDefault();
-    location.replace(a.href);
-  }, true);
-
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted) setTimeout(() => { history.back(); }, 0);
-  });
-})();
-
+// prap.js — PRAP por POA + AÑO, guardado solo en BD
 (function () {
-  const YEAR_STORE_KEY = "app_year_v1";
-  const NOW = new Date().getFullYear();
+  "use strict";
 
-  function getActiveYear() {
-    const p = new URLSearchParams(location.search);
-    const fromUrl = parseInt(p.get("year") || "", 10);
-    if (Number.isFinite(fromUrl)) return fromUrl;
-    const fromLs = parseInt(localStorage.getItem(YEAR_STORE_KEY) || "", 10);
-    if (Number.isFinite(fromLs)) return fromLs;
-    return NOW;
-  }
+  const COLS = 6;
 
-  const YEAR = getActiveYear();
-  const MAIN_PAGE = "direccion.html";
-
+  // ===================== Parámetros de la URL =====================
   const params = new URLSearchParams(location.search);
-  const dirId = params.get("id");
-  if (!dirId) {
-    alert("Falta el parámetro id en la URL (ej: prap.html?id=XXXX&year=YYYY).");
-    const backUrl = `${MAIN_PAGE}?year=${YEAR}`;
-    location.replace(backUrl);
+  const YEAR   = parseInt(params.get("year") || "", 10);
+  const POA_ID = parseInt(params.get("id")   || "0", 10);
+
+  if (!Number.isFinite(YEAR) || YEAR <= 0) {
+    alert("Falta o es inválido el parámetro 'year' en la URL");
+    location.replace("direccion.html");
     return;
   }
 
-  const KEY = `${YEAR}_prap_${dirId}`;
+  if (!POA_ID) {
+    alert("Falta el parámetro 'id' del POA en la URL");
+    location.replace("direccion.html");
+    return;
+  }
 
-  const table = document.getElementById("tablaPrap");
-  const tbody = table ? table.getElementsByTagName("tbody")[0] : null;
-  if (!tbody) return;
-
+  const tbody  = document.querySelector("#tablaPrap tbody");
   const btnAdd = document.getElementById("agregarFila");
-  const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(1, 10);
 
-  function normalizeFila(f) {
-    return {
-      rid: f.rid || rid(),
-      obj: f.obj ?? "",
-      ind: f.ind ?? "",
-      cant: f.cant ?? "",
-      acts: f.acts ?? "",
-      periodo: f.periodo ?? "",
-      resp: f.resp ?? ""
-    };
-  }
+  let YEAR_ID = 1;      // id_anio real en la BD
+  let PRAPS   = [];     // { id, cols[6] }
+  let DIRTY   = false;
 
-  function leer() {
+  const sanitizeCols = (cols = []) => {
+    const a = (Array.isArray(cols) ? cols : []).slice(0, COLS);
+    while (a.length < COLS) a.push("");
+    return a;
+  };
+
+  // ===================== Año lógico -> id_anio =====================
+  async function getYearId() {
     try {
-      const raw = localStorage.getItem(KEY);
-      const arr = raw ? JSON.parse(raw) : null;
-      if (!Array.isArray(arr)) return [];
-      return arr.map(normalizeFila);
-    } catch { return []; }
-  }
+      const resp = await fetch("php/anio_listar.php");
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
 
-  function escribir(arr) {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(arr.map(normalizeFila)));
+      const data = await resp.json();
+      if (!data.ok || !Array.isArray(data.anios)) {
+        throw new Error("Formato inválido de anio_listar.php");
+      }
+
+      const found = data.anios.find(
+        (a) => parseInt(a.anio, 10) === YEAR
+      );
+
+      if (!found) {
+        console.warn("Año", YEAR, "no está en tabla anio, uso id_anio = 1");
+        return 1;
+      }
+
+      const idAnio = parseInt(found.id, 10);
+      if (!Number.isFinite(idAnio) || idAnio <= 0) {
+        console.warn("Fila de anio sin id válido, uso 1:", found);
+        return 1;
+      }
+
+      return idAnio;
     } catch (e) {
-      console.warn("No se pudo guardar PRAP:", e);
+      console.error("Error getYearId:", e);
+      return 1;
     }
   }
 
-  function render() {
-    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+  // ===================== Cargar PRAP desde BD =====================
+  async function cargarDesdeBD() {
+    try {
+      const url  = `php/prap_listar.php?anio=${encodeURIComponent(
+        YEAR_ID
+      )}&poa=${encodeURIComponent(POA_ID)}`;
 
-    let filas = leer();                 // <- solo una lectura
-    if (!Array.isArray(filas)) filas = [];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
 
-    filas.forEach((fila) => {
-      const tr = tbody.insertRow();
-      const campos = ["obj", "ind", "cant", "acts", "periodo", "resp"];
-      campos.forEach((k, i) => {
-        const td = tr.insertCell(i);
-        td.contentEditable = "true";
-        td.textContent = fila[k] ?? "";
-        td.dataset.key = k;
-        td.dataset.rid = fila.rid;
+      const data = await resp.json();
+      if (!data.ok || !Array.isArray(data.rows)) {
+        console.error("prap_listar.php devolvió error:", data);
+        return [];
+      }
+
+      return data.rows.map((r) => ({
+        id: Number(r.id) || 0,
+        cols: sanitizeCols([
+          r.obj || "",
+          r.ind || "",
+          r.cant === null ? "" : String(r.cant),
+          r.acts || "",
+          r.periodo || "",
+          r.resp || "",
+        ]),
+      }));
+    } catch (e) {
+      console.error("Error al cargar PRAP desde BD:", e);
+      return [];
+    }
+  }
+
+  // ===================== Guardar PRAP en BD =====================
+  async function guardarEnBD(blocking) {
+    if (!DIRTY) return;
+
+    const payload = {
+      anio: YEAR_ID,  // id_anio
+      poa:  POA_ID,   // id_poa
+      rows: PRAPS.map((p) => ({
+        id:   p.id || 0,
+        obj:  p.cols[0] || "",
+        ind:  p.cols[1] || "",
+        cant: p.cols[2] === "" ? null : p.cols[2],
+        acts: p.cols[3] || "",
+        periodo: p.cols[4] || "",
+        resp:    p.cols[5] || "",
+      })),
+    };
+
+    const json = JSON.stringify(payload);
+
+    try {
+      // best-effort al cerrar pestaña
+      if (!blocking && navigator.sendBeacon) {
+        const blob = new Blob([json], { type: "application/json" });
+        navigator.sendBeacon("php/prap_guardar_lote.php", blob);
+        DIRTY = false;
+        return;
+      }
+
+      const resp = await fetch("php/prap_guardar_lote.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: json,
       });
 
-      const tdAcc = tr.insertCell(6);
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+
+      const data = await resp.json().catch(() => null);
+      if (!data || !data.ok) {
+        console.error("Error prap_guardar_lote.php:", data);
+        alert(data && data.error ? data.error : "Error al guardar PRAP.");
+        return;
+      }
+
+      DIRTY = false;
+    } catch (e) {
+      console.error("guardarEnBD error:", e);
+      alert("Error al guardar PRAP. Revisa la consola.");
+    }
+  }
+
+  // ===================== Render tabla =====================
+  function render() {
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    PRAPS.forEach((fila) => {
+      const tr = tbody.insertRow();
+      tr.dataset.id = fila.id || 0;
+
+      const valores = sanitizeCols(fila.cols);
+
+      for (let c = 0; c < COLS; c++) {
+        const td = tr.insertCell(-1);
+        td.contentEditable = "true";
+        td.textContent = valores[c];
+        td.addEventListener("input", () => {
+          fila.cols[c] = td.textContent.trim();
+          DIRTY = true;
+        });
+      }
+
+      const tdAcc = tr.insertCell(-1);
       const btn = document.createElement("button");
       btn.textContent = "🗑️";
-      btn.className = "eliminar-fila btn btn-danger";
+      btn.className = "eliminar-fila";
       btn.addEventListener("click", () => {
-        const nuevo = leer().filter(x => x.rid !== fila.rid);
-        escribir(nuevo);
+        PRAPS = PRAPS.filter((p) => p !== fila);
+        DIRTY = true;
         render();
       });
-      tdAcc.style.textAlign = "center";
       tdAcc.appendChild(btn);
     });
   }
 
-  function agregarFila() {
-    const arr = leer();
-    arr.push(normalizeFila({}));
-    escribir(arr);
+  // ===================== Eventos =====================
+  if (btnAdd) {
+    btnAdd.addEventListener("click", () => {
+      PRAPS.push({ id: 0, cols: ["", "", "", "", "", ""] });
+      DIRTY = true;
+      render();
+    });
+  }
+
+  window.addEventListener("beforeunload", () => {
+    guardarEnBD(false); // best-effort
+  });
+
+  const btnVolver = document.getElementById("btnVolver");
+  if (btnVolver) {
+    btnVolver.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await guardarEnBD(true);   // espera a guardar
+      location.href = btnVolver.href;
+    });
+  }
+
+  // ===================== Inicializar =====================
+  async function start() {
+    YEAR_ID = await getYearId();
+    PRAPS   = await cargarDesdeBD();   // PRAP asociados a ese año + poa
+    DIRTY   = false;
     render();
   }
 
-  let tSave;
-  function guardarDesdeDOM() {
-    clearTimeout(tSave);
-    tSave = setTimeout(() => {
-      const nuevo = [];
-      [...tbody.rows].forEach((tr) => {
-        const c = tr.cells;
-        const r =
-          (c[0]?.dataset?.rid) ||
-          (c[1]?.dataset?.rid) ||
-          (c[2]?.dataset?.rid) ||
-          null;
-        nuevo.push({
-          rid: r || rid(),
-          obj: c[0]?.textContent ?? "",
-          ind: c[1]?.textContent ?? "",
-          cant: c[2]?.textContent ?? "",
-          acts: c[3]?.textContent ?? "",
-          periodo: c[4]?.textContent ?? "",
-          resp: c[5]?.textContent ?? "",
-        });
-      });
-      escribir(nuevo);
-    }, 120);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
   }
-
-  if (btnAdd) btnAdd.addEventListener("click", agregarFila);
-
-  tbody.addEventListener("input", (e) => {
-    if (!e.target.closest('td[contenteditable="true"]')) return;
-    guardarDesdeDOM();
-  });
-
-  tbody.addEventListener("click", (e) => {
-    const btn = e.target.closest(".eliminar-fila");
-    if (!btn) return;
-    const tr = btn.closest("tr");
-    tr?.remove();
-    guardarDesdeDOM();
-    render();
-  });
-
-  window.addEventListener("storage", (e) => {
-    if (e.key === KEY) render();
-  });
-
-  // --- Inicialización: sembrar exactamente 1 fila si no hay datos ---
-  const init = leer();
-  if (init.length === 0) {
-    escribir([ normalizeFila({}) ]);
-  }
-  render();
 })();

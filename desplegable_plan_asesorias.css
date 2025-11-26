@@ -1,0 +1,141 @@
+/* ================== Controles del formulario (asesoría) ================== */
+.form-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 16px 0 24px 30px;
+}
+
+.form-controls label {
+  color: #fff;
+  font-weight: 600;
+}
+
+.form-controls select {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.form-controls select:hover {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+
+.ofdiv {
+  background-color: #ffffff;
+  border-radius: 6px;
+  height: 28px;
+}
+a.of-fmtv {
+
+  text-decoration: none;
+  color: #000000;
+  margin: 20px;
+}
+
+/* Contenedor de nombre + asesoría en la vista pública */
+.asesoria-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* Nombre del asesor: subtítulo, más pequeño, arriba */
+.asesor-nombre {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* Nombre de la asesoría: título principal, más grande, abajo */
+.asesor-asesoria {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Barra de herramientas debajo de la tabla (botón imprimir) */
+.table-toolbar {
+  margin-top: 0.85rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Botón de Imprimir para ambas vistas */
+.btn-print {
+  padding: 0.45rem 1.1rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(135deg, #111111, #1f1f1f);
+  color: #f9fafb;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  margin-left: 40px;
+}
+
+.btn-print:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, #060606, #1a1a1a);
+}
+
+.btn-print:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Ocultar elementos de control en la impresión */
+@media print {
+  .nonprint,
+  .nav-links,
+  .ofdiv,
+  .table-toolbar {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  header {
+    box-shadow: none !important;
+  }
+
+  /* Asegura que la tabla use todo el ancho en PDF */
+  .table-wrap,
+  table.data {
+    width: 100% !important;
+  }
+}
+
+/* Fila de controles: asesoría + botón Oferta Formativa */
+.form-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;         /* para que en pantallas pequeñas pueda bajar a otra línea */
+  gap: 0.75rem;
+}
+
+/* que el botón vaya pegado a la derecha */
+.form-controls .ofdiv {
+  margin-left: auto; 
+  margin-right: 30px;      /* empuja el botón hasta el final de la fila */
+}
+
+/* opcional: que el select o el bloque de nombre/asesoría no sean demasiado pequeños */
+#selectAsesoria,
+.asesoria-display {
+  min-width: 220px;
+}

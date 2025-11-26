@@ -2,113 +2,98 @@
 (() => {
   "use strict";
 
-  /* ==========================
-     Utilidades de sesión / usuario
-     ========================== */
-  const SESSION_KEY = 'session_user';
-  const USERS_KEY   = 'datos_administrativos_v1';
-  const ADMINS_KEY  = 'usuarios_admin_v1';
+  const SESSION_KEY = "session_user";
 
-  const readLS = (k, fb=null)=>{
-    try{ return JSON.parse(localStorage.getItem(k)||'null')??fb; }
-    catch{ return fb; }
-  };
-
-  const getSess = ()=>{
-    try{ return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null'); }
-    catch{ return null; }
-  };
-
-  const normKey = s => (s||"").toString()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,' ')
-    .replace(/\s+/g,' ').trim();
-
-  const rowIndex = row => {
-    const idx = {}; if (!row) return idx;
-    for (const k of Object.keys(row)) idx[normKey(k)] = row[k];
-    return idx;
-  };
-
-  const getField = (row, variants) => {
-    if (!row) return undefined;
-    const idx = rowIndex(row);
-    for (const v of variants) {
-      const val = idx[normKey(v)];
-      if (val !== undefined && val !== null && String(val).trim() !== "") return String(val).trim();
+  function getSession() {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
     }
-    return undefined;
-  };
-
-  const findUserRowByUsername = (username) => {
-    const rows = readLS(USERS_KEY, []);
-    const uname = (username||'').trim().toLowerCase();
-    return rows.find(r => (r?.usuario||'').trim().toLowerCase() === uname) || null;
-  };
-
-  function resolveNameAndAsesoria() {
-    const sess = getSess();
-    if(!sess) return { name:null, asesoria:null, isAdmin:false };
-
-    const uname = (sess.username||'').trim();
-    const role  = (sess.role||'').trim();
-    const isAdmin = role === 'admin';
-
-    const row = findUserRowByUsername(uname);
-
-    const NAME_VARIANTS = ['Nombre completo','nombre completo','Nombre','nombre'];
-    const ASESORIA_VARIANTS = [
-      'Nombre de asesoria o equipo','Nombre de asesoría o equipo',
-      'Asesoria','Asesoría','Asesoria equipo','Asesoría equipo',
-      'Nombre de equipo','Equipo','Departamento','Area','Área'
-    ];
-
-    let name;
-    if (isAdmin && uname.toLowerCase()==='administrador') {
-      name = 'Administrador';
-    } else if (isAdmin) {
-      const admins = readLS(ADMINS_KEY, []);
-      const hit = admins.find(a => (a?.usuario||'').trim().toLowerCase()===uname.toLowerCase());
-      name = (hit?.nombre && String(hit.nombre).trim())
-          || getField(row, NAME_VARIANTS)
-          || uname
-          || 'Administrador';
-    } else {
-      name = getField(row, NAME_VARIANTS) || uname || null;
-    }
-
-    let asesoria = getField(row, ASESORIA_VARIANTS);
-    if (!asesoria && isAdmin) asesoria = 'Administración';
-
-    return { name, asesoria, isAdmin };
   }
 
-  function paintNameAndAsesoria() {
-    const { name, asesoria, isAdmin } = resolveNameAndAsesoria();
-    if (!name && !asesoria) return;
+  // --------------------------------------------------
+  // PERFIL PORTADA: nombre + asesoría (usuario y admin)
+  // --------------------------------------------------
+  async function hydrateHomeProfile() {
+    const sess = getSession();
 
-    const nameSel = isAdmin ? '[data-admin-name-slot]' : '[data-user-name-slot]';
-    const aseSel  = isAdmin ? '[data-admin-asesoria-slot]' : '[data-user-asesoria-slot]';
+    // Si no hay sesión, no hacemos nada
+    if (!sess || !sess.username) return;
 
-    let nameSlot = document.querySelector(nameSel);
-    let aseSlot  = document.querySelector(aseSel);
+    const role = (sess.role || "").toLowerCase();
+    const isAdmin = role === "admin";
 
-    if (!nameSlot || !aseSlot) {
-      const landmark = document.querySelector('.perfil, .avatar, .user-card, .left-panel, .card, .profile, .icon, .panel-izq') || document.body;
-      if (!nameSlot) { nameSlot = document.createElement('div'); nameSlot.className='name-slot'; landmark.appendChild(nameSlot); }
-      if (!aseSlot)  { aseSlot  = document.createElement('div'); aseSlot.className='asesoria-slot'; nameSlot.insertAdjacentElement('afterend', aseSlot); }
+    const baseName  = sess.nombre || sess.username || "";
+    const userId    = Number(sess.id_usuarios || 0);
+    const username  = (sess.username || "").toLowerCase();
+    const asesoriaFromSession = sess.asesoria_usuarios || "";
+
+    // Selectores distintos para público vs admin
+    const nameSlot = document.querySelector(
+      isAdmin ? "[data-admin-name-slot]" : "[data-user-name-slot]"
+    );
+    const asesoriaSlot = document.querySelector(
+      isAdmin ? "[data-admin-asesoria-slot]" : "[data-user-asesoria-slot]"
+    );
+
+    if (!nameSlot && !asesoriaSlot) return;
+
+    // Nombre inicial: lo que viene en sesión
+    if (nameSlot) {
+      nameSlot.textContent =
+        (isAdmin && !baseName) ? "Administrador" : baseName;
     }
 
-    if (name) nameSlot.textContent = name;
-    if (asesoria) aseSlot.textContent = asesoria;
+    // Si ya traemos asesoría desde la sesión, la mostramos de una vez
+    if (asesoriaSlot && asesoriaFromSession) {
+      asesoriaSlot.textContent = asesoriaFromSession;
+    }
+
+    // Igual que en Control de Visitas: refinamos consultando list_asesorias
+    try {
+      const resp = await fetch("php/progreso_crud.php?action=list_asesorias");
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      const lista = await resp.json();
+
+      if (!Array.isArray(lista) || !lista.length) return;
+
+      // 1) Intentar empatar por id_usuarios
+      let propio = null;
+      if (userId) {
+        propio = lista.find(u => Number(u.id_usuarios) === userId);
+      }
+
+      // 2) Si no, empatar por username
+      if (!propio) {
+        propio = lista.find(
+          u => (u.usuario || "").toLowerCase() === username
+        );
+      }
+
+      if (!propio) return;
+
+      // Actualizar nombre si viene mejor desde BD
+      if (nameSlot) {
+        nameSlot.textContent = propio.nombre || baseName;
+      }
+
+      // Asesoría final: primero BD, luego sesión
+      if (asesoriaSlot) {
+        asesoriaSlot.textContent =
+          propio.asesoria_usuarios ||
+          asesoriaFromSession ||
+          "";
+      }
+    } catch (e) {
+      console.error("Error al obtener asesoría para portada:", e);
+      // Dejamos lo que ya había
+    }
   }
 
   /* =========================================================
      AppYear — maneja años DESDE BD + localStorage
-     - Guarda:
-         app_year_id_v1  -> id_anio (1,2,3,...)
-         app_year_v1     -> año (2025,2026,...)
-         app_year_val_v1 -> año (igual que arriba, por compatibilidad)
      ========================================================= */
 
   const AppYear = (() => {
@@ -135,13 +120,12 @@
 
       if (!norm.length) {
         // Fallback si hay un problema grave con la BD
-        // (esto SOLO es para que no se rompa la página)
         for (let i = 0; i < 4; i++) {
-          norm.push({ id: i+1, anio: 2025 + i });
+          norm.push({ id: i + 1, anio: 2025 + i });
         }
       }
 
-      norm.sort((a,b) => a.anio - b.anio); // de menor a mayor
+      norm.sort((a, b) => a.anio - b.anio); // de menor a mayor
       _years = norm;
     }
 
@@ -189,7 +173,7 @@
     function setCurrentById(id) {
       if (!_years.length) return null;
 
-      const target = _years.find(y => y.id === id) || _years[_years.length-1];
+      const target = _years.find(y => y.id === id) || _years[_years.length - 1];
 
       // Guardar en LS: ID y valor
       localStorage.setItem(LS_ID,  String(target.id));
@@ -265,15 +249,15 @@
   }
 
   /* =========================================================
-     YearTab — dropdown con scroll (no ocupa toda la pantalla)
+     YearTab — dropdown con scroll
      ========================================================= */
 
   function mountYearTab() {
-    const host = document.getElementById('yearTab');
+    const host = document.getElementById("yearTab");
     if (!host) return;
     if (host.dataset.mounted === "1") return;
     host.dataset.mounted = "1";
-    host.classList.add('year-tab');
+    host.classList.add("year-tab");
 
     const options = AppYear.getYearOptions(); // [{id, anio}, ...]
     if (!options.length) return;
@@ -296,25 +280,24 @@
     const list = host.querySelector(".yt-list");
 
     // Orden descendente (ej. 2040, 2039, 2038...)
-    const sorted = options.slice().sort((a,b) => b.anio - a.anio);
+    const sorted = options.slice().sort((a, b) => b.anio - a.anio);
 
     for (const y of sorted) {
       const li = document.createElement("li");
       li.className = "yt-item";
-      li.setAttribute("role","option");
+      li.setAttribute("role", "option");
       li.textContent = y.anio;
       li.dataset.id  = String(y.id);
       if (y.id === current.id) li.classList.add("active");
       list.appendChild(li);
     }
 
-    // Scroll para que el año actual quede visible (alrededor de 4 ítems)
     const scrollToCurrent = () => {
       const activeLi = list.querySelector(".yt-item.active");
       if (!activeLi) return;
       const liHeight = activeLi.offsetHeight || 1;
       const offset   = activeLi.offsetTop;
-      const targetScroll = Math.max(0, offset - liHeight); // lo deja más o menos en medio
+      const targetScroll = Math.max(0, offset - liHeight);
       pop.scrollTop = targetScroll;
     };
 
@@ -322,7 +305,7 @@
       pop.hidden = false;
       pill.setAttribute("aria-expanded", "true");
       scrollToCurrent();
-      document.addEventListener("click", onDocClick, { once:true });
+      document.addEventListener("click", onDocClick, { once: true });
     };
 
     const closePop = () => {
@@ -342,7 +325,8 @@
     pop.addEventListener("click", (ev) => ev.stopPropagation());
 
     list.addEventListener("click", (e) => {
-      const li = e.target.closest(".yt-item"); if (!li) return;
+      const li = e.target.closest(".yt-item");
+      if (!li) return;
       const id = parseInt(li.dataset.id, 10);
       if (!Number.isFinite(id) || id <= 0) return;
 
@@ -350,7 +334,9 @@
       if (!selected) return;
 
       host.querySelector(".yt-value").textContent = selected.anio;
-      list.querySelectorAll(".yt-item.active").forEach(n => n.classList.remove("active"));
+      list.querySelectorAll(".yt-item.active").forEach(n =>
+        n.classList.remove("active")
+      );
       li.classList.add("active");
       // El redirect se hace dentro de AppYear.setCurrentById
     });
@@ -361,13 +347,13 @@
      ========================================================= */
 
   const start = async () => {
-    paintNameAndAsesoria();
+    await hydrateHomeProfile();  // ← igual que control_visitas pero para portada
     await loadYearsConfig();
     mountYearTab();
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
   } else {
     start();
   }
@@ -375,42 +361,48 @@
 
 /* -------------------- Dropdown "Datos de la Empresa" + cierre seguro -------------------- */
 (function () {
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('.nav-dropdown > .has-caret');
-    const dd = e.target.closest('.nav-dropdown');
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest(".nav-dropdown > .has-caret");
+    const dd = e.target.closest(".nav-dropdown");
     if (trigger) {
       e.preventDefault();
       const parent = trigger.parentElement;
-      const isOpen = parent.classList.contains('open');
-      document.querySelectorAll('.nav-dropdown.open').forEach(n => {
-        if (n !== parent) n.classList.remove('open');
+      const isOpen = parent.classList.contains("open");
+      document.querySelectorAll(".nav-dropdown.open").forEach((n) => {
+        if (n !== parent) n.classList.remove("open");
       });
-      parent.classList.toggle('open', !isOpen);
+      parent.classList.toggle("open", !isOpen);
       return;
     }
     if (!dd) {
-      document.querySelectorAll('.nav-dropdown.open').forEach(n => n.classList.remove('open'));
+      document
+        .querySelectorAll(".nav-dropdown.open")
+        .forEach((n) => n.classList.remove("open"));
     }
   });
 
-  document.addEventListener('click', (e) => {
-    const menu = e.target.closest('.nav-dropdown .dropdown-menu');
-    if (menu) e.stopPropagation();
-  }, true);
+  document.addEventListener(
+    "click",
+    (e) => {
+      const menu = e.target.closest(".nav-dropdown .dropdown-menu");
+      if (menu) e.stopPropagation();
+    },
+    true
+  );
 
   // Cierre seguro del popup de año si se hace click fuera
-  const host = document.getElementById('yearTab');
+  const host = document.getElementById("yearTab");
   if (host) {
-    const pill = host.querySelector('.yt-pill');
-    const pop  = host.querySelector('.yt-pop');
+    const pill = host.querySelector(".yt-pill");
+    const pop  = host.querySelector(".yt-pop");
     if (pill && pop) {
-      pop.addEventListener('click', (ev) => ev.stopPropagation());
-      pill.addEventListener('click', (ev) => ev.stopPropagation());
-      document.addEventListener('click', (e) => {
+      pop.addEventListener("click", (ev) => ev.stopPropagation());
+      pill.addEventListener("click", (ev) => ev.stopPropagation());
+      document.addEventListener("click", (e) => {
         if (!host.contains(e.target)) {
           if (!pop.hidden) {
             pop.hidden = true;
-            pill.setAttribute('aria-expanded','false');
+            pill.setAttribute("aria-expanded", "false");
           }
         }
       });

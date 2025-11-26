@@ -11,26 +11,27 @@
   <link rel="stylesheet" href="theme-switch.css">
   <link rel="stylesheet" href="nada_fuera_de_lo_comun.css">
 </head>
-<header>
-  <div class="logo_direca">
-    <img src="logo_direca.png" alt="DIRECA">
-  </div>
-  <nav>
-    <ul class="nav-links">
-      <li class="nav-volver">
-        <a href="pagina_principal_regional.html" class="js-nav-replace">Inicio</a>
-      </li>
-      <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
-        <a href="#" class="has-caret">Datos de la Empresa</a>
-        <ul class="dropdown-menu" aria-label="submenu">
-          <li><a href="datos_administrativos_publico.html">Datos Administrativos</a></li>
-          <li><a href="justificacion_publico.html">Justificación</a></li>
-          <li><a href="mvv_publico.html">Ideas Rectoras</a></li>
-        </ul>
-      </li>
-      <div id="yearTab" class="year-tab"></div>
-      <li class="theme-switch">
-        <button
+<body class="home-page">
+  <header>
+    <div class="logo_direca">
+      <img src="logo_direca.png" alt="DIRECA">
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-volver">
+          <a href="pagina_principal_regional.html" class="js-nav-replace">Inicio</a>
+        </li>
+        <li class="nav-dropdown" aria-haspopup="true" aria-expanded="false">
+          <a href="#" class="has-caret">Datos de la Empresa</a>
+          <ul class="dropdown-menu" aria-label="submenu">
+            <li><a href="datos_administrativos_publico.html">Datos Administrativos</a></li>
+            <li><a href="justificacion_publico.html">Justificación</a></li>
+            <li><a href="mvv_publico.html">Ideas Rectoras</a></li>
+          </ul>
+        </li>
+        <div id="yearTab" class="year-tab"></div>
+        <li class="theme-switch">
+          <button
             id="themeToggle"
             class="switch"
             type="button"
@@ -40,23 +41,24 @@
             data-moon="moon-000000.png">
             <span class="knob" aria-hidden="true"></span>
           </button>
-      </li>
-      <li class="boton_salida">
-        <a href="index.html" class="js-nav-replace">Cerrar sesión</a>
-      </li>
-    </ul>
-  </nav>
-  <div class="logo">
-    <img src="logo_mep_sinfondo.png" alt="MEP">
-  </div>
-</header>
-<body class="home-page">
+        </li>
+        <li class="boton_salida">
+          <a href="index.html" class="js-nav-replace">Cerrar sesión</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="logo">
+      <img src="logo_mep_sinfondo.png" alt="MEP">
+    </div>
+  </header>
+
   <main class="container">
     <div class="left-panel">
       <div class="info-box">
         <img src="icono_perfil.png" alt="perfil">
         <div data-user-name-slot class="name-slot"></div>
         <div data-user-asesoria-slot class="asesoria-slot"></div>
+        <!-- h3 vacío por si quieres usarlo luego -->
         <h3 class="user-name"></h3>
       </div>
     </div>
@@ -74,21 +76,22 @@
           </span>
           <span class="mb-label">PRAP</span>
         </a>
-        <a href="indice_colaboradores.html" class="menu-button">
+        <a href="plan_asesorias_asesor.html" class="menu-button">
           <span class="mb-icon">
             <img src="subtask-ffffff.png" alt="Índice de Colaboradores" />
           </span>
-          <span class="mb-label">Índice de Colaboradores</span>
+          <span class="mb-label">Plan De Asesorías</span>
         </a>
-        <a href="control_visitas_publico.html" class="menu-button menu-button--wide"">
+        <a href="control_visitas_publico.html" class="menu-button menu-button--wide">
           <span class="mb-icon mb-icon--small">
-            <img src="book-closed-ffffff.png" alt="" />
+            <img src="book-closed-ffffff.png" alt="Control de Visitas" />
           </span>
           <span class="mb-label">Control de Visitas</span>
         </a>
       </div>
     </div>
   </main>
+
   <script src="nada_fuera_de_lo_comun.js"></script>
   <script src="header.js" defer></script>
   <script src="pagina_principal_regional.js" defer></script>
